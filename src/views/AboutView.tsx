@@ -8,11 +8,13 @@ import {
   BookOpen, 
   Award, 
   HelpCircle,
-  ArrowRight
+  ArrowRight,
+  Globe,
+  ExternalLink
 } from 'lucide-react';
 
 export const AboutView: React.FC = () => {
-  const { setTab } = useApp();
+  const { setTab, setDomainModalOpen } = useApp();
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
@@ -110,6 +112,30 @@ export const AboutView: React.FC = () => {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Custom Domain & Deployment Box */}
+      <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="space-y-2 max-w-xl">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-bold">
+            <Globe className="w-3.5 h-3.5" />
+            <span>Vercel Custom Domain Configuration</span>
+          </div>
+          <h3 className="text-xl font-bold font-display">
+            Host MATB STS PREP on Your Own Domain
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Attach any domain or subdomain (e.g. <code className="text-emerald-400 font-mono">matbstsprep.com</code> or <code className="text-emerald-400 font-mono">prep.yourdomain.pk</code>). Automated SSL certificate, edge routing, and global CDN are provisioned instantly.
+          </p>
+        </div>
+
+        <button
+          onClick={() => setDomainModalOpen(true)}
+          className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-emerald-950/40 cursor-pointer flex items-center gap-2 shrink-0"
+        >
+          <Globe className="w-4 h-4" />
+          <span>DNS Setup Guide</span>
+        </button>
       </div>
 
       {/* Disclaimer */}

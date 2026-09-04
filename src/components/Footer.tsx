@@ -12,7 +12,7 @@ import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { EXAMS_DATA } from '../data/examsData';
 
 export const Footer: React.FC = () => {
-  const { setTab, setSelectedCategorySlug, setSelectedExamId } = useApp();
+  const { setTab, setSelectedCategorySlug, setSelectedExamId, setDomainModalOpen } = useApp();
 
   const handleCategoryClick = (slug: string) => {
     setSelectedCategorySlug(slug);
@@ -209,6 +209,14 @@ export const Footer: React.FC = () => {
               <li>
                 <button onClick={() => setTab('about')} className="hover:text-emerald-400 transition">
                   About MATB STS PREP
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setDomainModalOpen(true)} 
+                  className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-semibold transition"
+                >
+                  <span>🌐 Custom Domain (Vercel)</span>
                 </button>
               </li>
             </ul>

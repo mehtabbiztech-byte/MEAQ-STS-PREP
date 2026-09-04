@@ -13,6 +13,8 @@ interface AppContextType {
   setGlobalSearchQuery: (query: string) => void;
   authModalOpen: boolean;
   setAuthModalOpen: (open: boolean) => void;
+  domainModalOpen: boolean;
+  setDomainModalOpen: (open: boolean) => void;
   selectedCategorySlug: string | null;
   setSelectedCategorySlug: (slug: string | null) => void;
   selectedExamId: string | null;
@@ -59,6 +61,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [searchOpen, setSearchOpen] = useState(false);
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [domainModalOpen, setDomainModalOpen] = useState(false);
   const [selectedCategorySlug, setSelectedCategorySlug] = useState<string | null>(null);
   const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
   const [selectedPastPaperId, setSelectedPastPaperId] = useState<string | null>(null);
@@ -182,6 +185,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setGlobalSearchQuery,
         authModalOpen,
         setAuthModalOpen,
+        domainModalOpen,
+        setDomainModalOpen,
         selectedCategorySlug,
         setSelectedCategorySlug,
         selectedExamId,
