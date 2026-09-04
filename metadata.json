@@ -1,0 +1,6 @@
+{
+  "name": "MATB STS PREP",
+  "description": "Practice Smart. Prepare Better. Crack Your Exam. Practice thousands of Pakistani competitive exam MCQs, timed quizzes, past papers, and current affairs for CSS, PMS, FPSC, PPSC, SPSC, STS, and NTS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

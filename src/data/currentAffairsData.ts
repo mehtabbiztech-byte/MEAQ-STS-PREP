@@ -1,0 +1,88 @@
+import { CurrentAffairItem } from '../types';
+
+export const CURRENT_AFFAIRS_DATA: CurrentAffairItem[] = [
+  {
+    id: 'ca-2025-01',
+    title: 'Pakistan’s Landmark Election to the United Nations Security Council (UNSC)',
+    category: 'Pakistan',
+    date: '2025 - 2026 Term',
+    summary: 'Pakistan assumed its seat as a non-permanent member of the United Nations Security Council (UNSC) for a 2-year tenure (2025-2026), having garnered 182 votes from the UN General Assembly.',
+    importance: 'High',
+    relatedMcq: {
+      question: 'For which two-year term was Pakistan elected as a non-permanent member of the UN Security Council in 2024?',
+      options: ['2024-2025', '2025-2026', '2026-2027', '2023-2024'],
+      correctIndex: 1,
+      explanation: 'Pakistan is serving on the UN Security Council for the 2025-2026 term, representing the Asia-Pacific group.',
+    },
+  },
+  {
+    id: 'ca-2024-02',
+    title: 'Historic 23rd SCO Summit Hosted in Islamabad',
+    category: 'Pakistan',
+    date: 'October 15-16, 2024',
+    summary: 'Pakistan successfully hosted the 23rd Council of Heads of Government of the Shanghai Cooperation Organisation (SCO) in Islamabad, attended by prime ministers including Li Qiang of China and Mikhail Mishustin of Russia.',
+    importance: 'High',
+    relatedMcq: {
+      question: 'Who chaired the 23rd SCO Council of Heads of Government meeting in Islamabad?',
+      options: ['Foreign Minister Ishaq Dar', 'Prime Minister Shehbaz Sharif', 'President Asif Ali Zardari', 'Chairman Senate Yousaf Raza Gilani'],
+      correctIndex: 1,
+      explanation: 'Prime Minister Shehbaz Sharif chaired the 23rd Meeting of the Council of Heads of Government of SCO in Islamabad.',
+    },
+  },
+  {
+    id: 'ca-2024-03',
+    title: 'Enactment of the 26th Constitutional Amendment',
+    category: 'Pakistan',
+    date: 'October 21, 2024',
+    summary: 'Parliament of Pakistan passed the 26th Constitutional Amendment, reforming the judicial appointment process, capping the Chief Justice of Pakistan\'s tenure at three years, and reconstituting the Judicial Commission.',
+    importance: 'High',
+    relatedMcq: {
+      question: 'Under the 26th Constitutional Amendment, the tenure of the Chief Justice of Pakistan is fixed at a maximum of:',
+      options: ['2 Years', '3 Years', '4 Years', '5 Years'],
+      correctIndex: 1,
+      explanation: 'The amendment fixed a 3-year term for the Chief Justice of Pakistan, subject to retirement age of 65 years.',
+    },
+  },
+  {
+    id: 'ca-2024-04',
+    title: 'Arshad Nadeem Shatters Olympic Record in Paris',
+    category: 'Pakistan',
+    date: 'August 8, 2024',
+    summary: 'Pakistani athlete Arshad Nadeem threw the javelin 92.97 meters at the 2024 Paris Olympic Games, breaking the 16-year Olympic record and winning Pakistan’s first Olympic gold medal since 1984.',
+    importance: 'High',
+    relatedMcq: {
+      question: 'What was Arshad Nadeem\'s Olympic record-breaking javelin throw distance in meters?',
+      options: ['89.94 m', '91.45 m', '92.97 m', '94.20 m'],
+      correctIndex: 2,
+      explanation: 'Arshad Nadeem set an Olympic record of 92.97 meters at the 2024 Paris Olympic Games.',
+    },
+  },
+  {
+    id: 'ca-2024-05',
+    title: 'Global Summit on AI Safety and Governance in Seoul',
+    category: 'International',
+    date: 'May 2024',
+    summary: 'World leaders and tech executives assembled in Seoul, South Korea, for the second AI Safety Summit, agreeing on rigorous safety thresholds and global coordination on frontier artificial intelligence models.',
+    importance: 'Medium',
+    relatedMcq: {
+      question: 'Which country hosted the AI Seoul Summit 2024 co-hosted with the United Kingdom?',
+      options: ['Japan', 'South Korea', 'Singapore', 'Germany'],
+      correctIndex: 1,
+      explanation: 'South Korea co-hosted the AI Seoul Summit in May 2024 focused on AI safety, innovation, and inclusivity.',
+    },
+  },
+  {
+    id: 'ca-2024-06',
+    title: 'BRICS Expansion Welcomes New Member States',
+    category: 'International',
+    date: 'January 1, 2024',
+    summary: 'The BRICS grouping officially integrated five new member nations: Egypt, Ethiopia, Iran, Saudi Arabia, and the United Arab Emirates (UAE), significantly enhancing its global economic weight.',
+    importance: 'High',
+    relatedMcq: {
+      question: 'Which of the following nations was among the newly inducted members of BRICS on January 1, 2024?',
+      options: ['Argentina', 'Egypt', 'Turkey', 'Mexico'],
+      correctIndex: 1,
+      explanation: 'Egypt officially joined BRICS along with Ethiopia, Iran, Saudi Arabia, and the UAE.',
+    },
+  },
+];
