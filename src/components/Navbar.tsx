@@ -108,7 +108,7 @@ export const Navbar: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 tracking-wider uppercase font-semibold hidden md:block">
-                  Practice Smart • Crack Your Exam
+                  By Mehtab Ali • Practice Smart
                 </p>
               </div>
             </button>

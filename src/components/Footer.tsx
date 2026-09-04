@@ -89,10 +89,14 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-sm text-slate-400 leading-relaxed mb-4">
-              MATB STS PREP is an independent, non-partisan educational portal created to help Pakistani students and government-job aspirants master syllabus-wise MCQs, timed mock examinations, and solved past papers for civil services and departmental recruitments.
+              MATB STS PREP is an independent educational portal founded and developed by <strong className="text-white font-semibold">Mehtab Ali</strong> to empower Pakistani students and government-job aspirants with syllabus-wise MCQs, timed mock examinations, and authentic solved past papers.
             </p>
 
             <div className="space-y-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Founded & Managed by <strong>Mehtab Ali</strong></span>
+              </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>Verified explanations from official textbooks and commissions</span>
@@ -102,8 +106,8 @@ export const Footer: React.FC = () => {
                 <span>100% Free mock exams & negative marking simulator</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Daily updated Pakistan & International Current Affairs</span>
+                <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Contact Founder: <a href="mailto:mehtabbiztech@gmail.com" className="text-emerald-400 hover:underline">mehtabbiztech@gmail.com</a></span>
               </div>
             </div>
           </div>
@@ -232,8 +236,8 @@ export const Footer: React.FC = () => {
               Disclaimer: MATB STS PREP is an independent educational platform. All questions are compiled from public past papers, standard syllabi, and official curriculum for study and practice purposes.
             </span>
           </div>
-          <div className="text-slate-400 shrink-0">
-            © {new Date().getFullYear()} MATB STS PREP. All Rights Reserved.
+          <div className="text-slate-400 shrink-0 text-center md:text-right">
+            © {new Date().getFullYear()} <span className="font-semibold text-white">MATB STS PREP</span> • Founded &amp; Developed by <span className="text-emerald-400 font-semibold">Mehtab Ali</span>. All Rights Reserved.
           </div>
         </div>
       </div>

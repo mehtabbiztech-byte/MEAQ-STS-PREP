@@ -10,7 +10,11 @@ import {
   HelpCircle,
   ArrowRight,
   Globe,
-  ExternalLink
+  ExternalLink,
+  GraduationCap,
+  Mail,
+  Code,
+  Heart
 } from 'lucide-react';
 
 export const AboutView: React.FC = () => {
@@ -30,8 +34,50 @@ export const AboutView: React.FC = () => {
           <span className="text-emerald-600 dark:text-emerald-400">Crack Your Exam.”</span>
         </h1>
         <p className="mt-4 text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
-          MATB STS PREP is an independent, state-of-the-art educational platform designed specifically for Pakistani students, civil service aspirants, and government job candidates.
+          MATB STS PREP is an independent, state-of-the-art educational platform founded by <strong>Mehtab Ali</strong>, designed specifically to help Pakistani students and civil service aspirants conquer public examinations.
         </p>
+      </div>
+
+      {/* Founder Profile Spotlight */}
+      <div className="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-950 text-white border border-emerald-800/60 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8 justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-emerald-300 text-slate-950 font-black text-2xl sm:text-3xl flex items-center justify-center shadow-xl ring-4 ring-emerald-500/30 shrink-0 font-display">
+              MA
+            </div>
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/90 border border-emerald-600/60 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Founder &amp; Lead Architect</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-display tracking-tight">
+                Mehtab Ali
+              </h2>
+              <p className="text-emerald-400 font-semibold text-xs sm:text-sm">
+                Creator of MATB STS PREP • Tech &amp; Education Lead
+              </p>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl pt-1">
+                “I built MATB STS PREP to ensure every student—regardless of financial background or geographic location—has direct access to authentic past papers, verified MCQs, and real exam simulations for FPSC, SPSC, PPSC, and STS.”
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0 w-full md:w-auto">
+            <a 
+              href="mailto:mehtabbiztech@gmail.com" 
+              className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-emerald-950/60 flex items-center justify-center gap-2"
+            >
+              <Mail className="w-4 h-4" />
+              <span>mehtabbiztech@gmail.com</span>
+            </a>
+            <div className="px-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700/70 text-slate-300 text-xs flex items-center justify-center gap-2">
+              <Code className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Full-Stack Platform Engineering</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 3 Value Pillars */}
@@ -87,6 +133,15 @@ export const AboutView: React.FC = () => {
         <div className="space-y-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
             <h4 className="font-bold text-sm text-slate-900 dark:text-white mb-1">
+              Who is the founder and developer of MATB STS PREP?
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              MATB STS PREP was founded and built by <strong className="text-slate-900 dark:text-white">Mehtab Ali</strong>. You can reach out directly via email at <a href="mailto:mehtabbiztech@gmail.com" className="text-emerald-600 dark:text-emerald-400 underline font-semibold">mehtabbiztech@gmail.com</a> for inquiries, academic suggestions, or partnerships.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <h4 className="font-bold text-sm text-slate-900 dark:text-white mb-1">
               Is MATB STS PREP free to use?
             </h4>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -125,7 +180,7 @@ export const AboutView: React.FC = () => {
             Host MATB STS PREP on Your Own Domain
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Attach any domain or subdomain (e.g. <code className="text-emerald-400 font-mono">matbstsprep.com</code> or <code className="text-emerald-400 font-mono">prep.yourdomain.pk</code>). Automated SSL certificate, edge routing, and global CDN are provisioned instantly.
+            Attach your official production domain: <code className="text-emerald-400 font-mono font-bold">meaqstsprep.app</code>. Automated SSL certificate, edge routing, and global CDN are provisioned instantly.
           </p>
         </div>
 

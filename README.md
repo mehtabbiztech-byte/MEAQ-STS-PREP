@@ -60,47 +60,45 @@ Click **"Deploy"**. Within ~45 seconds, your platform will be live with free aut
 
 ---
 
-## 🌐 Adding Your Custom Domain on Vercel
+## 🌐 Changing From Preview URL to `meaqstsprep.app`
 
-You can link any custom domain (e.g., `matbstsprep.com`, `prep.matb.pk`, `matbexams.com`) in 3 simple steps:
+Follow these 3 exact steps in Vercel to replace your preview URL (`meaq-sts-prep-kw7up69ng-mehtab2.vercel.app`) with your official brand domain (**`meaqstsprep.app`**):
 
-### Step 1: Add Domain in Vercel
-1. In your [Vercel Dashboard](https://vercel.com/dashboard), open your deployed **MATB STS PREP** project.
-2. Go to **Settings** → **Domains** (in the left sidebar).
-3. Type your domain name (e.g. `yourdomain.com` or `prep.yourdomain.pk`) and click **Add**.
-4. Vercel will recommend adding both:
-   - `yourdomain.com`
-   - `www.yourdomain.com` (with automatic redirect to the primary domain)
+### Step 1: Add `meaqstsprep.app` in Vercel
+1. Open your Vercel Dashboard at [vercel.com/dashboard](https://vercel.com/dashboard).
+2. Click on your project **`meaq-sts-prep`**.
+3. Go to **Settings** → **Domains** (in the left-hand navigation).
+4. In the text field, enter:
+   ```text
+   meaqstsprep.app
+   ```
+   and click **Add**.
+5. Vercel will ask if you want to also add `www.meaqstsprep.app` with a redirect. Choose **"Add meaqstsprep.app and redirect www.meaqstsprep.app to it"** (Recommended).
 
 ---
 
 ### Step 2: Configure DNS Records at Your Domain Registrar
-Log in to where you purchased your domain (e.g., **PKNIC**, **Namecheap**, **GoDaddy**, **Cloudflare**, **Hostinger**, etc.) and navigate to the **DNS Management / DNS Records** page:
+Log in to where you registered `meaqstsprep.app` (e.g. Google Domains / Squarespace, Namecheap, Cloudflare, GoDaddy, Hostinger, etc.) and add these two DNS records:
 
-#### Option A: For Root / Apex Domain (`yourdomain.com` or `yourdomain.pk`)
-Add an **A Record**:
-| Type | Name / Host | Value / Target | TTL |
+#### 1. For Root Domain (`meaqstsprep.app`):
+| Record Type | Name / Host | Value / Target | TTL |
 | :---: | :---: | :---: | :---: |
-| **A** | `@` (or leave blank) | `76.76.21.21` | Auto / 3600 |
+| **A** | `@` (or leave empty) | `76.76.21.21` | Auto / 3600 (1 hour) |
 
-#### Option B: For Subdomain or WWW (`www.yourdomain.com` or `prep.yourdomain.pk`)
-Add a **CNAME Record**:
-| Type | Name / Host | Value / Target | TTL |
+#### 2. For WWW Alias (`www.meaqstsprep.app`):
+| Record Type | Name / Host | Value / Target | TTL |
 | :---: | :---: | :---: | :---: |
-| **CNAME** | `www` (or `prep`) | `cname.vercel-dns.com.` | Auto / 3600 |
+| **CNAME** | `www` | `cname.vercel-dns.com.` | Auto / 3600 (1 hour) |
 
-> 💡 **Tip for Pakistani Domains (`.pk`, `.com.pk`, etc.)**:
-> If registered via PKNIC or a local provider that requires external DNS management, point your domain's nameservers to Cloudflare (free) or your DNS manager, then add the `A` and `CNAME` records above.
-
-> 🔒 **Tip for Cloudflare Users**:
-> When adding the records in Cloudflare, ensure the orange cloud is set to **DNS Only (Grey Cloud)** initially so Vercel can issue the SSL certificate smoothly.
+> 🔒 **Crucial for `.app` Domains**:
+> The `.app` top-level domain is part of Google's **HSTS Preload List**, requiring mandatory HTTPS. You do not need to purchase an SSL certificate; Vercel will automatically provision and install a free Let's Encrypt SSL certificate as soon as the A record resolves!
 
 ---
 
-### Step 3: Automatic SSL & Verification
-- Once the DNS records propagate (usually 2 to 15 minutes), Vercel will automatically verify the domain.
-- A free **Let's Encrypt SSL/TLS Certificate (HTTPS)** is automatically generated and renewed forever.
-- Your platform is now securely accessible worldwide at your custom domain!
+### Step 3: Verification & Go Live
+- Vercel monitors DNS propagation automatically (typically ready in 2–15 minutes).
+- Once you see green checkmarks next to `meaqstsprep.app` in your Vercel Domains list, your app is live at **https://meaqstsprep.app**!
+- Any visitors accessing `meaq-sts-prep-kw7up69ng-mehtab2.vercel.app` or `www.meaqstsprep.app` will seamlessly load your application.
 
 ---
 
@@ -117,6 +115,14 @@ npm run dev
 npm run build
 npm run preview
 ```
+
+---
+
+## 👨‍💻 Founder & Lead Developer
+
+- **Mehtab Ali**
+- **Email**: [mehtabbiztech@gmail.com](mailto:mehtabbiztech@gmail.com)
+- **Role**: Founder, Academic Lead & Full-Stack Platform Engineer
 
 ---
 
