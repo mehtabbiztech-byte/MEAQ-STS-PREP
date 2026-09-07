@@ -3,6 +3,7 @@ import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import explainHandler from './api/explain';
+import chatHandler from './api/chat';
 
 dotenv.config();
 
@@ -14,22 +15,15 @@ async function startServer() {
 
   // API Routes FIRST
   app.get('/api/health', (req, res) => {
-    const hasGemini1 = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 0);
-    const hasGemini2 = Boolean(process.env.GEMINI_API_KEY_2 && process.env.GEMINI_API_KEY_2.trim().length > 0);
-    const hasOpenAI = Boolean((process.env.OPENAI_API_KEY || process.env.CHATGPT_API_KEY) && (process.env.OPENAI_API_KEY || process.env.CHATGPT_API_KEY || '').trim().length > 0);
-
     res.json({ 
       status: 'ok', 
-      geminiConfigured: hasGemini1 || hasGemini2,
-      geminiKey1: hasGemini1,
-      geminiKey2: hasGemini2,
-      chatGptConfigured: hasOpenAI,
+      chatGptConfigured: Boolean(process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.trim().length > 0)
     });
   });
 
-  // Gemini MCQ explanation & doubt resolution endpoints
+  // Secure server-side ChatGPT endpoints
   app.all('/api/explain', (req, res) => explainHandler(req, res));
-  app.all('/api/gemini/explain', (req, res) => explainHandler(req, res));
+  app.all('/api/chat', (req, res) => chatHandler(req, res));
 
   // Vite middleware for development / static serving in production
   if (process.env.NODE_ENV !== 'production') {
