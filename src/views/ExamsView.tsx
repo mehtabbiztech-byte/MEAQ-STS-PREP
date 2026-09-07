@@ -68,13 +68,13 @@ export const ExamsView: React.FC = () => {
       {/* Top Header */}
       <div className="mb-6">
         <div className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">
-          Targeted Preparation Areas
+          Explore Exams
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-          All Pakistani Testing Commissions & Exam Syllabi
+          Pakistan’s Complete Exam Preparation Directory
         </h1>
         <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
-          Explore complete official schemes of syllabi, subject breakdowns, past papers, and mock tests for federal and provincial jobs.
+          Explore school, college, university, recruitment and competitive pathways—then open detailed syllabi, past papers and mock tests.
         </p>
       </div>
 
