@@ -366,7 +366,7 @@ export const McqsView: React.FC = () => {
                   </div>
                 )}
 
-                {/* Gemini AI On-Demand Explanation & Doubt Assistant */}
+                {/* ChatGPT On-Demand Explanation & Doubt Assistant */}
                 <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
 
                 {/* Card Action Controls */}

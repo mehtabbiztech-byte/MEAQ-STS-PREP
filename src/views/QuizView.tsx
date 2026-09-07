@@ -615,7 +615,7 @@ export const QuizView: React.FC = () => {
                     {mcq.explanation}
                   </div>
 
-                  {/* Gemini AI Detailed Explanation & Doubt Assistant */}
+                  {/* ChatGPT Detailed Explanation & Doubt Assistant */}
                   <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
                 </div>
               );

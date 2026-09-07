@@ -19,8 +19,8 @@ export interface ChatMessage {
 
 /**
  * Request an on-demand, deep conceptual explanation for a specific MCQ
- * from the server-side Gemini endpoint (/api/explain).
- * Never exposes the GEMINI_API_KEY to the client.
+ * from the server-side ChatGPT endpoint (/api/explain).
+ * Never exposes the OPENAI_API_KEY to the client.
  */
 export async function requestAiExplanation(
   mcq: MCQ,
@@ -84,7 +84,7 @@ export async function requestAiExplanation(
 
 /**
  * Ask a follow-up doubt or question regarding a specific MCQ
- * from the server-side Gemini endpoint (/api/explain).
+ * from the server-side ChatGPT endpoint (/api/explain).
  */
 export async function askAiDoubt(
   mcq: MCQ,

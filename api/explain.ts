@@ -1,5 +1,3 @@
-import { GoogleGenAI } from '@google/genai';
-
 interface McqPayload {
   id?: string;
   question: string;
@@ -20,208 +18,65 @@ interface RequestBody {
   examContext?: string;
 }
 
+const MODEL = process.env.OPENAI_MODEL || 'gpt-5-mini';
+
+async function createResponse(input: string): Promise<string> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) throw new Error('OPENAI_API_KEY_NOT_CONFIGURED');
+  const response = await fetch('https://api.openai.com/v1/responses', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: MODEL,
+      instructions: 'You are a careful, encouraging tutor for Pakistani students and competitive-exam candidates. Be accurate, concise, syllabus-focused, and clearly flag uncertainty.',
+      input,
+      max_output_tokens: 1200,
+      store: false,
+    }),
+  });
+  const data: any = await response.json();
+  if (!response.ok) throw new Error(data?.error?.message || 'OpenAI request failed.');
+  const text = data.output_text || data.output?.flatMap((item: any) => item.content || [])
+    .filter((item: any) => item.type === 'output_text').map((item: any) => item.text).join('\n');
+  if (!text) throw new Error('ChatGPT returned an empty response.');
+  return text;
+}
+
 export default async function handler(req: any, res: any) {
-  // CORS Headers for API calls
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  // Health / info check
-  if (req.method === 'GET') {
-    const isKeyConfigured = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 0);
-    return res.status(200).json({
-      status: 'ok',
-      endpoint: '/api/explain',
-      service: 'MATB STS Prep Gemini AI Tutor',
-      model: 'gemini-3.8-flash',
-      configured: isKeyConfigured,
-      capabilities: ['on_demand_explanation', 'doubt_resolution']
-    });
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({
-      success: false,
-      error: 'Method not allowed. Please use POST.'
-    });
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method === 'GET') return res.status(200).json({
+    status: 'ok', endpoint: '/api/explain', service: 'MATB STS Prep ChatGPT Tutor',
+    model: MODEL, configured: Boolean(process.env.OPENAI_API_KEY),
+    capabilities: ['on_demand_explanation', 'doubt_resolution'],
+  });
+  if (req.method !== 'POST') return res.status(405).json({ success: false, error: 'Method not allowed.' });
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    
-    // Graceful handling when key is not configured on the server
-    if (!apiKey || apiKey.trim() === '') {
-      return res.status(200).json({
-        success: false,
-        isConfigured: false,
-        error: 'GEMINI_API_KEY is not configured in the server environment. Please configure your GEMINI_API_KEY in Settings > Secrets or your deployment environment variables.',
-      });
-    }
-
     const body: RequestBody = req.body || {};
-    const { action = 'explain', mcq, doubt, chatHistory, examContext } = body;
+    const { action = 'explain', mcq, doubt, chatHistory = [], examContext } = body;
+    if (!mcq?.question || !Array.isArray(mcq.options)) return res.status(400).json({ success: false, error: 'A valid MCQ is required.' });
+    const correctLetter = String.fromCharCode(65 + (mcq.correctIndex ?? 0));
+    const correctText = mcq.options[mcq.correctIndex] || `Option ${correctLetter}`;
+    const options = mcq.options.map((option, index) => `${String.fromCharCode(65 + index)}) ${option}`).join('\n');
+    const shared = `Exam: ${examContext || 'Pakistani competitive exams'}\nSubject: ${mcq.category || 'General Knowledge'}\nQuestion: ${mcq.question}\nOptions:\n${options}\nVerified answer: ${correctLetter}) ${correctText}`;
 
-    if (!mcq || !mcq.question || !Array.isArray(mcq.options)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Invalid request payload: Valid MCQ object with question and options is required.'
-      });
-    }
-
-    // Lazy initialization of GoogleGenAI SDK with user agent
-    const ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        },
-      },
-    });
-
-    // Helper for resilient model execution across available high-performance aliases
-    const executeWithFallback = async (prompt: string): Promise<{ text: string; modelUsed: string }> => {
-      const candidateModels = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.1-flash-lite'];
-      let lastError: any = null;
-
-      for (const model of candidateModels) {
-        try {
-          const res = await ai.models.generateContent({
-            model,
-            contents: prompt,
-          });
-          if (res.text) {
-            return { text: res.text, modelUsed: model };
-          }
-        } catch (err: any) {
-          lastError = err;
-          // If error is unauthorized or invalid key, break early
-          const msg = (err?.message || '').toLowerCase();
-          if (msg.includes('api_key') || msg.includes('unauthorized') || msg.includes('forbidden')) {
-            throw err;
-          }
-          // Continue to next model on temporary 503 or overload
-          console.warn(`Model ${model} returned error, trying fallback...`, err?.message);
-        }
-      }
-      throw lastError || new Error('All model candidates failed to respond.');
-    };
-
-    const correctOptionLetter = String.fromCharCode(65 + (mcq.correctIndex ?? 0));
-    const correctOptionText = mcq.options[mcq.correctIndex] || 'Option ' + correctOptionLetter;
-    const formattedOptions = mcq.options
-      .map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`)
-      .join('\n');
-
-    // (b) Answer student's follow-up "doubt" question about this specific MCQ
     if (action === 'doubt') {
-      if (!doubt || typeof doubt !== 'string' || !doubt.trim()) {
-        return res.status(400).json({
-          success: false,
-          error: 'Doubt question query is required.'
-        });
-      }
-
-      const conversationHistoryText = (chatHistory && chatHistory.length > 0)
-        ? `\nPRIOR CONVERSATION CONTEXT:\n` + chatHistory.slice(-4).map(m => `${m.role === 'user' ? 'Candidate' : 'Tutor'}: ${m.content}`).join('\n')
-        : '';
-
-      const doubtPrompt = `You are a distinguished mentor and academic coach for Pakistani competitive and recruitment exams, specifically STS (Sukkur IBA BPS 5-15), FPSC, SPSC, PPSC, and CSS.
-
-A candidate preparing for ${examContext || 'competitive exams'} has a doubt regarding the following question:
-
-QUESTION:
-${mcq.question}
-
-OPTIONS:
-${formattedOptions}
-
-VERIFIED CORRECT ANSWER:
-Option ${correctOptionLetter}: ${correctOptionText}
-
-${mcq.explanation ? `REFERENCE NOTE: ${mcq.explanation}\n` : ''}${conversationHistoryText}
-
-CANDIDATE'S DOUBT / QUESTION:
-"${doubt.trim()}"
-
-YOUR TASK AS THE TUTOR:
-1. Address the student's doubt directly, empathetically, and clearly.
-2. Explain precisely why the verified answer (Option ${correctOptionLetter}) holds true based on authoritative Pakistani academic standards, historical facts, or scientific principles.
-3. If the student asked why another option is wrong, explain the flaw, nuance, or common candidate confusion with that option.
-4. Keep the explanation concise, encouraging, and structured (2 to 3 focused paragraphs or bullet points).
-5. Use clean markdown formatting (bold key terms).`;
-
-      const { text: replyText, modelUsed } = await executeWithFallback(doubtPrompt);
-
-      return res.status(200).json({
-        success: true,
-        isConfigured: true,
-        action: 'doubt',
-        reply: replyText,
-        model: modelUsed
-      });
+      if (!doubt?.trim()) return res.status(400).json({ success: false, error: 'Please enter your question.' });
+      const history = chatHistory.slice(-6).map(message => `${message.role}: ${message.content}`).join('\n');
+      const reply = await createResponse(`${shared}\n\nRecent conversation:\n${history}\n\nStudent question: ${doubt.trim()}\n\nAnswer directly in simple English. Explain misconceptions and include one useful exam tip.`);
+      return res.status(200).json({ success: true, isConfigured: true, action, reply, model: MODEL });
     }
 
-    // (a) Generate an on-demand comprehensive explanation for the MCQ
-    const explainPrompt = `You are an elite academic instructor and exam preparation coach for Pakistani competitive examinations, specifically STS (Sukkur IBA BPS 5-15), FPSC, SPSC CCE, PPSC, and NTS.
-
-Generate an on-demand, high-yield conceptual explanation for the following multiple choice question:
-
-SUBJECT: ${mcq.category || 'General Knowledge'}
-${mcq.subtopic ? `SUBTOPIC: ${mcq.subtopic}` : ''}
-EXAM FOCUS: ${examContext || (mcq.examTags?.join(', ') || 'STS Sukkur IBA / General Recruitment')}
-DIFFICULTY: ${mcq.difficulty || 'Medium'}
-
-QUESTION:
-${mcq.question}
-
-OPTIONS:
-${formattedOptions}
-
-CORRECT ANSWER:
-Option ${correctOptionLetter}: ${correctOptionText}
-
-${mcq.explanation ? `EXISTING REFERENCE NOTE: ${mcq.explanation}` : ''}
-
-Please generate a well-structured, authoritative explanation following these sections:
-
-### 1. Why Option ${correctOptionLetter} is Correct
-Provide a clear, verified explanation of the core concept. Include key historical dates, constitutional provisions, scientific mechanisms, or grammatical rules where relevant to Pakistani syllabus.
-
-### 2. Analysis of Incorrect Options
-Briefly explain why each of the other options is incorrect or what classic exam trap/distractor it represents.
-
-### 3. High-Yield Exam Memory Tip
-Provide a quick memory anchor, mnemonic, or related high-frequency fact that frequently appears alongside this topic in past STS, FPSC, or SPSC papers.
-
-Format using clean, readable Markdown with bullet points and bold highlights. Keep it strictly focused and avoid fluff.`;
-
-    const { text: explanationText, modelUsed } = await executeWithFallback(explainPrompt);
-
-    return res.status(200).json({
-      success: true,
-      isConfigured: true,
-      action: 'explain',
-      explanation: explanationText,
-      model: modelUsed
-    });
-
+    const explanation = await createResponse(`${shared}\nDifficulty: ${mcq.difficulty || 'Medium'}\nReference note: ${mcq.explanation || 'None'}\n\nExplain with these short sections: Why the answer is correct; Why other options are wrong; Memory tip. Use clear Markdown.`);
+    return res.status(200).json({ success: true, isConfigured: true, action, explanation, model: MODEL });
   } catch (error: any) {
-    console.error('Server error generating Gemini explanation:', error);
-    
-    // Check for common API key issues
-    const errorMessage = error?.message || 'Failed to communicate with Gemini API.';
-    const isKeyError = errorMessage.toLowerCase().includes('api_key') || errorMessage.toLowerCase().includes('apikey') || errorMessage.toLowerCase().includes('unauthorized');
-
-    return res.status(500).json({
-      success: false,
-      isConfigured: !isKeyError,
-      error: isKeyError 
-        ? 'Gemini API key is invalid or unauthorized. Please verify your GEMINI_API_KEY in Settings > Secrets.'
-        : `AI tutor service encountered an error: ${errorMessage}`
+    const missingKey = error?.message === 'OPENAI_API_KEY_NOT_CONFIGURED';
+    return res.status(missingKey ? 503 : 500).json({
+      success: false, isConfigured: !missingKey,
+      error: missingKey ? 'ChatGPT is not configured yet. Add OPENAI_API_KEY to your deployment environment variables.' : error?.message || 'The ChatGPT tutor is temporarily unavailable.',
     });
   }
 }
