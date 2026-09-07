@@ -334,7 +334,7 @@ export const ExamsView: React.FC = () => {
                   }}
                   className="text-xs font-bold text-emerald-600 hover:underline"
                 >
-                  View in Full MCQ Solver →
+                  View All MCQs →
                 </button>
               </div>
 
