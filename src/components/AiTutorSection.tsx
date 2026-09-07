@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { 
-  Bot, 
   Sparkles, 
-  Send, 
   Loader2, 
   AlertCircle, 
-  Copy, 
-  Check, 
+  Send, 
   RefreshCw, 
   ChevronUp, 
   ChevronDown, 
@@ -14,12 +11,13 @@ import {
   Lightbulb, 
   CheckCircle2, 
   KeyRound,
+  Bot,
   User,
-  Zap,
-  Cpu
+  Copy,
+  Check
 } from 'lucide-react';
 import { MCQ } from '../types';
-import { requestAiExplanation, askAiDoubt, ChatMessage, AiProvider } from '../services/aiTutorService';
+import { requestAiExplanation, askAiDoubt, ChatMessage } from '../services/aiTutorService';
 
 interface AiTutorSectionProps {
   mcq: MCQ;
@@ -34,12 +32,6 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   
-  // AI Provider selection
-  const [provider, setProvider] = useState<AiProvider>('auto');
-  const [activeProvider, setActiveProvider] = useState<'gemini' | 'chatgpt' | null>(null);
-  const [activeModel, setActiveModel] = useState<string>('gemini-2.5-flash');
-  const [keyUsed, setKeyUsed] = useState<number | undefined>(undefined);
-
   // Explanation state
   const [explanation, setExplanation] = useState<string | null>(null);
   const [loadingExplanation, setLoadingExplanation] = useState(false);
@@ -50,7 +42,7 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
   const [doubtInput, setDoubtInput] = useState('');
   const [loadingDoubt, setLoadingDoubt] = useState(false);
   const [doubtError, setDoubtError] = useState<string | null>(null);
-  const [chatHistory, setChatHistory] = useState<Array<ChatMessage & { provider?: 'gemini' | 'chatgpt'; model?: string }>>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   // Toggle open and auto-fetch if first time
@@ -58,35 +50,27 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
     const nextState = !isOpen;
     setIsOpen(nextState);
     if (nextState && !explanation && !loadingExplanation) {
-      handleFetchExplanation(provider);
+      handleFetchExplanation();
     }
   };
 
   // Fetch AI Explanation
-  const handleFetchExplanation = async (targetProvider: AiProvider = provider) => {
+  const handleFetchExplanation = async () => {
     setLoadingExplanation(true);
     setExplainError(null);
 
-    const res = await requestAiExplanation(mcq, examContext, targetProvider);
+    const res = await requestAiExplanation(mcq, examContext);
     setLoadingExplanation(false);
 
     if (res.success && res.explanation) {
       setExplanation(res.explanation);
       setIsKeyConfigured(true);
-      if (res.provider) setActiveProvider(res.provider);
-      if (res.model) setActiveModel(res.model);
-      if (res.keyUsed) setKeyUsed(res.keyUsed);
     } else {
       setExplainError(res.error || 'Failed to generate AI explanation.');
       if (res.isConfigured === false) {
         setIsKeyConfigured(false);
       }
     }
-  };
-
-  const handleProviderChange = (newProvider: AiProvider) => {
-    setProvider(newProvider);
-    handleFetchExplanation(newProvider);
   };
 
   // Ask Follow-Up Doubt
@@ -108,22 +92,17 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
     setLoadingDoubt(true);
     setDoubtError(null);
 
-    const res = await askAiDoubt(mcq, query, updatedHistory, examContext, provider);
+    const res = await askAiDoubt(mcq, query, updatedHistory, examContext);
     setLoadingDoubt(false);
 
     if (res.success && res.reply) {
-      const assistantMsg = {
+      const assistantMsg: ChatMessage = {
         id: `a-${Date.now()}`,
-        role: 'assistant' as const,
+        role: 'assistant',
         content: res.reply,
         timestamp: Date.now(),
-        provider: res.provider,
-        model: res.model,
       };
       setChatHistory(prev => [...prev, assistantMsg]);
-      if (res.provider) setActiveProvider(res.provider);
-      if (res.model) setActiveModel(res.model);
-      if (res.keyUsed) setKeyUsed(res.keyUsed);
     } else {
       setDoubtError(res.error || 'Could not resolve doubt at this moment.');
       if (res.isConfigured === false) {
@@ -234,15 +213,10 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
           <span className="p-1 rounded-lg bg-emerald-600 text-white shadow-2xs">
             <Sparkles className="w-3.5 h-3.5" />
           </span>
-          <span className="font-bold">AI Tutor & Doubt Solver</span>
-          <div className="hidden sm:flex items-center gap-1">
-            <span className="px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold">
-              Gemini
-            </span>
-            <span className="px-1.5 py-0.5 rounded bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300 text-[10px] font-bold">
-              ChatGPT
-            </span>
-          </div>
+          <span className="font-bold">ChatGPT Tutor & Doubt Solver</span>
+          <span className="hidden sm:inline-block px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold uppercase tracking-wider">
+            Server-Side
+          </span>
         </div>
 
         <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
@@ -255,73 +229,19 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
       {isOpen && (
         <div className="mt-2.5 p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-emerald-50/40 via-white to-slate-50 dark:from-slate-800/80 dark:via-slate-850 dark:to-slate-900 border border-emerald-200/80 dark:border-emerald-800/50 shadow-sm animate-in fade-in duration-150">
           
-          {/* Header Bar with Provider Selection */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 mb-3 border-b border-slate-200/80 dark:border-slate-800">
+          {/* Header pill */}
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <Bot className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white font-display">
-                Multi-Engine AI Tutor
+                AI On-Demand Explanation & Doubt Assistant
               </h4>
             </div>
             
-            {/* Engine Selector Tabs */}
-            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/90 p-1 rounded-xl border border-slate-200/80 dark:border-slate-700/80 text-[11px]">
-              <button
-                type="button"
-                onClick={() => handleProviderChange('auto')}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer whitespace-nowrap ${
-                  provider === 'auto'
-                    ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-                title="Auto-selects best available model with failover"
-              >
-                🔄 Auto
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleProviderChange('gemini')}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer whitespace-nowrap ${
-                  provider === 'gemini'
-                    ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-                title="Google Gemini API (Key 1 & Key 2 Redundancy)"
-              >
-                ✨ Gemini
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleProviderChange('chatgpt')}
-                className={`px-2.5 py-1 rounded-lg font-semibold transition cursor-pointer whitespace-nowrap ${
-                  provider === 'chatgpt'
-                    ? 'bg-white dark:bg-slate-700 text-teal-700 dark:text-teal-300 shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-                title="OpenAI ChatGPT API (gpt-4o-mini)"
-              >
-                ⚡ ChatGPT
-              </button>
-            </div>
-          </div>
-
-          {/* Active Model & Engine Status Tag */}
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-[11px] text-slate-500 dark:text-slate-400 px-1">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Active Engine: <strong className="text-slate-800 dark:text-slate-200 font-semibold">{activeModel || 'Gemini 2.5 Flash'}</strong></span>
-              {keyUsed && (
-                <span className="px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold">
-                  Key {keyUsed}
-                </span>
-              )}
+              <span>Model: gemini-3.8-flash</span>
             </div>
-
-            <span className="text-[10px] text-slate-400 dark:text-slate-500">
-              STS IBA • FPSC • SPSC Verified
-            </span>
           </div>
 
           {/* 1. KEY NOT CONFIGURED BANNER */}
@@ -329,25 +249,14 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
             <div className="mb-4 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/80 text-amber-900 dark:text-amber-200 text-xs">
               <div className="flex items-start gap-2.5">
                 <KeyRound className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                <div className="space-y-1.5 flex-1">
-                  <strong className="font-bold block">API Key Configuration Notice</strong>
+                <div className="space-y-1">
+                  <strong className="font-bold block">OPENAI_API_KEY Not Configured</strong>
                   <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
-                    {explainError || 'Please configure your API keys in the server environment.'}
+                    To enable ChatGPT explanations and doubt resolution, add your <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono text-[11px]">OPENAI_API_KEY</code> to the server environment variables.
                   </p>
-                  <div className="flex flex-wrap items-center gap-2 pt-1">
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Keys supported in <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded font-mono text-[10px]">.env</code>: <span className="font-mono text-emerald-700 dark:text-emerald-400">GEMINI_API_KEY</span>, <span className="font-mono text-emerald-700 dark:text-emerald-400">GEMINI_API_KEY_2</span>, <span className="font-mono text-teal-700 dark:text-teal-400">OPENAI_API_KEY</span>
-                    </span>
-                    {provider !== 'gemini' && (
-                      <button
-                        type="button"
-                        onClick={() => handleProviderChange('gemini')}
-                        className="px-2 py-0.5 rounded bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] cursor-pointer"
-                      >
-                        Switch to Gemini
-                      </button>
-                    )}
-                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Your standard verified answer, offline reference notes, past papers, and mock exams remain 100% available without interruption.
+                  </p>
                 </div>
               </div>
             </div>
@@ -361,7 +270,7 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                  {provider === 'chatgpt' ? 'ChatGPT' : 'Gemini'} is analyzing question #{mcq.id}...
+                  ChatGPT is analyzing question #{mcq.id}...
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Verifying core syllabus concepts, eliminating distractor traps, and generating exam tips.
@@ -382,7 +291,7 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
               </div>
               <button
                 type="button"
-                onClick={() => handleFetchExplanation(provider)}
+                onClick={handleFetchExplanation}
                 className="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-bold text-[11px] hover:bg-rose-700 transition flex items-center gap-1 shrink-0 cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" />
@@ -400,24 +309,14 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Verified Answer: Option {String.fromCharCode(65 + mcq.correctIndex)} — {mcq.options[mcq.correctIndex]}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleFetchExplanation(provider)}
-                      className="text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer p-1 rounded transition"
-                      title="Regenerate explanation"
-                    >
-                      <RefreshCw className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleCopyText(explanation, -1)}
-                      className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer p-1 rounded transition"
-                      title="Copy AI Explanation"
-                    >
-                      {copiedIndex === -1 ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyText(explanation, -1)}
+                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer p-1 rounded transition"
+                    title="Copy AI Explanation"
+                  >
+                    {copiedIndex === -1 ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  </button>
                 </div>
 
                 {renderFormattedText(explanation)}
@@ -428,21 +327,21 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
                 <div className="flex items-center gap-2 mb-2.5">
                   <HelpCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <h5 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
-                    Still have a doubt? Ask your {provider === 'chatgpt' ? 'ChatGPT' : 'Gemini'} Tutor
+                    Still have a doubt? Ask your ChatGPT Tutor
                   </h5>
                 </div>
 
                 {/* Quick suggestion prompt chips */}
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {quickSuggestions.map((promptText, pIdx) => (
+                  {quickSuggestions.map((prompt, pIdx) => (
                     <button
                       key={pIdx}
                       type="button"
                       disabled={loadingDoubt || !isKeyConfigured}
-                      onClick={() => handleSendDoubt(undefined, promptText)}
+                      onClick={() => handleSendDoubt(undefined, prompt)}
                       className="text-[11px] px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 transition cursor-pointer disabled:opacity-50 text-left"
                     >
-                      💬 {promptText}
+                      💬 {prompt}
                     </button>
                   ))}
                 </div>
@@ -469,7 +368,7 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
                             ) : (
                               <>
                                 <Bot className="w-3 h-3 text-emerald-500" />
-                                <span>{msg.provider === 'chatgpt' ? 'ChatGPT Tutor' : 'Gemini Tutor'}</span>
+                                <span>ChatGPT Tutor</span>
                               </>
                             )}
                           </span>
@@ -512,8 +411,8 @@ export const AiTutorSection: React.FC<AiTutorSectionProps> = ({
                     disabled={loadingDoubt || !isKeyConfigured}
                     placeholder={
                       isKeyConfigured 
-                        ? `Ask anything about this question to ${provider === 'chatgpt' ? 'ChatGPT' : 'Gemini'}...`
-                        : "Configure API key to ask doubt questions"
+                        ? "Ask anything about this question (e.g. Why not option C?)"
+                        : "Configure OPENAI_API_KEY to ask doubt questions"
                     }
                     className="flex-1 px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:cursor-not-allowed"
                   />
