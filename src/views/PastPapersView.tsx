@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { PastPaper } from '../types';
-import { AiTutorSection } from '../components/AiTutorSection';
 
 export const PastPapersView: React.FC = () => {
   const { selectedPastPaperId, setSelectedPastPaperId, setTab, userProfile } = useApp();
@@ -236,9 +235,6 @@ export const PastPapersView: React.FC = () => {
                         {mcq.explanation}
                       </div>
                     )}
-
-                    {/* ChatGPT Explanation & Doubt Resolver */}
-                    <AiTutorSection mcq={mcq} examContext={activePaper.exam} />
                   </div>
                 );
               })}

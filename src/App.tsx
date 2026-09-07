@@ -11,7 +11,6 @@ import { SearchModal } from './components/SearchModal';
 import { AuthModal } from './components/AuthModal';
 import { CustomDomainModal } from './components/CustomDomainModal';
 import { AttractiveBackground } from './components/AttractiveBackground';
-import { ChatGPTAssistant } from './components/ChatGPTAssistant';
 
 import { HomeView } from './views/HomeView';
 import { McqsView } from './views/McqsView';
@@ -57,7 +56,6 @@ const MainContent: React.FC = () => {
         isOpen={domainModalOpen} 
         onClose={() => setDomainModalOpen(false)} 
       />
-      <ChatGPTAssistant page={tab} />
     </div>
   );
 };

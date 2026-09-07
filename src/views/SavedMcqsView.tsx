@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { MCQS_DATA } from '../data/mcqsData';
 import { MCQ } from '../types';
-import { AiTutorSection } from '../components/AiTutorSection';
 
 interface SavedMcqsViewProps {
   initialSubTab?: 'bookmarks' | 'mistakes';
@@ -233,9 +232,6 @@ export const SavedMcqsView: React.FC<SavedMcqsViewProps> = ({ initialSubTab = 'b
                     {mcq.explanation}
                   </div>
                 )}
-
-                {/* ChatGPT Explanation & Doubt Resolution */}
-                <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
 
                 <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
                   <button

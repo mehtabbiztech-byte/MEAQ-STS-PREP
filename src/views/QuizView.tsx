@@ -22,7 +22,6 @@ import confetti from 'canvas-confetti';
 import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
-import { AiTutorSection } from '../components/AiTutorSection';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -614,9 +613,6 @@ export const QuizView: React.FC = () => {
                     <strong className="text-emerald-700 dark:text-emerald-400 block mb-1">Official Explanation:</strong>
                     {mcq.explanation}
                   </div>
-
-                  {/* ChatGPT Detailed Explanation & Doubt Assistant */}
-                  <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
                 </div>
               );
             })}

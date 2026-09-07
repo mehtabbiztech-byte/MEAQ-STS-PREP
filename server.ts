@@ -2,8 +2,6 @@ import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
-import explainHandler from './api/explain';
-import chatHandler from './api/chat';
 
 dotenv.config();
 
@@ -13,17 +11,13 @@ async function startServer() {
 
   app.use(express.json());
 
-  // API Routes FIRST
+  // Health check endpoint
   app.get('/api/health', (req, res) => {
     res.json({ 
-      status: 'ok', 
-      chatGptConfigured: Boolean(process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.trim().length > 0)
+      status: 'ok',
+      app: 'MATB STS PREP'
     });
   });
-
-  // Secure server-side ChatGPT endpoints
-  app.all('/api/explain', (req, res) => explainHandler(req, res));
-  app.all('/api/chat', (req, res) => chatHandler(req, res));
 
   // Vite middleware for development / static serving in production
   if (process.env.NODE_ENV !== 'production') {

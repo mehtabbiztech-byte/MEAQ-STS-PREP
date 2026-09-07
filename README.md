@@ -44,14 +44,12 @@ git push -u origin main
 #### ⚡ Are Any API Keys Mandatory?
 **NO.** The platform is architected to run **100% standalone out of the box**. All question banks, past papers, 16 commission portals, quizzes with PPSC negative marking, mistakes notebooks, and bookmarks are pre-bundled and function without requiring any external database or paid API keys.
 
-#### 🔑 Optional API Keys
+#### 🔑 Optional Environment Variables
 If you want to configure optional enhancements, navigate to **Project Settings → Environment Variables** in Vercel and add:
 
 | Environment Variable | Required? | Description & Purpose |
 | :--- | :---: | :--- |
-| `OPENAI_API_KEY` | Optional | Server-side OpenAI key for ChatGPT study assistance, MCQ explanations and doubt solving. Get it from [OpenAI API keys](https://platform.openai.com/api-keys). |
-| `OPENAI_MODEL` | Optional | OpenAI model used by the tutor. Defaults to `gpt-5-mini`. |
-| `VITE_APP_URL` | Optional | Your production URL (e.g. `https://matb-sts-prep.vercel.app`) for OpenGraph and social sharing. |
+| `VITE_APP_URL` | Optional | Your production URL (e.g. `https://matbstsprep.app` or `https://matb-sts-prep.vercel.app`) for OpenGraph and social sharing. |
 | `VITE_GA_MEASUREMENT_ID` | Optional | Google Analytics 4 tracking ID (`G-XXXXXXXXXX`) to track test takers and page views. |
 
 ---
