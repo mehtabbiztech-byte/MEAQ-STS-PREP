@@ -69,7 +69,7 @@ interface AppContextType {
 const DEFAULT_PROFILE: UserProfile = {
   name: 'Aspirant',
   email: 'aspirant@prep.pk',
-  targetExam: 'STS (Sukkur IBA BPS 5-15)',
+  targetExam: 'Jobs: STS',
   province: 'Sindh',
   points: 450,
   streakDays: 4,
@@ -444,4 +444,3 @@ export const useApp = (): AppContextType => {
   }
   return context;
 };
-

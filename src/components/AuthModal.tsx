@@ -21,7 +21,7 @@ import {
   MapPin,
   Sparkles
 } from 'lucide-react';
-import { EXAMS_DATA } from '../data/examsData';
+import { TARGET_OPTIONS } from '../data/learnerPaths';
 
 export const AuthModal: React.FC = () => {
   const { 
@@ -50,7 +50,7 @@ export const AuthModal: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState('');
-  const [targetExam, setTargetExam] = useState('STS (Sukkur IBA BPS 5-15)');
+  const [targetExam, setTargetExam] = useState('Jobs: STS');
   const [province, setProvince] = useState('Sindh');
   
   // Profile edit fields for logged in user
@@ -332,9 +332,9 @@ export const AuthModal: React.FC = () => {
                       onChange={(e) => setEditExam(e.target.value)}
                       className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
                     >
-                      {EXAMS_DATA.map((ex) => (
-                        <option key={ex.id} value={`${ex.shortName} (${ex.conductedBy})`}>
-                          {ex.shortName} — {ex.name}
+                      {TARGET_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
                         </option>
                       ))}
                     </select>
@@ -608,9 +608,9 @@ export const AuthModal: React.FC = () => {
                       onChange={(e) => setTargetExam(e.target.value)}
                       className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
                     >
-                      {EXAMS_DATA.map((ex) => (
-                        <option key={ex.id} value={`${ex.shortName} (${ex.conductedBy})`}>
-                          {ex.shortName} ({ex.conductedBy})
+                      {TARGET_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
                         </option>
                       ))}
                     </select>
