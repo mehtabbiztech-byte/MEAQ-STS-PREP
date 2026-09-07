@@ -1,5 +1,7 @@
 import { MCQ } from '../types';
 
+export type AiProvider = 'auto' | 'gemini' | 'chatgpt';
+
 export interface AiExplainResponse {
   success: boolean;
   explanation?: string;
@@ -7,7 +9,9 @@ export interface AiExplainResponse {
   error?: string;
   isConfigured?: boolean;
   action?: 'explain' | 'doubt';
+  provider?: 'gemini' | 'chatgpt';
   model?: string;
+  keyUsed?: number;
 }
 
 export interface ChatMessage {
@@ -19,12 +23,13 @@ export interface ChatMessage {
 
 /**
  * Request an on-demand, deep conceptual explanation for a specific MCQ
- * from the server-side ChatGPT endpoint (/api/explain).
- * Never exposes the OPENAI_API_KEY to the client.
+ * from the server-side multi-engine endpoint (/api/explain).
+ * Supports Gemini (with Key 1 & Key 2 rotation) and ChatGPT (OpenAI).
  */
 export async function requestAiExplanation(
   mcq: MCQ,
-  examContext?: string
+  examContext?: string,
+  provider: AiProvider = 'auto'
 ): Promise<AiExplainResponse> {
   try {
     const controller = new AbortController();
@@ -37,6 +42,7 @@ export async function requestAiExplanation(
       },
       body: JSON.stringify({
         action: 'explain',
+        provider,
         mcq: {
           id: mcq.id,
           question: mcq.question,
@@ -84,13 +90,14 @@ export async function requestAiExplanation(
 
 /**
  * Ask a follow-up doubt or question regarding a specific MCQ
- * from the server-side ChatGPT endpoint (/api/explain).
+ * from the server-side AI endpoint (/api/explain).
  */
 export async function askAiDoubt(
   mcq: MCQ,
   doubt: string,
   chatHistory: ChatMessage[] = [],
-  examContext?: string
+  examContext?: string,
+  provider: AiProvider = 'auto'
 ): Promise<AiExplainResponse> {
   try {
     const controller = new AbortController();
@@ -108,6 +115,7 @@ export async function askAiDoubt(
       },
       body: JSON.stringify({
         action: 'doubt',
+        provider,
         mcq: {
           id: mcq.id,
           question: mcq.question,
