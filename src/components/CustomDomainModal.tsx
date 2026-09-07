@@ -19,12 +19,12 @@ interface CustomDomainModalProps {
 }
 
 export const CustomDomainModal: React.FC<CustomDomainModalProps> = ({ isOpen, onClose }) => {
-  const [domainInput, setDomainInput] = useState('meaqstsprep.app');
+  const [domainInput, setDomainInput] = useState('matbstsprep.app');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const cleanDomain = domainInput.trim().replace(/^https?:\/\//, '').replace(/\/$/, '') || 'meaqstsprep.app';
+  const cleanDomain = domainInput.trim().replace(/^https?:\/\//, '').replace(/\/$/, '') || 'matbstsprep.app';
   const isSubdomain = cleanDomain.split('.').length > 2 && !cleanDomain.startsWith('www.');
 
   const handleCopy = (text: string, key: string) => {
@@ -78,16 +78,16 @@ export const CustomDomainModal: React.FC<CustomDomainModalProps> = ({ isOpen, on
               </span>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono">
-              <span className="text-slate-400 truncate max-w-xs" title="meaq-sts-prep-kw7up69ng-mehtab2.vercel.app">
-                meaq-sts-prep-kw7up69ng-mehtab2.vercel.app
+              <span className="text-slate-400 truncate max-w-xs" title="matb-sts-prep.vercel.app">
+                matb-sts-prep.vercel.app
               </span>
               <div className="flex items-center gap-2 text-emerald-400 font-bold shrink-0">
                 <ArrowRight className="w-4 h-4" />
-                <span className="text-sm text-emerald-300">meaqstsprep.app</span>
+                <span className="text-sm text-emerald-300">matbstsprep.app</span>
               </div>
             </div>
             <p className="text-[11px] text-slate-400 leading-normal">
-              Linking <strong className="text-white">meaqstsprep.app</strong> will replace the temporary preview hash with your professional brand address.
+              Linking <strong className="text-white">matbstsprep.app</strong> will replace the temporary preview hash with your professional brand address.
             </p>
           </div>
 
@@ -101,7 +101,7 @@ export const CustomDomainModal: React.FC<CustomDomainModalProps> = ({ isOpen, on
                 type="text"
                 value={domainInput}
                 onChange={(e) => setDomainInput(e.target.value)}
-                placeholder="meaqstsprep.app"
+                placeholder="matbstsprep.app"
                 className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-mono text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
               />
             </div>
@@ -234,10 +234,10 @@ export const CustomDomainModal: React.FC<CustomDomainModalProps> = ({ isOpen, on
           <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-900 dark:text-emerald-200 space-y-1.5">
             <div className="font-bold flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Special Note for .app Domains (meaqstsprep.app)</span>
+              <span>Special Note for .app Domains (matbstsprep.app)</span>
             </div>
             <p className="leading-relaxed text-[11px]">
-              The <strong>.app</strong> top-level domain is included in Google’s <strong>HSTS preload list</strong>, meaning browsers require strict HTTPS. Vercel provisions a free, auto-renewing Let's Encrypt SSL certificate within minutes of adding your DNS records. Once DNS verifies, <code className="font-mono font-bold">https://meaqstsprep.app</code> goes live with end-to-end encryption.
+              The <strong>.app</strong> top-level domain is included in Google’s <strong>HSTS preload list</strong>, meaning browsers require strict HTTPS. Vercel provisions a free, auto-renewing Let's Encrypt SSL certificate within minutes of adding your DNS records. Once DNS verifies, <code className="font-mono font-bold">https://matbstsprep.app</code> goes live with end-to-end encryption.
             </p>
           </div>
         </div>

@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with exam preferences, bookmarks, and mistakes",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Full name of the student" },
+        "email": { "type": "string", "description": "Email address" },
+        "targetExam": { "type": "string", "description": "Target competitive examination" },
+        "province": { "type": "string", "description": "Province or region" },
+        "studyGoalDaily": { "type": "number", "description": "Daily MCQ target" },
+        "bookmarks": { "type": "array", "description": "Array of bookmarked MCQ IDs" },
+        "mistakes": { "type": "array", "description": "Array of mistake MCQ IDs" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["name", "targetExam", "province", "bookmarks", "mistakes"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Timed quiz or mock test score record with backend score validation",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "User UID who took the test" },
+        "quizTitle": { "type": "string", "description": "Title of the quiz" },
+        "category": { "type": "string", "description": "Subject or exam category" },
+        "score": { "type": "number", "description": "Number of correct answers" },
+        "totalQuestions": { "type": "number", "description": "Total question count" },
+        "percentage": { "type": "number", "description": "Calculated score percentage" },
+        "timeSpentSeconds": { "type": "number", "description": "Duration in seconds" },
+        "passed": { "type": "boolean", "description": "Whether passing threshold was met" },
+        "createdAt": { "type": "string", "description": "Timestamp of submission" }
+      },
+      "required": ["userId", "quizTitle", "category", "score", "totalQuestions", "percentage", "timeSpentSeconds", "passed", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User account document containing profile, target exam, bookmarks, and mistakes"
+    },
+    "/users/{userId}/quiz_history/{quizId}": {
+      "schema": "QuizAttempt",
+      "description": "Validated immutable quiz result history for the authenticated user"
+    }
+  }
+}

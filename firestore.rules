@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Connection test document
+    match /test/{docId} {
+      allow read: if true;
+    }
+
+    // User Profile Document
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId)
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.targetExam is string
+        && request.resource.data.province is string
+        && request.resource.data.bookmarks is list
+        && request.resource.data.mistakes is list
+        && request.resource.data.bookmarks.size() <= 2000
+        && request.resource.data.mistakes.size() <= 2000;
+      allow delete: if isOwner(userId);
+
+      // Quiz History Subcollection with Backend Validation
+      match /quiz_history/{quizId} {
+        allow read: if isOwner(userId);
+        
+        // Backend validation: reject impossible quiz scores
+        allow create: if isOwner(userId)
+          && request.resource.data.userId == userId
+          && request.resource.data.score is number
+          && request.resource.data.totalQuestions is number
+          && request.resource.data.totalQuestions > 0
+          && request.resource.data.score >= 0
+          && request.resource.data.score <= request.resource.data.totalQuestions
+          && request.resource.data.percentage is number
+          && request.resource.data.percentage >= 0
+          && request.resource.data.percentage <= 100
+          && request.resource.data.timeSpentSeconds is number
+          && request.resource.data.timeSpentSeconds >= 0;
+
+        // Quiz submissions are immutable historical logs
+        allow update: if false;
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

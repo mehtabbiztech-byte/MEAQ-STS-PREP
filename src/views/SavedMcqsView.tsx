@@ -10,10 +10,13 @@ import {
   RotateCcw, 
   Trophy,
   ArrowRight,
-  BookOpen
+  BookOpen,
+  Cloud,
+  LogIn
 } from 'lucide-react';
 import { MCQS_DATA } from '../data/mcqsData';
 import { MCQ } from '../types';
+import { AiTutorSection } from '../components/AiTutorSection';
 
 interface SavedMcqsViewProps {
   initialSubTab?: 'bookmarks' | 'mistakes';
@@ -21,11 +24,13 @@ interface SavedMcqsViewProps {
 
 export const SavedMcqsView: React.FC<SavedMcqsViewProps> = ({ initialSubTab = 'bookmarks' }) => {
   const { 
+    user,
     userProfile, 
     toggleBookmark, 
     removeMistake, 
     clearAllMistakes,
     setTab,
+    setAuthModalOpen,
     recordQuizAttempt
   } = useApp();
 
@@ -104,6 +109,33 @@ export const SavedMcqsView: React.FC<SavedMcqsViewProps> = ({ initialSubTab = 'b
             <HelpCircle className="w-3.5 h-3.5" />
             <span>Mistakes Notebook ({userProfile.mistakeIds.length})</span>
           </button>
+        </div>
+
+        {/* Database Sync Status Alert */}
+        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          {user ? (
+            <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
+              <Cloud className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span>
+                <strong>Cloud Firestore Synced:</strong> Your saved questions and mistakes are safely backed up for <strong>{user.email}</strong>.
+              </span>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-2 text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/30 p-2.5 rounded-xl border border-amber-200 dark:border-amber-900/40">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+                <span><strong>Guest Mode:</strong> Questions are stored in this browser only. Sign in to sync across all your devices.</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setAuthModalOpen(true)}
+                className="self-start sm:self-auto px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-[11px] flex items-center gap-1 shadow-2xs cursor-pointer"
+              >
+                <LogIn className="w-3 h-3" />
+                <span>Sign In & Sync</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -201,6 +233,9 @@ export const SavedMcqsView: React.FC<SavedMcqsViewProps> = ({ initialSubTab = 'b
                     {mcq.explanation}
                   </div>
                 )}
+
+                {/* Gemini AI Explanation & Doubt Resolution */}
+                <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
 
                 <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
                   <button

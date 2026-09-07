@@ -20,6 +20,7 @@ import {
 import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ } from '../types';
+import { AiTutorSection } from '../components/AiTutorSection';
 
 export const McqsView: React.FC = () => {
   const { 
@@ -28,6 +29,7 @@ export const McqsView: React.FC = () => {
     toggleBookmark, 
     isBookmarked,
     addMistake,
+    userProfile,
     setTab
   } = useApp();
 
@@ -363,6 +365,9 @@ export const McqsView: React.FC = () => {
                     )}
                   </div>
                 )}
+
+                {/* Gemini AI On-Demand Explanation & Doubt Assistant */}
+                <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
 
                 {/* Card Action Controls */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">

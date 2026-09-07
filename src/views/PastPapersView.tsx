@@ -14,9 +14,10 @@ import {
 } from 'lucide-react';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { PastPaper } from '../types';
+import { AiTutorSection } from '../components/AiTutorSection';
 
 export const PastPapersView: React.FC = () => {
-  const { selectedPastPaperId, setSelectedPastPaperId, setTab } = useApp();
+  const { selectedPastPaperId, setSelectedPastPaperId, setTab, userProfile } = useApp();
   const [examFilter, setExamFilter] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [revealedOptions, setRevealedOptions] = useState<Record<string, boolean>>({});
@@ -235,6 +236,9 @@ export const PastPapersView: React.FC = () => {
                         {mcq.explanation}
                       </div>
                     )}
+
+                    {/* Gemini AI Explanation & Doubt Resolver */}
+                    <AiTutorSection mcq={mcq} examContext={activePaper.exam} />
                   </div>
                 );
               })}

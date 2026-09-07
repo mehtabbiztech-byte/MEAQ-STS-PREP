@@ -10,6 +10,7 @@ import { Footer } from './components/Footer';
 import { SearchModal } from './components/SearchModal';
 import { AuthModal } from './components/AuthModal';
 import { CustomDomainModal } from './components/CustomDomainModal';
+import { AttractiveBackground } from './components/AttractiveBackground';
 
 import { HomeView } from './views/HomeView';
 import { McqsView } from './views/McqsView';
@@ -27,10 +28,13 @@ const MainContent: React.FC = () => {
   const { tab, domainModalOpen, setDomainModalOpen } = useApp();
 
   return (
-    <main className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-slate-50/80 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors relative selection:bg-emerald-500 selection:text-white">
+      {/* Eye-catching ambient background lighting & patterns */}
+      <AttractiveBackground />
+
       <Navbar />
       
-      <div className="flex-1">
+      <main className="flex-1 relative z-10">
         {tab === 'home' && <HomeView />}
         {tab === 'mcqs' && <McqsView />}
         {tab === 'quiz' && <QuizView />}
@@ -43,7 +47,7 @@ const MainContent: React.FC = () => {
         {tab === 'about' && <AboutView />}
         {tab === 'bookmarks' && <SavedMcqsView initialSubTab="bookmarks" />}
         {tab === 'mistakes' && <SavedMcqsView initialSubTab="mistakes" />}
-      </div>
+      </main>
 
       <Footer />
       <SearchModal />
@@ -52,7 +56,7 @@ const MainContent: React.FC = () => {
         isOpen={domainModalOpen} 
         onClose={() => setDomainModalOpen(false)} 
       />
-    </main>
+    </div>
   );
 };
 

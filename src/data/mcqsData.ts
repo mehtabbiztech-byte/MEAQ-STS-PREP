@@ -1,6 +1,8 @@
 import { MCQ } from '../types';
+import { PAKISTAN_CURRENT_AFFAIRS_MCQS } from './pakistanCurrentAffairsMcqs';
 
 export const MCQS_DATA: MCQ[] = [
+  ...PAKISTAN_CURRENT_AFFAIRS_MCQS,
   // Pakistan Studies
   {
     id: 'ps-01',

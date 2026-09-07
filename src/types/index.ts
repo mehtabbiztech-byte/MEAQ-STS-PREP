@@ -1,3 +1,5 @@
+export type ThemeStyle = 'emerald' | 'sapphire' | 'aurora' | 'sunset';
+
 export type NavigationTab = 
   | 'home' 
   | 'mcqs' 

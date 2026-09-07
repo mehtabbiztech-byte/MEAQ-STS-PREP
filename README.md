@@ -60,32 +60,32 @@ Click **"Deploy"**. Within ~45 seconds, your platform will be live with free aut
 
 ---
 
-## 🌐 Changing From Preview URL to `meaqstsprep.app`
+## 🌐 Changing From Preview URL to `matbstsprep.app`
 
-Follow these 3 exact steps in Vercel to replace your preview URL (`meaq-sts-prep-kw7up69ng-mehtab2.vercel.app`) with your official brand domain (**`meaqstsprep.app`**):
+Follow these 3 exact steps in Vercel to replace your preview URL (`matb-sts-prep.vercel.app`) with your official brand domain (**`matbstsprep.app`**):
 
-### Step 1: Add `meaqstsprep.app` in Vercel
+### Step 1: Add `matbstsprep.app` in Vercel
 1. Open your Vercel Dashboard at [vercel.com/dashboard](https://vercel.com/dashboard).
-2. Click on your project **`meaq-sts-prep`**.
+2. Click on your project **`matb-sts-prep`**.
 3. Go to **Settings** → **Domains** (in the left-hand navigation).
 4. In the text field, enter:
    ```text
-   meaqstsprep.app
+   matbstsprep.app
    ```
    and click **Add**.
-5. Vercel will ask if you want to also add `www.meaqstsprep.app` with a redirect. Choose **"Add meaqstsprep.app and redirect www.meaqstsprep.app to it"** (Recommended).
+5. Vercel will ask if you want to also add `www.matbstsprep.app` with a redirect. Choose **"Add matbstsprep.app and redirect www.matbstsprep.app to it"** (Recommended).
 
 ---
 
 ### Step 2: Configure DNS Records at Your Domain Registrar
-Log in to where you registered `meaqstsprep.app` (e.g. Google Domains / Squarespace, Namecheap, Cloudflare, GoDaddy, Hostinger, etc.) and add these two DNS records:
+Log in to where you registered `matbstsprep.app` (e.g. Google Domains / Squarespace, Namecheap, Cloudflare, GoDaddy, Hostinger, etc.) and add these two DNS records:
 
-#### 1. For Root Domain (`meaqstsprep.app`):
+#### 1. For Root Domain (`matbstsprep.app`):
 | Record Type | Name / Host | Value / Target | TTL |
 | :---: | :---: | :---: | :---: |
 | **A** | `@` (or leave empty) | `76.76.21.21` | Auto / 3600 (1 hour) |
 
-#### 2. For WWW Alias (`www.meaqstsprep.app`):
+#### 2. For WWW Alias (`www.matbstsprep.app`):
 | Record Type | Name / Host | Value / Target | TTL |
 | :---: | :---: | :---: | :---: |
 | **CNAME** | `www` | `cname.vercel-dns.com.` | Auto / 3600 (1 hour) |
@@ -97,8 +97,8 @@ Log in to where you registered `meaqstsprep.app` (e.g. Google Domains / Squaresp
 
 ### Step 3: Verification & Go Live
 - Vercel monitors DNS propagation automatically (typically ready in 2–15 minutes).
-- Once you see green checkmarks next to `meaqstsprep.app` in your Vercel Domains list, your app is live at **https://meaqstsprep.app**!
-- Any visitors accessing `meaq-sts-prep-kw7up69ng-mehtab2.vercel.app` or `www.meaqstsprep.app` will seamlessly load your application.
+- Once you see green checkmarks next to `matbstsprep.app` in your Vercel Domains list, your app is live at **https://matbstsprep.app**!
+- Any visitors accessing `matb-sts-prep.vercel.app` or `www.matbstsprep.app` will seamlessly load your application.
 
 ---
 

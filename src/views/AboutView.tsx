@@ -180,7 +180,7 @@ export const AboutView: React.FC = () => {
             Host MATB STS PREP on Your Own Domain
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Attach your official production domain: <code className="text-emerald-400 font-mono font-bold">meaqstsprep.app</code>. Automated SSL certificate, edge routing, and global CDN are provisioned instantly.
+            Attach your official production domain: <code className="text-emerald-400 font-mono font-bold">matbstsprep.app</code>. Automated SSL certificate, edge routing, and global CDN are provisioned instantly.
           </p>
         </div>
 

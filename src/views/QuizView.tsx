@@ -14,15 +14,20 @@ import {
   BookOpen, 
   Flame,
   Bookmark,
-  Share2
+  Share2,
+  Cloud,
+  LogIn
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
+import { AiTutorSection } from '../components/AiTutorSection';
 
 export const QuizView: React.FC = () => {
   const { 
+    user,
+    setAuthModalOpen,
     recordQuizAttempt, 
     toggleBookmark, 
     isBookmarked,
@@ -489,6 +494,27 @@ export const QuizView: React.FC = () => {
                 </div>
               </div>
 
+              {/* Cloud Sync & Backend Score Validation Badge */}
+              <div className="mt-5 flex justify-center">
+                {user ? (
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 text-xs font-semibold shadow-2xs">
+                    <Cloud className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Backend Validated • Synced to Cloud Firestore</span>
+                  </div>
+                ) : (
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-slate-700 text-slate-300 text-xs shadow-2xs">
+                    <span>Stored locally in browser (Guest)</span>
+                    <button
+                      type="button"
+                      onClick={() => setAuthModalOpen(true)}
+                      className="text-emerald-400 hover:text-emerald-300 font-bold underline cursor-pointer"
+                    >
+                      Sign In to sync history
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <button
                   onClick={() => setQuizState('config')}
@@ -588,6 +614,9 @@ export const QuizView: React.FC = () => {
                     <strong className="text-emerald-700 dark:text-emerald-400 block mb-1">Official Explanation:</strong>
                     {mcq.explanation}
                   </div>
+
+                  {/* Gemini AI Detailed Explanation & Doubt Assistant */}
+                  <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
                 </div>
               );
             })}
