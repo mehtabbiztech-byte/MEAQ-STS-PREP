@@ -2,5 +2,5 @@
   "name": "MATB STS PREP",
   "description": "Practice Smart. Prepare Better. Crack Your Exam. Founded and developed by Mehtab Ali. Practice thousands of Pakistani competitive exam MCQs, timed quizzes, past papers, and current affairs for CSS, PMS, FPSC, PPSC, SPSC, STS, and NTS.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_OPENAI_API"]
 }

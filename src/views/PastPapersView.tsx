@@ -237,7 +237,7 @@ export const PastPapersView: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Gemini AI Explanation & Doubt Resolver */}
+                    {/* ChatGPT Explanation & Doubt Resolver */}
                     <AiTutorSection mcq={mcq} examContext={activePaper.exam} />
                   </div>
                 );

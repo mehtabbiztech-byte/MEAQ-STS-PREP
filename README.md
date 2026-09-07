@@ -49,7 +49,8 @@ If you want to configure optional enhancements, navigate to **Project Settings â
 
 | Environment Variable | Required? | Description & Purpose |
 | :--- | :---: | :--- |
-| `GEMINI_API_KEY` | Optional | Google Gemini API key for automated AI question explanations & doubt solving. Get from [Google AI Studio](https://aistudio.google.com/app/apikey). |
+| `OPENAI_API_KEY` | Optional | Server-side OpenAI key for ChatGPT study assistance, MCQ explanations and doubt solving. Get it from [OpenAI API keys](https://platform.openai.com/api-keys). |
+| `OPENAI_MODEL` | Optional | OpenAI model used by the tutor. Defaults to `gpt-5-mini`. |
 | `VITE_APP_URL` | Optional | Your production URL (e.g. `https://matb-sts-prep.vercel.app`) for OpenGraph and social sharing. |
 | `VITE_GA_MEASUREMENT_ID` | Optional | Google Analytics 4 tracking ID (`G-XXXXXXXXXX`) to track test takers and page views. |
 

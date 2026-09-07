@@ -234,7 +234,7 @@ export const SavedMcqsView: React.FC<SavedMcqsViewProps> = ({ initialSubTab = 'b
                   </div>
                 )}
 
-                {/* Gemini AI Explanation & Doubt Resolution */}
+                {/* ChatGPT Explanation & Doubt Resolution */}
                 <AiTutorSection mcq={mcq} examContext={userProfile.targetExam} />
 
                 <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
