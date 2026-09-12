@@ -1,4 +1,5 @@
-import { StudyNote } from '../types';
+import { StudyNote, StudySubject } from '../types';
+import { MCQS_DATA } from './mcqsData';
 
 export const STUDY_NOTES_DATA: StudyNote[] = [
   {
@@ -75,4 +76,58 @@ export const STUDY_NOTES_DATA: StudyNote[] = [
       'Which organ cleanses and filters blood? (Kidneys, containing nephrons)',
     ],
   },
+];
+
+// Preserve the original revision sheets while giving each lesson a stable place
+// in the curriculum. Related IDs refer to the existing question bank, not an
+// assertion that a question appeared in a particular official paper.
+const locations: Record<string, { chapter: string; topic: string; questionIds: string[] }> = {
+  'note-01': { chapter: 'Constitutional history', topic: 'Constitutions and amendments', questionIds: ['ps-01', 'ps-04'] },
+  'note-02': { chapter: 'Physical geography', topic: 'Water and rivers', questionIds: [] },
+  'note-03': { chapter: 'Grammar', topic: 'Prepositions and idioms', questionIds: [] },
+  'note-04': { chapter: 'Biology', topic: 'Human body', questionIds: [] },
+};
+
+export const STUDY_CURRICULUM: StudySubject[] = [
+  {
+    id: 'mathematics', title: 'Mathematics', chapters: [{ id: 'numbers', title: 'Numbers and operations', topics: [{
+      id: 'addition', title: 'Addition', lessons: [{
+        id: 'adding-small-numbers', title: 'Let’s add together', audience: 'kids', readTime: '4 min read',
+        explanation: 'Adding means putting groups together. Count the first group, then count on for the second group to find how many there are altogether.',
+        examples: ['You have 2 pencils. A friend gives you 3 more. Now you have 5 pencils.', 'Start at 4 and count two more: 5, 6. So 4 + 2 = 6.'],
+        importantPoints: ['The + sign means add.', 'The = sign means both sides have the same value.', 'Adding zero does not change a number.'],
+        images: [{ src: '/lessons/addition.svg', alt: 'Two green counters plus three blue counters equals five counters.', caption: 'Count the counters: 2 + 3 = 5.' }],
+        tables: [{ title: 'Try counting on', headers: ['Start with', 'Add', 'Total'], rows: [['1', '2', '3'], ['2', '3', '5'], ['4', '2', '6']] }],
+        formulas: ['2 + 3 = 5'],
+        mcqs: [{ id: 'lesson-add-1', question: 'You have 3 books and get 2 more. How many now?', options: ['4', '5', '6'], correctIndex: 1, explanation: 'Count on from 3: 4, 5. There are 5 books.', category: 'mathematics', difficulty: 'Easy' }],
+        practice: [{ prompt: 'Draw 4 circles and then 3 more. How many circles?', answer: '7 circles: 4 + 3 = 7.' }], relatedQuestionIds: [],
+      }],
+    }, {
+      id: 'percentages', title: 'Percentages', lessons: [{
+        id: 'percentage-foundations', title: 'Percentages for aptitude tests', audience: 'advanced', readTime: '6 min read',
+        explanation: 'A percentage expresses a ratio out of 100. Identify the base quantity before calculating: percentage change uses the original value as its denominator.',
+        examples: ['A score of 36 out of 45 is (36 ÷ 45) × 100 = 80%.', 'A price rises from 800 to 1,000. The increase is 200 ÷ 800 × 100 = 25%.'],
+        importantPoints: ['Convert p% to p/100 before multiplying.', 'Successive percentage changes multiply; they do not simply add.', 'A 20% increase followed by a 20% decrease leaves 96% of the original amount.'],
+        formulas: ['Percentage = (part ÷ whole) × 100', 'Percentage change = ((new − original) ÷ original) × 100'],
+        tables: [{ title: 'Useful equivalents', headers: ['Fraction', 'Decimal', 'Percentage'], rows: [['1/2', '0.5', '50%'], ['1/4', '0.25', '25%'], ['1/5', '0.2', '20%']] }],
+        mcqs: [{ id: 'lesson-percent-1', question: 'A value increases by 20% and then decreases by 20%. What is the net change?', options: ['No change', '4% decrease', '4% increase', '40% decrease'], correctIndex: 1, explanation: 'Start at 100: 100 × 1.2 × 0.8 = 96, a 4% decrease.', category: 'mathematics', difficulty: 'Hard' }],
+        practice: [{ prompt: 'A candidate answers 42 of 60 questions correctly. Calculate the score percentage.', answer: '42 ÷ 60 × 100 = 70%.' }], relatedQuestionIds: [],
+      }],
+    }] }],
+  },
+  ...STUDY_NOTES_DATA.map(note => {
+    const location = locations[note.id];
+    return {
+      id: `subject-${note.id}`, title: note.subject,
+      chapters: [{ id: `chapter-${note.id}`, title: location.chapter, topics: [{
+        id: `topic-${note.id}`, title: location.topic, lessons: [{
+          id: note.id, title: note.title, audience: 'advanced' as const, readTime: note.readTime,
+          explanation: note.summary, examples: note.frequentlyAsked, importantPoints: note.keyPoints,
+          mcqs: MCQS_DATA.filter(q => location.questionIds.includes(q.id)),
+          practice: [{ prompt: 'Without looking, recall three important points from this lesson.', answer: note.keyPoints.slice(0, 3).join('\n\n') }],
+          relatedQuestionIds: location.questionIds,
+        }],
+      }] }],
+    };
+  }),
 ];

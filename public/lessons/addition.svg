@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-labelledby="title desc">
+  <title id="title">Adding two and three</title><desc id="desc">Two green counters plus three blue counters equals five.</desc>
+  <rect width="640" height="160" rx="24" fill="#ecfdf5"/>
+  <g fill="#047857"><circle cx="50" cy="65" r="18"/><circle cx="96" cy="65" r="18"/></g>
+  <g fill="#0369a1"><circle cx="210" cy="65" r="18"/><circle cx="256" cy="65" r="18"/><circle cx="302" cy="65" r="18"/></g>
+  <g fill="#047857"><circle cx="421" cy="65" r="15"/><circle cx="460" cy="65" r="15"/></g>
+  <g fill="#0369a1"><circle cx="499" cy="65" r="15"/><circle cx="538" cy="65" r="15"/><circle cx="577" cy="65" r="15"/></g>
+  <g font-family="sans-serif" font-size="28" text-anchor="middle" fill="#0f172a"><text x="154" y="75">+</text><text x="362" y="75">=</text><text x="73" y="125">2</text><text x="256" y="125">3</text><text x="499" y="125">5</text></g>
+</svg>
