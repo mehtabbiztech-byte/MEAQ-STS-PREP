@@ -109,6 +109,31 @@ export interface StudyNote {
   tags?: string[];
 }
 
+export interface StudyLesson {
+  id: string;
+  title: string;
+  audience: 'kids' | 'advanced';
+  readTime: string;
+  explanation: string;
+  examples: string[];
+  importantPoints: string[];
+  images?: { src: string; alt: string; caption?: string }[];
+  tables?: { title: string; headers: string[]; rows: string[][] }[];
+  formulas?: string[];
+  mcqs: MCQ[];
+  practice: { prompt: string; answer: string }[];
+  references?: { title: string; url: string }[];
+  relatedQuestionIds: string[];
+}
+
+export interface StudySubject {
+  id: string;
+  title: string;
+  chapters: { id: string; title: string; topics: {
+    id: string; title: string; lessons: StudyLesson[];
+  }[] }[];
+}
+
 export interface RankingUser {
   id: string;
   name: string;
