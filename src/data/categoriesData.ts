@@ -127,6 +127,15 @@ export const POPULAR_CATEGORIES: Category[] = [
     subtopics: ['Urdu Qawaid & Grammar', 'Famous Urdu Poets & Divans', 'Allama Iqbal Poetry & Works', 'Mirza Ghalib & Classical Era', 'Urdu Idioms & Proverbs (ضرب الامثال)', 'Important Urdu Novels & Afsane'],
   },
   {
+    id: 'sindhi',
+    name: 'Sindhi',
+    slug: 'sindhi',
+    description: 'Sindhi literature, Shah Abdul Latif Bhittai (Shah Jo Risalo), Sachal Sarmast, grammar (Viyakaran), idioms, and prose.',
+    iconName: 'BookMarked',
+    totalMcqs: 1850,
+    subtopics: ['Shah Jo Risalo & Sur', 'Sachal Sarmast & Sami', 'Sindhi Viyakaran & Grammar', 'Sindhi Idioms (پهاڪا ۽ چوڻيون)', 'Sindhi Literature History', 'Sindh Culture & Heritage'],
+  },
+  {
     id: 'geography',
     name: 'Geography',
     slug: 'geography',

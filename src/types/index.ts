@@ -1,5 +1,9 @@
 export type ThemeStyle = 'emerald' | 'sapphire' | 'aurora' | 'sunset';
 
+export type UserPersona = 'kids' | 'school' | 'college' | 'university' | 'jobs' | 'competitive';
+
+export type ExamCategory = 'school' | 'college' | 'university' | 'jobs' | 'competitive' | 'general';
+
 export type NavigationTab = 
   | 'home' 
   | 'mcqs' 
@@ -48,6 +52,9 @@ export interface ExamInfo {
   shortName: string;
   fullName: string;
   conductedBy: string;
+  category: ExamCategory;
+  subCategory?: string;
+  targetAudience?: string;
   description: string;
   eligibility: string;
   ageLimit: string;
@@ -169,6 +176,31 @@ export interface CurrentAffairItem {
   };
 }
 
+export type RankTier = 
+  | 'Gold Distinction' 
+  | 'Silver Merit' 
+  | 'Bronze Honor' 
+  | 'Certified Aspirant' 
+  | 'Participation';
+
+export interface QuizCertificate {
+  id: string;
+  quizId: string;
+  candidateName: string;
+  quizTitle: string;
+  category: string;
+  score: number;
+  totalQuestions: number;
+  percentage: number;
+  grade: string;
+  rankTier: RankTier;
+  rankPosition: number;
+  percentile: number;
+  timeSpentSeconds: number;
+  issuedDate: string;
+  verificationCode: string;
+}
+
 export interface QuizAttempt {
   id: string;
   date: string;
@@ -180,6 +212,11 @@ export interface QuizAttempt {
     mcq: MCQ;
     selectedIndex: number;
   }[];
+  certificate?: QuizCertificate;
+  certificateId?: string;
+  rankTier?: RankTier;
+  rankPosition?: number;
+  percentile?: number;
 }
 
 export interface UserProfile {
@@ -187,9 +224,12 @@ export interface UserProfile {
   email: string;
   targetExam: string;
   province: string;
+  persona?: UserPersona;
+  gradeOrClass?: string;
   points: number;
   streakDays: number;
   bookmarks: string[]; // MCQ IDs
   mistakeIds: string[]; // MCQ IDs
   quizHistory: QuizAttempt[];
+  certificates?: QuizCertificate[];
 }

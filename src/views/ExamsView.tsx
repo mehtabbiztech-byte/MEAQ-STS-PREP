@@ -15,7 +15,8 @@ import {
 import { EXAMS_DATA } from '../data/examsData';
 import { MCQS_DATA } from '../data/mcqsData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
-import { STSSyllabusExplorer } from './STSSyllabusExplorer';
+import { ExamCategory } from '../types';
+import { CssSyllabusExplorer } from '../components/CssSyllabusExplorer';
 
 export const ExamsView: React.FC = () => {
   const { 
@@ -27,6 +28,7 @@ export const ExamsView: React.FC = () => {
   } = useApp();
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<ExamCategory | 'all'>('all');
   const [activeTab, setActiveTab] = useState<'overview' | 'syllabus' | 'mcqs' | 'papers' | 'resources'>('overview');
 
   // Currently selected exam
@@ -36,14 +38,21 @@ export const ExamsView: React.FC = () => {
 
   // Filtered exams list for sidebar
   const filteredExams = useMemo(() => {
-    if (!searchQuery.trim()) return EXAMS_DATA;
-    const q = searchQuery.toLowerCase();
-    return EXAMS_DATA.filter((e) =>
-      e.name.toLowerCase().includes(q) ||
-      e.shortName.toLowerCase().includes(q) ||
-      e.conductedBy.toLowerCase().includes(q)
-    );
-  }, [searchQuery]);
+    let list = EXAMS_DATA;
+    if (selectedCategory !== 'all') {
+      list = list.filter((e) => e.category === selectedCategory);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter((e) =>
+        e.name.toLowerCase().includes(q) ||
+        e.shortName.toLowerCase().includes(q) ||
+        e.conductedBy.toLowerCase().includes(q) ||
+        (e.targetAudience && e.targetAudience.toLowerCase().includes(q))
+      );
+    }
+    return list;
+  }, [searchQuery, selectedCategory]);
 
   // Exam specific MCQs
   const examMcqs = useMemo(() => {
@@ -81,15 +90,40 @@ export const ExamsView: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         
-        {/* Left Sidebar: List of 16 Exams */}
+        {/* Left Sidebar: List of Exams */}
         <div className="lg:col-span-1 space-y-3">
+          
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-1 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'school', label: '🎒 School' },
+              { id: 'college', label: '📚 College' },
+              { id: 'university', label: '🎓 Uni' },
+              { id: 'jobs', label: '💼 Jobs' },
+              { id: 'competitive', label: '🏆 CSS' },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id as any)}
+                className={`px-2 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                  selectedCategory === cat.id
+                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
           <div className="relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Filter 16 exams..."
+              placeholder="Filter exams..."
               className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
             />
           </div>
@@ -272,8 +306,10 @@ export const ExamsView: React.FC = () => {
           )}
 
           {/* Sub-tab 2: Syllabus */}
-          {activeTab === 'syllabus' && currentExam.id === 'sts' && <STSSyllabusExplorer />}
-          {activeTab === 'syllabus' && currentExam.id !== 'sts' && (
+          {activeTab === 'syllabus' && (
+            currentExam.id === 'css' ? (
+              <CssSyllabusExplorer />
+            ) : (
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs animate-in fade-in duration-150">
               <div className="flex items-center justify-between">
                 <div>
@@ -315,6 +351,7 @@ export const ExamsView: React.FC = () => {
                 ))}
               </div>
             </div>
+            )
           )}
 
           {/* Sub-tab 3: Targeted MCQs */}

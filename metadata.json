@@ -2,5 +2,5 @@
   "name": "MATB STS PREP",
   "description": "Pakistan's all-in-one learning and exam preparation platform for kids, school, college, university, job tests and competitive examinations.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

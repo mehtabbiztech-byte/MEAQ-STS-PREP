@@ -110,6 +110,8 @@ export async function recordQuizAttemptInDb(
       date: attempt.date || new Date().toISOString(),
       createdAt: new Date().toISOString(),
       incorrectCount: attempt.incorrectQuestions ? attempt.incorrectQuestions.length : 0,
+      certificateId: attempt.certificateId || null,
+      rankTier: attempt.rankTier || null,
     };
 
     // Save attempt in subcollection
@@ -168,6 +170,8 @@ export async function getUserQuizHistoryFromDb(userId: string): Promise<QuizAtte
         score: d.score || 0,
         timeSpentSeconds: d.timeSpentSeconds || 0,
         incorrectQuestions: [],
+        certificateId: d.certificateId || undefined,
+        rankTier: d.rankTier || undefined,
       });
     });
 

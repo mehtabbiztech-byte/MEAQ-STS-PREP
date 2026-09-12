@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { NavigationTab, UserProfile, QuizAttempt, ThemeStyle } from '../types';
+import { NavigationTab, UserProfile, QuizAttempt, ThemeStyle, UserPersona, QuizCertificate } from '../types';
 import { 
   auth, 
   googleProvider, 
@@ -19,6 +19,7 @@ import {
   mergeGuestProfileIntoDb 
 } from '../lib/firestoreService';
 import { validateQuizAttempt } from '../lib/validation';
+import { generateCertificateFromAttempt } from '../lib/certificateService';
 
 interface AppContextType {
   tab: NavigationTab;
@@ -48,7 +49,15 @@ interface AppContextType {
   authLoading: boolean;
   isSyncing: boolean;
   loginWithEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
-  signupWithEmail: (email: string, pass: string, name: string, targetExam: string, province: string) => Promise<{ success: boolean; error?: string }>;
+  signupWithEmail: (
+    email: string, 
+    pass: string, 
+    name: string, 
+    targetExam: string, 
+    province: string,
+    persona?: UserPersona,
+    gradeOrClass?: string
+  ) => Promise<{ success: boolean; error?: string }>;
   loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   sendPasswordReset: (email: string) => Promise<{ success: boolean; error?: string }>;
@@ -60,17 +69,45 @@ interface AppContextType {
   addMistake: (mcqId: string) => void;
   removeMistake: (mcqId: string) => void;
   clearAllMistakes: () => void;
-  recordQuizAttempt: (attempt: QuizAttempt) => Promise<{ success: boolean; error?: string }>;
+  recordQuizAttempt: (attempt: QuizAttempt) => Promise<{ success: boolean; error?: string; certificate?: QuizCertificate }>;
   updateTargetExam: (exam: string) => void;
   updateUserName: (name: string) => void;
   updateProvince: (province: string) => void;
+  updatePersona: (persona: UserPersona, gradeOrClass?: string) => void;
+
+  // Certificate Modal State & Actions
+  activeCertificate: QuizCertificate | null;
+  isCertificateModalOpen: boolean;
+  openCertificateModal: (cert: QuizCertificate) => void;
+  closeCertificateModal: () => void;
+  updateCertificateCandidateName: (newName: string) => void;
 }
+
+const INITIAL_CERTIFICATE: QuizCertificate = {
+  id: 'MATB-CERT-2026-INIT01',
+  quizId: 'quiz-init-1',
+  candidateName: 'Aspirant',
+  quizTitle: 'Pakistan Studies & Current Affairs Booster',
+  category: 'Pakistan Affairs',
+  score: 8,
+  totalQuestions: 10,
+  percentage: 80,
+  grade: 'A',
+  rankTier: 'Silver Merit',
+  rankPosition: 48,
+  percentile: 91.5,
+  timeSpentSeconds: 340,
+  issuedDate: '11 Sep 2026',
+  verificationCode: 'MATB-CERT-2026-INIT01',
+};
 
 const DEFAULT_PROFILE: UserProfile = {
   name: 'Aspirant',
   email: 'aspirant@prep.pk',
   targetExam: 'Jobs: STS',
   province: 'Sindh',
+  persona: 'jobs',
+  gradeOrClass: 'Graduate Category (BPS 5-15)',
   points: 450,
   streakDays: 4,
   bookmarks: ['ps-01', 'ca-02', 'es-01', 'eng-01'],
@@ -84,8 +121,14 @@ const DEFAULT_PROFILE: UserProfile = {
       score: 8,
       timeSpentSeconds: 340,
       incorrectQuestions: [],
+      certificate: INITIAL_CERTIFICATE,
+      certificateId: INITIAL_CERTIFICATE.id,
+      rankTier: INITIAL_CERTIFICATE.rankTier,
+      rankPosition: INITIAL_CERTIFICATE.rankPosition,
+      percentile: INITIAL_CERTIFICATE.percentile,
     },
   ],
+  certificates: [INITIAL_CERTIFICATE],
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -104,6 +147,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
+
+  // Certificate Modal State
+  const [activeCertificate, setActiveCertificate] = useState<QuizCertificate | null>(INITIAL_CERTIFICATE);
+  const [isCertificateModalOpen, setIsCertificateModalOpen] = useState<boolean>(false);
+
+  const openCertificateModal = useCallback((cert: QuizCertificate) => {
+    setActiveCertificate(cert);
+    setIsCertificateModalOpen(true);
+  }, []);
+
+  const closeCertificateModal = useCallback(() => {
+    setIsCertificateModalOpen(false);
+  }, []);
 
   // Dark mode init with localStorage and document class
   const [darkMode, setDarkMode] = useState<boolean>(() => {
@@ -223,7 +279,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     pass: string, 
     name: string, 
     targetExam: string, 
-    province: string
+    province: string,
+    persona?: UserPersona,
+    gradeOrClass?: string
   ): Promise<{ success: boolean; error?: string }> => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email.trim(), pass);
@@ -237,6 +295,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         email: email.trim(),
         targetExam: targetExam || userProfile.targetExam,
         province: province || userProfile.province,
+        persona: persona || userProfile.persona || 'jobs',
+        gradeOrClass: gradeOrClass || userProfile.gradeOrClass || '',
       };
 
       await saveUserProfileToDb(res.user.uid, initialProfile);
@@ -321,7 +381,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Backend-Validated Quiz Attempt Recording
-  const recordQuizAttempt = async (attempt: QuizAttempt): Promise<{ success: boolean; error?: string }> => {
+  const recordQuizAttempt = async (attempt: QuizAttempt): Promise<{ success: boolean; error?: string; certificate?: QuizCertificate }> => {
     // 1. Strict validation against impossible scores
     const validation = validateQuizAttempt(attempt, attempt.totalQuestions);
     if (!validation.isValid) {
@@ -334,6 +394,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       score: validation.sanitizedScore,
     };
 
+    // 2. Generate official ranked certificate
+    const cert = attempt.certificate || generateCertificateFromAttempt(
+      sanitizedAttempt,
+      userProfile.name || 'Aspirant',
+      sanitizedAttempt.title
+    );
+
+    sanitizedAttempt.certificate = cert;
+    sanitizedAttempt.certificateId = cert.id;
+    sanitizedAttempt.rankTier = cert.rankTier;
+    sanitizedAttempt.rankPosition = cert.rankPosition;
+    sanitizedAttempt.percentile = cert.percentile;
+
     const newMistakes = new Set(userProfile.mistakeIds);
     if (sanitizedAttempt.incorrectQuestions) {
       sanitizedAttempt.incorrectQuestions.forEach((q) => {
@@ -341,27 +414,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
     }
 
+    const existingCerts = userProfile.certificates || [];
+    const updatedCerts = [cert, ...existingCerts.filter((c) => c.id !== cert.id)];
+
     const pointsEarned = Math.round(validation.sanitizedScore * 15);
     const updatedProfile: UserProfile = {
       ...userProfile,
       points: userProfile.points + pointsEarned,
       mistakeIds: Array.from(newMistakes),
       quizHistory: [sanitizedAttempt, ...userProfile.quizHistory.slice(0, 24)],
+      certificates: updatedCerts,
     };
 
     // Update in-memory state & local storage immediately
     syncProfileChange(updatedProfile);
+    setActiveCertificate(cert);
 
     // If authenticated, persist to real Firestore database subcollection with backend validation
     if (auth.currentUser) {
       const dbResult = await recordQuizAttemptInDb(auth.currentUser.uid, sanitizedAttempt);
       if (!dbResult.success) {
         console.warn('Firestore quiz record validation warning:', dbResult.error);
-        return dbResult;
+        return { ...dbResult, certificate: cert };
       }
     }
 
-    return { success: true };
+    return { success: true, certificate: cert };
+  };
+
+  const updateCertificateCandidateName = (newName: string) => {
+    if (!newName.trim()) return;
+    const trimmed = newName.trim();
+    syncProfileChange({ ...userProfile, name: trimmed });
+    if (activeCertificate) {
+      setActiveCertificate({ ...activeCertificate, candidateName: trimmed });
+    }
   };
 
   const updateTargetExam = (exam: string) => {
@@ -370,10 +457,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateUserName = (name: string) => {
     syncProfileChange({ ...userProfile, name });
+    if (activeCertificate) {
+      setActiveCertificate({ ...activeCertificate, candidateName: name });
+    }
   };
 
   const updateProvince = (province: string) => {
     syncProfileChange({ ...userProfile, province });
+  };
+
+  const updatePersona = (persona: UserPersona, gradeOrClass?: string) => {
+    syncProfileChange({ 
+      ...userProfile, 
+      persona, 
+      ...(gradeOrClass ? { gradeOrClass } : {}) 
+    });
   };
 
   // Keyboard shortcut Ctrl+K / Cmd+K for search
@@ -430,6 +528,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateTargetExam,
         updateUserName,
         updateProvince,
+        updatePersona,
+        activeCertificate,
+        isCertificateModalOpen,
+        openCertificateModal,
+        closeCertificateModal,
+        updateCertificateCandidateName,
       }}
     >
       {children}
