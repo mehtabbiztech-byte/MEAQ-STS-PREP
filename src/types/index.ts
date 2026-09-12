@@ -31,6 +31,8 @@ export interface MCQ {
   difficulty: 'Easy' | 'Medium' | 'Hard';
   viewsCount?: number;
   submittedBy?: string;
+  sourceUrl?: string;
+  sourceCheckedOn?: string;
 }
 
 export interface Category {
