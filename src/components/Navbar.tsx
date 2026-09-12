@@ -50,6 +50,7 @@ export const Navbar: React.FC = () => {
     user,
     isSyncing,
     userProfile,
+    updatePersona,
     setSelectedCategorySlug,
     setSelectedExamId
   } = useApp();
@@ -137,6 +138,13 @@ export const Navbar: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openKids = () => {
+    updatePersona('kids');
+    setTab('home');
+    setMobileMenuOpen(false);
+    window.setTimeout(() => document.getElementById('kids-hub')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 70);
+  };
+
   return (
     <>
       <header className="sticky top-0 z-40 w-full max-w-full overflow-x-clip border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md transition-colors shadow-xs">
@@ -218,6 +226,7 @@ export const Navbar: React.FC = () => {
 
             {/* Right Action Icons (Optimized for zero overflow on mobile screens) */}
             <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+              <button onClick={openKids} aria-label="Open Kids learning, art and games" className="shrink-0 inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-100 px-2 sm:px-3 py-2 text-xs font-extrabold text-sky-900 hover:bg-sky-200"><span aria-hidden="true">🫧</span><span className="hidden sm:inline">Kids</span></button>
               
               {/* Search Icon Trigger on mobile/tablet */}
               <button
