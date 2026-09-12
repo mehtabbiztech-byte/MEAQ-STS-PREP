@@ -53,17 +53,17 @@ export const PersonalizedDashboard: React.FC = () => {
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       {/* Container Card */}
-      <div className="bg-white dark:bg-slate-900 border-2 border-emerald-500/30 dark:border-emerald-500/20 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+      <div className="bg-white/95 dark:bg-slate-900/95 border-2 border-purple-500/30 dark:border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-xl shadow-purple-950/5 relative overflow-hidden backdrop-blur-md">
         
         {/* Subtle background glow */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Section Header with Persona Switcher */}
+        {/* Section Header with Persona Switcher in Sequence of 3 and 3 */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/80 text-purple-800 dark:text-purple-300 text-xs font-bold mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-pink-500" />
               <span>Smart Adaptive Learning Hub</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
@@ -74,33 +74,34 @@ export const PersonalizedDashboard: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Persona Pills Switcher */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700/80 max-w-full overflow-x-auto">
-            {[
-              { id: 'kids' as UserPersona, label: '👧 Kids (Class 1–5)', icon: Baby },
-              { id: 'school' as UserPersona, label: '🎒 School (6–10)', icon: School },
-              { id: 'college' as UserPersona, label: '📚 College & Entry', icon: GraduationCap },
-              { id: 'university' as UserPersona, label: '🎓 University', icon: Building },
-              { id: 'jobs' as UserPersona, label: '💼 Job Seekers', icon: Briefcase },
-              { id: 'competitive' as UserPersona, label: '🏆 CSS & Commissions', icon: Trophy },
-            ].map((item) => {
-              const Icon = item.icon;
-              const isSelected = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handlePersonaChange(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                    isSelected
-                      ? 'bg-emerald-600 text-white shadow-xs'
-                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-slate-700'
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
+          {/* Persona Switcher in Sequence of 3 and 3 */}
+          <div className="w-full lg:max-w-xl bg-slate-100/90 dark:bg-slate-800/90 p-2 rounded-2xl border border-purple-200/60 dark:border-slate-700/80 shadow-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {[
+                { id: 'kids' as UserPersona, label: 'Kids (Class 1–5)', emoji: '👧', icon: Baby },
+                { id: 'school' as UserPersona, label: 'School (6–10)', emoji: '🎒', icon: School },
+                { id: 'college' as UserPersona, label: 'College & Entry', emoji: '📚', icon: GraduationCap },
+                { id: 'university' as UserPersona, label: 'University', emoji: '🎓', icon: Building },
+                { id: 'jobs' as UserPersona, label: 'Job Seekers', emoji: '💼', icon: Briefcase },
+                { id: 'competitive' as UserPersona, label: 'CSS & Commissions', emoji: '🏆', icon: Trophy },
+              ].map((item) => {
+                const isSelected = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handlePersonaChange(item.id)}
+                    className={`flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer text-center select-none ${
+                      isSelected
+                        ? 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white shadow-md shadow-purple-600/30 ring-2 ring-purple-400/50'
+                        : 'bg-white/95 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-purple-50/80 dark:hover:bg-purple-950/40 border border-slate-200/80 dark:border-slate-700'
+                    }`}
+                  >
+                    <span className="text-sm leading-none">{item.emoji}</span>
+                    <span className="whitespace-nowrap font-bold">{item.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -496,11 +497,11 @@ export const PersonalizedDashboard: React.FC = () => {
           {activeTab === 'jobs' && (
             <div className="space-y-8 animate-fadeIn">
               
-              {/* Target Screening Test Card (Exact requested format) */}
-              <div className="bg-gradient-to-r from-emerald-900/10 via-teal-900/10 to-slate-900/10 border-2 border-emerald-500/30 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              {/* Target Screening Test Card */}
+              <div className="bg-gradient-to-r from-purple-900/10 via-fuchsia-900/10 to-pink-900/10 border-2 border-purple-500/30 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-extrabold uppercase">
+                    <span className="px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-extrabold uppercase">
                       Active Target
                     </span>
                     <span className="text-xs text-slate-500 dark:text-slate-400 font-bold">
@@ -517,14 +518,14 @@ export const PersonalizedDashboard: React.FC = () => {
                       <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
                         Overall Preparation:
                       </span>
-                      <span className="ml-2 font-extrabold text-emerald-600 dark:text-emerald-400 text-lg">
+                      <span className="ml-2 font-extrabold text-purple-600 dark:text-pink-400 text-lg">
                         72%
                       </span>
                     </div>
                   </div>
 
-                  <div className="mt-2 w-full max-w-md bg-slate-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
-                    <div className="bg-emerald-600 h-full rounded-full" style={{ width: '72%' }} />
+                  <div className="mt-2 w-full max-w-md bg-purple-100 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                    <div className="bg-gradient-to-r from-purple-600 to-pink-600 h-full rounded-full" style={{ width: '72%' }} />
                   </div>
 
                   {/* Weak Question practice prompt */}
@@ -603,39 +604,43 @@ export const PersonalizedDashboard: React.FC = () => {
           {activeTab === 'competitive' && (
             <div className="space-y-8 animate-fadeIn">
               
-              {/* CSS Aspirant Welcome Card (Exact requested format) */}
-              <div className="bg-gradient-to-r from-emerald-950/20 via-slate-900 to-teal-950/20 border border-emerald-500/30 rounded-3xl p-6 sm:p-8">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
+              {/* CSS Aspirant Welcome Card (Updated to Purple & Light Pink Theme) */}
+              <div className="bg-gradient-to-r from-purple-950/85 via-slate-900/95 to-pink-950/75 border border-purple-500/40 rounded-3xl p-6 sm:p-8 shadow-xl shadow-purple-950/25 relative overflow-hidden backdrop-blur-xl">
+                {/* Decorative purple-pink ambient glow inside card */}
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-pink-500/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-purple-900/40 relative z-10">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-extrabold">
+                      <span className="px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-extrabold shadow-xs">
                         Civil Services of Pakistan
                       </span>
-                      <span className="text-xs text-slate-400 font-medium">
+                      <span className="text-xs text-purple-200/70 font-medium">
                         Central Superior Services (CSS) & Provincial PMS
                       </span>
                     </div>
 
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display mt-2">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-display mt-2">
                       👋 Welcome back, {userProfile.name}!
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                    <p className="text-xs sm:text-sm text-purple-200/80 mt-0.5">
                       Your Preparation Dashboard & Compulsory Subjects Mastery
                     </p>
                   </div>
 
-                  <div className="text-right sm:text-right">
-                    <div className="text-xs text-slate-400 font-medium">
+                  <div className="text-left sm:text-right">
+                    <div className="text-xs text-purple-200/70 font-medium">
                       Overall Progress
                     </div>
-                    <div className="text-3xl font-extrabold text-emerald-500 font-display">
+                    <div className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-pink-300 font-display">
                       67%
                     </div>
                   </div>
                 </div>
 
-                {/* Specific Subject Progress Bars (Exact numbers requested) */}
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Specific Subject Progress Bars */}
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
                   
                   {/* English — 74% */}
                   <div 
@@ -644,16 +649,16 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('mcqs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 transition cursor-pointer"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-purple-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">English Precis & Vocab</span>
-                      <span className="text-emerald-500 font-extrabold">74%</span>
+                      <span className="text-purple-600 dark:text-purple-400 font-extrabold">74%</span>
                     </div>
-                    <div className="mt-2 w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: '74%' }} />
+                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-purple-600 to-pink-500 h-full rounded-full" style={{ width: '74%' }} />
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                       Dawn Vocabulary, Idioms, Prepositions
                     </p>
                   </div>
@@ -664,16 +669,16 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('current-affairs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 hover:border-teal-500 transition cursor-pointer"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-pink-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">Current Affairs</span>
-                      <span className="text-teal-400 font-extrabold">61%</span>
+                      <span className="text-pink-600 dark:text-pink-400 font-extrabold">61%</span>
                     </div>
-                    <div className="mt-2 w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-teal-500 h-full rounded-full" style={{ width: '61%' }} />
+                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-fuchsia-600 to-pink-500 h-full rounded-full" style={{ width: '61%' }} />
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                       2025-2026 Summits, Economy, Foreign Policy
                     </p>
                   </div>
@@ -685,16 +690,16 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('mcqs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 transition cursor-pointer"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-purple-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">Pakistan Affairs</span>
-                      <span className="text-emerald-400 font-extrabold">78%</span>
+                      <span className="text-purple-600 dark:text-purple-400 font-extrabold">78%</span>
                     </div>
-                    <div className="mt-2 w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-emerald-400 h-full rounded-full" style={{ width: '78%' }} />
+                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 h-full rounded-full" style={{ width: '78%' }} />
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                       1857-1947 Movement & 1973 Constitution
                     </p>
                   </div>
@@ -706,16 +711,16 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('mcqs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 hover:border-amber-500 transition cursor-pointer"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-amber-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">General Science & Ability</span>
-                      <span className="text-amber-400 font-extrabold">53%</span>
+                      <span className="text-amber-500 dark:text-amber-400 font-extrabold">53%</span>
                     </div>
-                    <div className="mt-2 w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-amber-400 h-full rounded-full" style={{ width: '53%' }} />
+                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full" style={{ width: '53%' }} />
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                       Everyday Science, Math & Analytical Logic
                     </p>
                   </div>
@@ -723,14 +728,14 @@ export const PersonalizedDashboard: React.FC = () => {
                 </div>
 
                 {/* CSS Actions */}
-                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                  <div className="text-xs text-slate-400">
-                    Target Exam: <span className="text-emerald-400 font-bold">CSS MPT 2026 (200 MCQs Screening) & Main (1200 Marks)</span>
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-purple-900/40 relative z-10">
+                  <div className="text-xs text-purple-200/90">
+                    Target Exam: <span className="text-pink-300 font-bold">CSS MPT 2026 (200 MCQs Screening) & Main (1200 Marks)</span>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <button
                       onClick={() => setShowCssSyllabus(!showCssSyllabus)}
-                      className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold transition cursor-pointer flex items-center gap-1.5 shadow-sm"
+                      className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 text-xs font-extrabold transition cursor-pointer flex items-center gap-1.5 shadow-sm"
                     >
                       <BookOpen className="w-3.5 h-3.5" />
                       <span>{showCssSyllabus ? 'Hide Syllabus Explorer' : 'ALL CSS Subjects & Syllabus'}</span>
@@ -741,7 +746,7 @@ export const PersonalizedDashboard: React.FC = () => {
                         setTab('exams');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5"
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-purple-900/30"
                     >
                       <span>Full CSS Portal</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -751,7 +756,7 @@ export const PersonalizedDashboard: React.FC = () => {
                         setTab('quiz');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition cursor-pointer"
+                      className="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-purple-200 text-xs font-bold transition cursor-pointer border border-purple-500/30"
                     >
                       Start MPT Mock Quiz
                     </button>

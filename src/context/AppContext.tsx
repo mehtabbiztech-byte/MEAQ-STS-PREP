@@ -182,13 +182,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
-  // Theme Style (emerald, sapphire, aurora, sunset)
+  // Theme Style (aurora/Purple-Pink, emerald, sapphire, sunset, rose, lavender, cyber, ocean)
   const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
     const saved = (localStorage.getItem('matb_theme_style') ?? localStorage.getItem('meaq_theme_style')) as ThemeStyle;
-    if (saved && ['emerald', 'sapphire', 'aurora', 'sunset'].includes(saved)) {
+    if (saved && ['aurora', 'emerald', 'sapphire', 'sunset', 'rose', 'lavender', 'cyber', 'ocean'].includes(saved)) {
       return saved;
     }
-    return 'emerald';
+    return 'aurora';
   });
 
   useEffect(() => {

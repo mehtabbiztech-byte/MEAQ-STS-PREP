@@ -1,4 +1,13 @@
-export type ThemeStyle = 'emerald' | 'sapphire' | 'aurora' | 'sunset';
+export type ThemeStyle = 
+  | 'aurora' 
+  | 'rose' 
+  | 'lavender' 
+  | 'galaxy' 
+  | 'cyber' 
+  | 'emerald' 
+  | 'sapphire' 
+  | 'sunset' 
+  | 'ocean';
 
 export type UserPersona = 'kids' | 'school' | 'college' | 'university' | 'jobs' | 'competitive';
 

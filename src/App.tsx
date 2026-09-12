@@ -37,13 +37,13 @@ const MainContent: React.FC = () => {
   } = useApp();
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50/80 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors relative selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-500 relative selection:bg-purple-600 selection:text-white w-full max-w-full overflow-x-hidden">
       {/* Eye-catching ambient background lighting & patterns */}
       <AttractiveBackground />
 
       <Navbar />
       
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative z-10 w-full max-w-full pb-16 sm:pb-0">
         {tab === 'home' && <HomeView />}
         {tab === 'mcqs' && <McqsView />}
         {tab === 'quiz' && <QuizView />}

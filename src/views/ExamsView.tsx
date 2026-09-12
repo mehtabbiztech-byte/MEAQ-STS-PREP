@@ -77,7 +77,7 @@ export const ExamsView: React.FC = () => {
       
       {/* Top Header */}
       <div className="mb-6">
-        <div className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">
+        <div className="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-pink-400 mb-1">
           Explore Exams
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
@@ -108,8 +108,8 @@ export const ExamsView: React.FC = () => {
                 onClick={() => setSelectedCategory(cat.id as any)}
                 className={`px-2 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
                   selectedCategory === cat.id
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-2xs font-extrabold'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-purple-600 dark:hover:text-pink-400'
                 }`}
               >
                 {cat.label}
@@ -124,7 +124,7 @@ export const ExamsView: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filter exams..."
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
+              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-purple-500"
             />
           </div>
 
@@ -140,15 +140,15 @@ export const ExamsView: React.FC = () => {
                   }}
                   className={`w-full p-2.5 rounded-xl text-left transition flex items-center justify-between cursor-pointer ${
                     isSelected
-                      ? 'bg-emerald-600 text-white font-bold shadow-2xs'
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold shadow-xs'
+                      : 'text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-slate-800'
                   }`}
                 >
                   <div>
                     <div className="text-sm font-semibold leading-tight">
                       {exam.shortName}
                     </div>
-                    <div className={`text-[11px] truncate max-w-[180px] ${isSelected ? 'text-emerald-100' : 'text-slate-400'}`}>
+                    <div className={`text-[11px] truncate max-w-[180px] ${isSelected ? 'text-pink-100 font-medium' : 'text-slate-400'}`}>
                       {exam.fullName}
                     </div>
                   </div>
@@ -163,10 +163,10 @@ export const ExamsView: React.FC = () => {
         <div className="lg:col-span-3 space-y-6">
           
           {/* Active Exam Header Banner */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 border border-purple-100 dark:border-purple-900/40 rounded-3xl p-6 sm:p-8 shadow-xs">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 font-bold text-xs">
+                <span className="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-950/80 text-purple-800 dark:text-pink-300 font-bold text-xs">
                   {currentExam.conductedBy}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display mt-2">
@@ -183,7 +183,7 @@ export const ExamsView: React.FC = () => {
                     setTab('quiz');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md transition cursor-pointer flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs sm:text-sm shadow-md transition cursor-pointer flex items-center gap-2"
                 >
                   <Trophy className="w-4 h-4 text-amber-300" />
                   <span>Launch Mock Test</span>
@@ -191,58 +191,33 @@ export const ExamsView: React.FC = () => {
               </div>
             </div>
 
-            {/* Inner Sub-Navigation Tabs */}
-            <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 overflow-x-auto text-xs font-semibold">
-              <button
-                onClick={() => setActiveTab('overview')}
-                className={`px-3.5 py-2 rounded-xl transition cursor-pointer ${
-                  activeTab === 'overview'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                Exam Overview & Eligibility
-              </button>
-              <button
-                onClick={() => setActiveTab('syllabus')}
-                className={`px-3.5 py-2 rounded-xl transition cursor-pointer ${
-                  activeTab === 'syllabus'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                Official Syllabus & Weightage
-              </button>
-              <button
-                onClick={() => setActiveTab('mcqs')}
-                className={`px-3.5 py-2 rounded-xl transition cursor-pointer ${
-                  activeTab === 'mcqs'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                Targeted MCQs ({examMcqs.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('papers')}
-                className={`px-3.5 py-2 rounded-xl transition cursor-pointer ${
-                  activeTab === 'papers'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                Past Papers ({examPastPapers.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('resources')}
-                className={`px-3.5 py-2 rounded-xl transition cursor-pointer ${
-                  activeTab === 'resources'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                Preparation Resources
-              </button>
+            {/* Official Module Headers as Buttons — No horizontal scroll, responsive mobile view */}
+            <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
+              <div className="text-[11px] font-extrabold uppercase tracking-wider text-purple-600 dark:text-pink-400 mb-3">
+                Official Examination Modules
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-center gap-2.5">
+                {[
+                  { id: 'overview', label: 'Exam Overview & Eligibility', icon: BookOpen },
+                  { id: 'syllabus', label: 'Official Syllabus & Weightage', icon: FileText },
+                  { id: 'mcqs', label: `Targeted MCQs (${examMcqs.length})`, icon: CheckCircle2 },
+                  { id: 'papers', label: `Past Papers (${examPastPapers.length})`, icon: GraduationCap },
+                  { id: 'resources', label: 'Preparation Resources', icon: Sparkles },
+                ].map((tabItem) => (
+                  <button
+                    key={tabItem.id}
+                    onClick={() => setActiveTab(tabItem.id as any)}
+                    className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 border ${
+                      activeTab === tabItem.id
+                        ? 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white border-transparent shadow-md shadow-purple-950/30 font-extrabold'
+                        : 'bg-slate-50 dark:bg-slate-800/80 hover:bg-purple-50 dark:hover:bg-purple-950/40 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-slate-700/80 hover:border-purple-300 dark:hover:border-purple-800'
+                    }`}
+                  >
+                    <tabItem.icon className="w-4 h-4 shrink-0" />
+                    <span>{tabItem.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -278,11 +253,11 @@ export const ExamsView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60">
-                <div className="text-xs text-emerald-800 dark:text-emerald-300 font-bold uppercase tracking-wider mb-1">
+              <div className="p-4 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60">
+                <div className="text-xs text-purple-800 dark:text-pink-300 font-bold uppercase tracking-wider mb-1">
                   Screening Test Pattern & Marks Scheme
                 </div>
-                <div className="text-sm text-emerald-950 dark:text-emerald-200 leading-relaxed font-medium">
+                <div className="text-sm text-purple-950 dark:text-pink-200 leading-relaxed font-medium">
                   {currentExam.screeningStructure}
                 </div>
               </div>
@@ -333,7 +308,7 @@ export const ExamsView: React.FC = () => {
                         {item.section}
                       </h4>
                       {item.weightage && (
-                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-xs font-bold">
+                        <span className="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-pink-300 text-xs font-bold">
                           {item.weightage}
                         </span>
                       )}
@@ -342,7 +317,7 @@ export const ExamsView: React.FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {item.topics.map((t, tIdx) => (
                         <div key={tIdx} className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-pink-400 shrink-0" />
                           <span>{t}</span>
                         </div>
                       ))}
@@ -371,7 +346,7 @@ export const ExamsView: React.FC = () => {
                     setTab('mcqs');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="text-xs font-bold text-emerald-600 hover:underline"
+                  className="text-xs font-bold text-purple-600 dark:text-pink-400 hover:underline"
                 >
                   View All MCQs →
                 </button>
@@ -381,16 +356,16 @@ export const ExamsView: React.FC = () => {
                 {examMcqs.map((mcq, idx) => (
                   <div
                     key={mcq.id}
-                    className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500 transition"
+                    className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-purple-500 transition"
                   >
                     <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
                       <span>Q {idx + 1} • {mcq.category.replace('-', ' ')}</span>
-                      <span className="font-semibold text-emerald-600">{mcq.difficulty}</span>
+                      <span className="font-semibold text-purple-600 dark:text-pink-400">{mcq.difficulty}</span>
                     </div>
                     <p className="text-sm font-semibold text-slate-900 dark:text-white mb-2">
                       {mcq.question}
                     </p>
-                    <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-xs text-emerald-950 dark:text-emerald-200">
+                    <div className="p-3 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-xs text-purple-950 dark:text-pink-200">
                       <strong>Answer: {mcq.options[mcq.correctIndex]}</strong> — {mcq.explanation}
                     </div>
                   </div>
@@ -424,17 +399,17 @@ export const ExamsView: React.FC = () => {
                         setSelectedPastPaperId(paper.id);
                         setTab('past-papers');
                       }}
-                      className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500 transition flex items-center justify-between group cursor-pointer"
+                      className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-purple-500 transition flex items-center justify-between group cursor-pointer"
                     >
                       <div>
-                        <div className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-emerald-600 transition">
+                        <div className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-pink-400 transition">
                           {paper.title}
                         </div>
                         <div className="text-xs text-slate-500 mt-0.5">
                           {paper.postName} • Conducted in {paper.year}
                         </div>
                       </div>
-                      <span className="text-xs font-bold text-emerald-600 group-hover:underline">
+                      <span className="text-xs font-bold text-purple-600 dark:text-pink-400 group-hover:underline">
                         Solve Online →
                       </span>
                     </div>
@@ -463,7 +438,7 @@ export const ExamsView: React.FC = () => {
                     className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex flex-col justify-between"
                   >
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-pink-300">
                         {res.type}
                       </span>
                       <h4 className="font-bold text-sm text-slate-900 dark:text-white mt-2">
@@ -476,7 +451,7 @@ export const ExamsView: React.FC = () => {
 
                     <div className="mt-4 pt-2 border-t border-slate-200 dark:border-slate-700/80 flex items-center justify-between text-xs">
                       <span className="text-slate-400 font-medium">Free Access</span>
-                      <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 cursor-pointer hover:underline">
+                      <span className="text-purple-600 dark:text-pink-400 font-bold flex items-center gap-1 cursor-pointer hover:underline">
                         <span>Read Online</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </span>

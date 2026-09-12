@@ -42,26 +42,26 @@ import { PersonalizedDashboard } from '../components/PersonalizedDashboard';
 
 // Map string icon names to Lucide components
 const iconMap: Record<string, React.ReactNode> = {
-  Globe2: <Globe2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Landmark: <Landmark className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
+  Globe2: <Globe2 className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Landmark: <Landmark className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
   Flame: <Flame className="w-5 h-5 text-amber-500" />,
-  Moon: <Moon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  BookOpenCheck: <BookOpenCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Laptop: <Laptop className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Atom: <Atom className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Calculator: <Calculator className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
+  Moon: <Moon className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  BookOpenCheck: <BookOpenCheck className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Laptop: <Laptop className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Atom: <Atom className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Calculator: <Calculator className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
   Zap: <Zap className="w-5 h-5 text-amber-500" />,
-  FlaskConical: <FlaskConical className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Dna: <Dna className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  GraduationCap: <GraduationCap className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  PenTool: <PenTool className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Compass: <Compass className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Hourglass: <Hourglass className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  TrendingUp: <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Users: <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Building2: <Building2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Network: <Network className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
-  Sprout: <Sprout className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
+  FlaskConical: <FlaskConical className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Dna: <Dna className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  GraduationCap: <GraduationCap className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  PenTool: <PenTool className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Compass: <Compass className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Hourglass: <Hourglass className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  TrendingUp: <TrendingUp className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Users: <Users className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Building2: <Building2 className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Network: <Network className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
+  Sprout: <Sprout className="w-5 h-5 text-purple-600 dark:text-pink-400" />,
 };
 
 export const HomeView: React.FC = () => {
@@ -96,16 +96,16 @@ export const HomeView: React.FC = () => {
     <div className="space-y-16 pb-16">
       
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-emerald-950 via-slate-900 to-slate-950 text-white pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-b border-emerald-900/40">
+      <section className="relative overflow-hidden bg-gradient-to-b from-purple-950 via-slate-900 to-slate-950 text-white pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-b border-purple-900/40">
         
         {/* Subtle decorative background pattern */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ec4899_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/60 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-6 shadow-inner">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-900/60 border border-purple-500/30 text-pink-300 text-xs font-semibold mb-6 shadow-inner">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Pakistan’s Most Comprehensive Competitive Exam Portal</span>
           </div>
@@ -113,7 +113,7 @@ export const HomeView: React.FC = () => {
           {/* Hero Headline */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-display">
             Prepare for Pakistan's <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-200 to-emerald-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-pink-300">
               Competitive & Government Exams
             </span>
           </h1>
@@ -131,7 +131,7 @@ export const HomeView: React.FC = () => {
                 setTab('mcqs');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base shadow-lg shadow-emerald-900/40 hover:shadow-emerald-600/30 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-base shadow-lg shadow-purple-900/40 hover:shadow-purple-600/30 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
             >
               <span>Start Practicing</span>
               <ArrowRight className="w-5 h-5" />
@@ -143,7 +143,7 @@ export const HomeView: React.FC = () => {
                 setTab('quiz');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="px-8 py-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-100 font-semibold text-base border border-slate-700/80 hover:border-emerald-500/50 shadow-md transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+              className="px-8 py-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-100 font-semibold text-base border border-slate-700/80 hover:border-purple-500/50 shadow-md transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
             >
               <Trophy className="w-5 h-5 text-amber-400" />
               <span>Take a Timed Quiz</span>
@@ -153,8 +153,8 @@ export const HomeView: React.FC = () => {
           {/* Prominent Global Search Bar */}
           <div className="mt-10 max-w-2xl mx-auto">
             <form onSubmit={handleHeroSearchSubmit} className="relative group">
-              <div className="relative flex items-center bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border-2 border-emerald-600/60 group-focus-within:border-emerald-400 transition-all overflow-hidden p-1.5">
-                <Search className="w-6 h-6 text-emerald-600 dark:text-emerald-400 ml-3.5 shrink-0" />
+              <div className="relative flex items-center bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border-2 border-purple-500/60 group-focus-within:border-pink-400 transition-all overflow-hidden p-1.5">
+                <Search className="w-6 h-6 text-purple-600 dark:text-pink-400 ml-3.5 shrink-0" />
                 <input
                   type="text"
                   value={searchInput}
@@ -166,7 +166,7 @@ export const HomeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition shrink-0 cursor-pointer hidden sm:block"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-sm transition shrink-0 cursor-pointer hidden sm:block"
                 >
                   Search
                 </button>
@@ -186,7 +186,7 @@ export const HomeView: React.FC = () => {
                 <button
                   key={idx}
                   onClick={p.action}
-                  className="px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-emerald-900/60 border border-slate-700/60 hover:border-emerald-500/40 text-slate-300 hover:text-white transition cursor-pointer"
+                  className="px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-purple-900/60 border border-slate-700/60 hover:border-purple-500/40 text-slate-300 hover:text-white transition cursor-pointer"
                 >
                   {p.label}
                 </button>
@@ -197,11 +197,11 @@ export const HomeView: React.FC = () => {
         </div>
 
         {/* 2. STATISTICS SECTION (Below hero show statistics) */}
-        <div className="mt-16 max-w-6xl mx-auto pt-10 border-t border-slate-800/80">
+        <div className="mt-16 max-w-6xl mx-auto pt-10 border-t border-purple-900/40">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 text-center">
             
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-              <div className="font-extrabold text-2xl sm:text-3xl text-emerald-400 font-display">
+            <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-950/60">
+              <div className="font-extrabold text-2xl sm:text-3xl text-purple-400 font-display">
                 50,000+
               </div>
               <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">
@@ -209,8 +209,8 @@ export const HomeView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-              <div className="font-extrabold text-2xl sm:text-3xl text-teal-400 font-display">
+            <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-950/60">
+              <div className="font-extrabold text-2xl sm:text-3xl text-pink-400 font-display">
                 100+
               </div>
               <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">
@@ -236,8 +236,8 @@ export const HomeView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 col-span-2 md:col-span-1">
-              <div className="font-extrabold text-2xl sm:text-3xl text-emerald-300 font-display">
+            <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-950/60 col-span-2 md:col-span-1">
+              <div className="font-extrabold text-2xl sm:text-3xl text-pink-300 font-display">
                 Thousands
               </div>
               <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">
@@ -255,10 +255,10 @@ export const HomeView: React.FC = () => {
 
       {/* 3. INTERACTIVE QUESTION OF THE DAY */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-emerald-50 via-white to-teal-50 dark:from-slate-900 dark:via-slate-900 dark:to-emerald-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-900/60 p-6 sm:p-8 shadow-sm">
+        <div className="bg-gradient-to-r from-purple-50 via-pink-50/40 to-fuchsia-50 dark:from-slate-900 dark:via-slate-900 dark:to-purple-950/40 rounded-2xl border border-purple-200 dark:border-purple-900/60 p-6 sm:p-8 shadow-sm">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-2.5">
-              <span className="px-3 py-1 rounded-full bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5">
                 <Flame className="w-3.5 h-3.5 fill-white" />
                 Question of the Day
               </span>
@@ -272,8 +272,8 @@ export const HomeView: React.FC = () => {
                 onClick={() => toggleBookmark(dailyMcq.id)}
                 className={`p-2 rounded-lg border transition cursor-pointer ${
                   isBookmarked(dailyMcq.id)
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60'
-                    : 'border-slate-200 dark:border-slate-700 text-slate-500 hover:text-emerald-600'
+                    ? 'border-purple-500 bg-purple-50 text-purple-600 dark:bg-purple-950/60'
+                    : 'border-slate-200 dark:border-slate-700 text-slate-500 hover:text-purple-600'
                 }`}
                 title="Bookmark this question"
               >
@@ -285,7 +285,7 @@ export const HomeView: React.FC = () => {
                     navigator.clipboard.writeText(`${dailyMcq.question}\nOptions: ${dailyMcq.options.join(', ')}`);
                   }
                 }}
-                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-emerald-600 transition cursor-pointer"
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-purple-600 transition cursor-pointer"
                 title="Copy question text"
               >
                 <Share2 className="w-4 h-4" />
@@ -301,11 +301,11 @@ export const HomeView: React.FC = () => {
             {dailyMcq.options.map((option, idx) => {
               const isSelected = dailySelected === idx;
               const isCorrect = idx === dailyMcq.correctIndex;
-              let btnStyle = 'border-slate-200 dark:border-slate-700 hover:border-emerald-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200';
+              let btnStyle = 'border-slate-200 dark:border-slate-700 hover:border-purple-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200';
 
               if (dailySelected !== null) {
                 if (isCorrect) {
-                  btnStyle = 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-200 font-bold';
+                  btnStyle = 'border-purple-600 bg-purple-50 dark:bg-purple-950/80 text-purple-900 dark:text-pink-200 font-bold';
                 } else if (isSelected && !isCorrect) {
                   btnStyle = 'border-rose-500 bg-rose-50 dark:bg-rose-950/80 text-rose-900 dark:text-rose-200';
                 }
@@ -327,7 +327,7 @@ export const HomeView: React.FC = () => {
                     <span>{option}</span>
                   </div>
                   {dailySelected !== null && isCorrect && (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-purple-600 dark:text-pink-400 shrink-0" />
                   )}
                 </button>
               );
@@ -335,9 +335,9 @@ export const HomeView: React.FC = () => {
           </div>
 
           {dailyShowExplanation && (
-            <div className="p-4 rounded-xl bg-emerald-100/60 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/80 text-emerald-950 dark:text-emerald-200 text-sm space-y-1 animate-in fade-in duration-200">
+            <div className="p-4 rounded-xl bg-purple-100/60 dark:bg-purple-950/50 border border-purple-300 dark:border-purple-800/80 text-purple-950 dark:text-pink-200 text-sm space-y-1 animate-in fade-in duration-200">
               <div className="font-bold flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <CheckCircle2 className="w-4 h-4 text-purple-600 dark:text-pink-400" />
                 <span>Correct Answer: Option {String.fromCharCode(65 + dailyMcq.correctIndex)} ({dailyMcq.options[dailyMcq.correctIndex]})</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
@@ -353,7 +353,7 @@ export const HomeView: React.FC = () => {
                 setSelectedCategorySlug('pakistan-studies');
                 setTab('mcqs');
               }}
-              className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline"
+              className="text-purple-600 dark:text-pink-400 font-bold hover:underline"
             >
               Practice More Pakistan Studies MCQs →
             </button>
@@ -572,16 +572,16 @@ export const HomeView: React.FC = () => {
 
       {/* 7. QUIZ ENGINE PROMOTIONAL CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-8 sm:p-12 relative overflow-hidden shadow-xl">
+        <div className="rounded-3xl bg-gradient-to-r from-purple-900 via-fuchsia-950 to-pink-900 text-white p-8 sm:p-12 relative overflow-hidden shadow-xl border border-purple-800/40">
           <div className="max-w-2xl relative z-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700/60 border border-emerald-400/30 text-emerald-200 text-xs font-semibold mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-800/60 border border-pink-400/30 text-pink-200 text-xs font-semibold mb-3">
               <Clock className="w-3.5 h-3.5" />
               <span>Real-Time Exam Simulator</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-display leading-tight">
               Test Your Speed with Timed Online Quizzes
             </h2>
-            <p className="text-emerald-100 text-sm sm:text-base mt-2 leading-relaxed">
+            <p className="text-purple-100 text-sm sm:text-base mt-2 leading-relaxed">
               Experience the pressure of actual exam conditions with countdown timers, 0.25 negative marking toggles, instant graphical performance scorecards, and a dedicated mistake review book.
             </p>
 
@@ -591,17 +591,17 @@ export const HomeView: React.FC = () => {
                   setTab('quiz');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="px-7 py-3 rounded-xl bg-white text-emerald-950 font-bold text-sm shadow-md hover:bg-emerald-50 transition cursor-pointer flex items-center gap-2"
+                className="px-7 py-3 rounded-xl bg-white text-purple-950 font-bold text-sm shadow-md hover:bg-pink-50 transition cursor-pointer flex items-center gap-2"
               >
                 <span>Launch Mock Exam</span>
-                <ArrowRight className="w-4 h-4 text-emerald-800" />
+                <ArrowRight className="w-4 h-4 text-purple-800" />
               </button>
               <button
                 onClick={() => {
                   setTab('mistakes');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="px-6 py-3 rounded-xl bg-emerald-700/60 hover:bg-emerald-700 text-white font-semibold text-sm border border-emerald-500/40 transition cursor-pointer"
+                className="px-6 py-3 rounded-xl bg-purple-800/60 hover:bg-purple-800 text-white font-semibold text-sm border border-purple-500/40 transition cursor-pointer"
               >
                 Review My Mistakes Notebook
               </button>
