@@ -148,7 +148,32 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   background: #334155;
 }
 
+/* The children’s portal keeps a light palette even when the main site is dark. */
+.kids-ocean { color: #153147; background: linear-gradient(125deg, #e7fbff 0%, #f3fcff 44%, #fff3dc 100%); }
+.kids-ocean .kids-water { position: absolute; pointer-events: none; left: -12%; width: 124%; height: 280px; border-radius: 42% 58% 0 0 / 24% 28% 0 0; }
+.kids-water-back { bottom: -197px; background: rgba(56, 189, 248, .28); animation: kids-wave-drift 14s ease-in-out infinite alternate; }
+.kids-water-front { bottom: -225px; background: rgba(14, 165, 233, .23); animation: kids-wave-drift 11s ease-in-out infinite alternate-reverse; }
+.kids-bubbles i { position: absolute; width: 26px; height: 26px; border: 2px solid rgba(3, 105, 161, .23); background: rgba(255,255,255,.38); border-radius: 50%; pointer-events: none; animation: kids-bubble-rise 18s linear infinite; }
+.kids-bubbles i:nth-child(1) { left: 8%; bottom: -30px; animation-delay: -2s; }
+.kids-bubbles i:nth-child(2) { left: 25%; bottom: -30px; width: 17px; height: 17px; animation-delay: -11s; }
+.kids-bubbles i:nth-child(3) { left: 46%; bottom: -30px; width: 38px; height: 38px; animation-delay: -6s; }
+.kids-bubbles i:nth-child(4) { left: 65%; bottom: -30px; animation-delay: -15s; }
+.kids-bubbles i:nth-child(5) { left: 82%; bottom: -30px; width: 17px; height: 17px; animation-delay: -9s; }
+.kids-bubbles i:nth-child(6) { left: 91%; bottom: -30px; width: 35px; height: 35px; animation-delay: -3s; }
+.kids-answer-bubble { animation: kids-float 3.6s ease-in-out infinite alternate; }
+.kids-ocean-paused .kids-water, .kids-ocean-paused .kids-bubbles i, .kids-ocean-paused .kids-answer-bubble { animation-play-state: paused; }
+@keyframes kids-wave-drift { from { transform: translateX(-3%) rotate(-1deg); } to { transform: translateX(3%) rotate(1deg); } }
+@keyframes kids-bubble-rise { from { transform: translateY(0) scale(.7); opacity: 0; } 15% { opacity: .7; } 85% { opacity: .7; } to { transform: translateY(-800px) scale(1.3); opacity: 0; } }
+@keyframes kids-float { to { transform: translateY(-8px); } }
+@media (prefers-reduced-motion: reduce) { .kids-ocean .kids-water, .kids-ocean .kids-bubbles i, .kids-answer-bubble { animation: none !important; } }
+@media print {
+  @page { size: A4 portrait; margin: 9mm; }
+  body * { visibility: hidden !important; }
+  .kids-printable, .kids-printable * { visibility: visible !important; }
+  .kids-printable { position: absolute; top: 0; left: 0; width: 100%; border: 0; box-shadow: none; padding: 0; break-inside: avoid; }
+  .kids-printable svg { max-height: 180mm; }
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { UserPersona } from '../types';
 import { 
@@ -28,6 +28,7 @@ import {
   FileText
 } from 'lucide-react';
 import { CssSyllabusExplorer } from './CssSyllabusExplorer';
+import { KidsPlayground } from './KidsPlayground';
 
 export const PersonalizedDashboard: React.FC = () => {
   const { 
@@ -43,6 +44,7 @@ export const PersonalizedDashboard: React.FC = () => {
   const currentPersona: UserPersona = userProfile.persona || 'jobs';
   const [activeTab, setActiveTab] = useState<UserPersona>(currentPersona);
   const [showCssSyllabus, setShowCssSyllabus] = useState<boolean>(false);
+  useEffect(() => setActiveTab(currentPersona), [currentPersona]);
 
   const handlePersonaChange = (persona: UserPersona) => {
     setActiveTab(persona);
@@ -50,7 +52,7 @@ export const PersonalizedDashboard: React.FC = () => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="kids-hub" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-28">
       
       {/* Container Card */}
       <div className="bg-white/95 dark:bg-slate-900/95 border-2 border-purple-500/30 dark:border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-xl shadow-purple-950/5 relative overflow-hidden backdrop-blur-md">
@@ -111,177 +113,7 @@ export const PersonalizedDashboard: React.FC = () => {
           {/* ========================================================= */}
           {/* 1. 👧 KIDS DASHBOARD (Class 1–5)                          */}
           {/* ========================================================= */}
-          {activeTab === 'kids' && (
-            <div className="space-y-8 animate-fadeIn">
-              
-              {/* Joyful Greeting Header */}
-              <div className="bg-gradient-to-r from-amber-500/10 via-pink-500/10 to-emerald-500/10 border border-amber-200 dark:border-amber-900/40 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                <div>
-                  <div className="flex items-center gap-2 text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-                    <span>👋 Hello {userProfile.name === 'Aspirant' ? 'Ahmed' : userProfile.name}!</span>
-                  </div>
-                  <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-medium mt-1">
-                    Ready for today's fun learning quest? Learn fast, collect golden stars, and keep your streak burning!
-                  </p>
-                  
-                  {/* Streak & Badges */}
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 font-extrabold text-xs sm:text-sm">
-                      <Flame className="w-4 h-4 text-amber-500 fill-amber-500" />
-                      <span>{userProfile.streakDays || 5} Day Streak! Keep it going! 🔥</span>
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 font-extrabold text-xs sm:text-sm">
-                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                      <span>{userProfile.points || 450} Learning Stars</span>
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setSelectedExamId('primary-school');
-                    setTab('mcqs');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-6 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm shadow-md transition transform hover:scale-105 cursor-pointer flex items-center gap-2 shrink-0"
-                >
-                  <Star className="w-5 h-5 fill-slate-950" />
-                  <span>Start Daily Brain Quest</span>
-                </button>
-              </div>
-
-              {/* Today's Learning Breakdown (Exact format requested) */}
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
-                  <BookOpen className="w-5 h-5 text-emerald-600" />
-                  <span>Today's Learning</span>
-                </h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  
-                  {/* Math Quest */}
-                  <div 
-                    onClick={() => {
-                      setSelectedCategorySlug('mathematics');
-                      setTab('mcqs');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 hover:border-amber-400 dark:hover:border-amber-500 transition cursor-pointer group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/80 flex items-center justify-center text-amber-600 text-xl font-bold">
-                        ⭐
-                      </div>
-                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                        <span>Practice</span>
-                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition" />
-                      </span>
-                    </div>
-                    <h4 className="font-extrabold text-base text-slate-900 dark:text-white mt-3">
-                      Mathematics
-                    </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      10 questions — Tables, addition & fun shapes
-                    </p>
-                    <div className="mt-4 w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-amber-500 h-full rounded-full w-3/4" />
-                    </div>
-                  </div>
-
-                  {/* English Quest */}
-                  <div 
-                    onClick={() => {
-                      setSelectedCategorySlug('english');
-                      setTab('mcqs');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 hover:border-sky-400 dark:hover:border-sky-500 transition cursor-pointer group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/80 flex items-center justify-center text-sky-600 text-xl font-bold">
-                        📖
-                      </div>
-                      <span className="text-xs font-bold text-sky-600 dark:text-sky-400 flex items-center gap-1">
-                        <span>Read Lesson</span>
-                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition" />
-                      </span>
-                    </div>
-                    <h4 className="font-extrabold text-base text-slate-900 dark:text-white mt-3">
-                      English
-                    </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      1 lesson — Phonics, rhyming words & simple stories
-                    </p>
-                    <div className="mt-4 w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-sky-500 h-full rounded-full w-1/2" />
-                    </div>
-                  </div>
-
-                  {/* General Knowledge Quest */}
-                  <div 
-                    onClick={() => {
-                      setSelectedCategorySlug('general-knowledge');
-                      setTab('mcqs');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 hover:border-emerald-400 dark:hover:border-emerald-500 transition cursor-pointer group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/80 flex items-center justify-center text-emerald-600 text-xl font-bold">
-                        🧠
-                      </div>
-                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                        <span>Explore</span>
-                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition" />
-                      </span>
-                    </div>
-                    <h4 className="font-extrabold text-base text-slate-900 dark:text-white mt-3">
-                      General Knowledge
-                    </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      10 questions — Animals, seasons, earth & Pakistan
-                    </p>
-                    <div className="mt-4 w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-emerald-500 h-full rounded-full w-5/6" />
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-              {/* Kids Subject Quick Badges (Urdu, Sindhi, Science, Islamiat, Computer) */}
-              <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-                  All Class 1–5 Subjects
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-                  {[
-                    { name: 'Mathematics', emoji: '🧮', slug: 'mathematics', color: 'hover:border-amber-400' },
-                    { name: 'English', emoji: '🔤', slug: 'english', color: 'hover:border-sky-400' },
-                    { name: 'Urdu', emoji: '✍️', slug: 'urdu', color: 'hover:border-emerald-400' },
-                    { name: 'Sindhi', emoji: '📜', slug: 'sindhi', color: 'hover:border-teal-400' },
-                    { name: 'Science', emoji: '🌱', slug: 'everyday-science', color: 'hover:border-green-400' },
-                    { name: 'Islamiat', emoji: '🌙', slug: 'islamic-studies', color: 'hover:border-indigo-400' },
-                    { name: 'Computer', emoji: '💻', slug: 'computer', color: 'hover:border-purple-400' },
-                  ].map((sub, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        setSelectedCategorySlug(sub.slug);
-                        setTab('mcqs');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className={`p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 ${sub.color} transition text-center cursor-pointer`}
-                    >
-                      <div className="text-2xl mb-1">{sub.emoji}</div>
-                      <div className="font-bold text-xs text-slate-800 dark:text-slate-200">{sub.name}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-          )}
+          {activeTab === 'kids' && <KidsPlayground />}
 
           {/* ========================================================= */}
           {/* 2. 🎒 SCHOOL DASHBOARD (Class 6–10 / Matric / Boards)     */}
