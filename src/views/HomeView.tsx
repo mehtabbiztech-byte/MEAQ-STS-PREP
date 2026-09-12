@@ -38,8 +38,7 @@ import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { EXAMS_DATA } from '../data/examsData';
 import { MCQS_DATA } from '../data/mcqsData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
-import { AdaptiveDashboard } from '../components/AdaptiveDashboard';
-import { ExploreLearningPaths } from '../components/ExploreLearningPaths';
+import { PersonalizedDashboard } from '../components/PersonalizedDashboard';
 
 // Map string icon names to Lucide components
 const iconMap: Record<string, React.ReactNode> = {
@@ -108,20 +107,20 @@ export const HomeView: React.FC = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/60 border border-emerald-500/30 text-emerald-300 text-xs font-semibold mb-6 shadow-inner">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Pakistan’s All-in-One Learning & Exam Platform</span>
+            <span>Pakistan’s Most Comprehensive Competitive Exam Portal</span>
           </div>
 
           {/* Hero Headline */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-display">
-            One Platform for Every <br className="hidden sm:inline" />
+            Prepare for Pakistan's <br className="hidden sm:inline" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-200 to-emerald-300">
-              Learner and Every Exam
+              Competitive & Government Exams
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="mt-4 text-base sm:text-xl text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-            From Class 1 learning to university entry tests, job screening and Pakistan’s competitive examinations.
+            “Practice thousands of MCQs, solve past papers, take timed quizzes, and track your preparation.”
           </p>
 
           {/* Buttons: Start Practicing, Take a Quiz */}
@@ -251,9 +250,8 @@ export const HomeView: React.FC = () => {
 
       </section>
 
-      <AdaptiveDashboard />
-
-      <ExploreLearningPaths />
+      {/* 2. ADAPTIVE PERSONALIZED DASHBOARD */}
+      <PersonalizedDashboard />
 
       {/* 3. INTERACTIVE QUESTION OF THE DAY */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

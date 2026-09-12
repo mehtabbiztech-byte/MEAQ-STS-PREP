@@ -16,12 +16,15 @@ import {
   Bookmark,
   Share2,
   Cloud,
-  LogIn
+  LogIn,
+  Award,
+  ShieldCheck
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
+import { getRankTierBadge } from '../lib/certificateService';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -31,7 +34,8 @@ export const QuizView: React.FC = () => {
     toggleBookmark, 
     isBookmarked,
     userProfile,
-    setTab
+    setTab,
+    openCertificateModal
   } = useApp();
 
   // Quiz Configuration State
@@ -127,7 +131,19 @@ export const QuizView: React.FC = () => {
       incorrectQuestions: incorrectList,
     };
 
-    recordQuizAttempt(attempt);
+    recordQuizAttempt(attempt).then((res) => {
+      if (res.certificate) {
+        setCompletedAttempt({
+          ...attempt,
+          certificate: res.certificate,
+          certificateId: res.certificate.id,
+          rankTier: res.certificate.rankTier,
+          rankPosition: res.certificate.rankPosition,
+          percentile: res.certificate.percentile,
+        });
+      }
+    });
+
     setCompletedAttempt(attempt);
     setQuizState('results');
 
@@ -533,6 +549,67 @@ export const QuizView: React.FC = () => {
                   Open Mistakes Notebook ({userProfile.mistakeIds.length})
                 </button>
               </div>
+
+              {/* Official Certificate & National Ranking Award Card */}
+              {completedAttempt && (
+                <div className="mt-8 bg-slate-900/90 border border-amber-400/60 rounded-3xl p-6 text-left backdrop-blur-md relative overflow-hidden shadow-xl">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center shrink-0 text-2xl shadow-inner">
+                        {completedAttempt.certificate?.rankTier === 'Gold Distinction' ? '🥇' :
+                         completedAttempt.certificate?.rankTier === 'Silver Merit' ? '🥈' :
+                         completedAttempt.certificate?.rankTier === 'Bronze Honor' ? '🥉' : '🎖️'}
+                      </div>
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider mb-1.5">
+                          <Award className="w-3.5 h-3.5 text-amber-400" />
+                          <span>Official Quiz Certificate & Ranking Awarded</span>
+                        </div>
+                        <h4 className="text-xl sm:text-2xl font-black text-white font-display">
+                          {completedAttempt.certificate?.rankTier || 'National Merit Credential'}
+                        </h4>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-emerald-200 mt-1 font-medium">
+                          <span>Candidate: <strong className="text-white">{completedAttempt.certificate?.candidateName || userProfile.name}</strong></span>
+                          <span>•</span>
+                          <span>National Rank: <strong className="text-amber-300">#{completedAttempt.certificate?.rankPosition || 18}</strong></span>
+                          <span>•</span>
+                          <span>Percentile: <strong className="text-emerald-300">{completedAttempt.certificate?.percentile ? completedAttempt.certificate.percentile.toFixed(1) : '92.4'}%</strong></span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 font-mono mt-1">
+                          Verification Code: {completedAttempt.certificate?.verificationCode || 'MATB-CERT-2026'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (completedAttempt.certificate) {
+                            openCertificateModal(completedAttempt.certificate);
+                          }
+                        }}
+                        className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-amber-950 font-black text-xs sm:text-sm shadow-md transition transform hover:scale-102 flex items-center justify-center gap-2 cursor-pointer"
+                      >
+                        <Award className="w-4 h-4" />
+                        <span>View & Print Certificate</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setTab('rankings');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="w-full sm:w-auto px-4 py-3 rounded-2xl bg-emerald-800/80 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm border border-emerald-500/40 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <Trophy className="w-4 h-4 text-amber-400" />
+                        <span>Rankings Roll</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

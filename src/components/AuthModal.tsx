@@ -19,9 +19,11 @@ import {
   Loader2,
   AlertCircle,
   MapPin,
-  Sparkles
+  Sparkles,
+  GraduationCap
 } from 'lucide-react';
-import { TARGET_OPTIONS } from '../data/learnerPaths';
+import { EXAMS_DATA } from '../data/examsData';
+import { UserPersona } from '../types';
 
 export const AuthModal: React.FC = () => {
   const { 
@@ -39,6 +41,7 @@ export const AuthModal: React.FC = () => {
     updateTargetExam, 
     updateUserName,
     updateProvince,
+    updatePersona,
     setTab
   } = useApp();
 
@@ -50,13 +53,17 @@ export const AuthModal: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState('');
-  const [targetExam, setTargetExam] = useState('Jobs: STS');
+  const [targetExam, setTargetExam] = useState('STS (Sukkur IBA BPS 5-15)');
   const [province, setProvince] = useState('Sindh');
+  const [persona, setPersona] = useState<UserPersona>(userProfile.persona || 'jobs');
+  const [gradeOrClass, setGradeOrClass] = useState(userProfile.gradeOrClass || '');
   
   // Profile edit fields for logged in user
   const [editName, setEditName] = useState(userProfile.name);
   const [editExam, setEditExam] = useState(userProfile.targetExam);
   const [editProvince, setEditProvince] = useState(userProfile.province);
+  const [editPersona, setEditPersona] = useState<UserPersona>(userProfile.persona || 'jobs');
+  const [editGradeOrClass, setEditGradeOrClass] = useState(userProfile.gradeOrClass || '');
 
   // States
   const [submitting, setSubmitting] = useState(false);
@@ -114,7 +121,7 @@ export const AuthModal: React.FC = () => {
     }
     setSubmitting(true);
     setErrorMessage(null);
-    const res = await signupWithEmail(email, password, fullName, targetExam, province);
+    const res = await signupWithEmail(email, password, fullName, targetExam, province, persona, gradeOrClass);
     setSubmitting(false);
     if (!res.success) {
       setErrorMessage(res.error || 'Registration failed.');
@@ -153,6 +160,7 @@ export const AuthModal: React.FC = () => {
     }
     updateTargetExam(editExam);
     updateProvince(editProvince);
+    updatePersona(editPersona, editGradeOrClass);
     setSavedSuccess(true);
     setTimeout(() => {
       setSavedSuccess(false);
@@ -323,6 +331,42 @@ export const AuthModal: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+                    Student / Learner Category
+                  </label>
+                  <div className="relative">
+                    <GraduationCap className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                    <select
+                      value={editPersona}
+                      onChange={(e) => setEditPersona(e.target.value as UserPersona)}
+                      className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
+                    >
+                      <option value="kids">👧 Kids (Class 1–5)</option>
+                      <option value="school">🎒 School (Class 6–10 / Matric)</option>
+                      <option value="college">📚 College (Inter / FSc / Entry Tests)</option>
+                      <option value="university">🎓 University & Scholarships</option>
+                      <option value="jobs">💼 Job Seeker (STS, NTS, Govt)</option>
+                      <option value="competitive">🏆 Competitive (CSS, PMS, SPSC)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+                    Grade / Class / Level (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={editGradeOrClass}
+                    onChange={(e) => setEditGradeOrClass(e.target.value)}
+                    placeholder="e.g. Class 10th / FSc Part 2 / BPS-11"
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                     Target Exam
                   </label>
                   <div className="relative">
@@ -332,9 +376,9 @@ export const AuthModal: React.FC = () => {
                       onChange={(e) => setEditExam(e.target.value)}
                       className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
                     >
-                      {TARGET_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
+                      {EXAMS_DATA.map((ex) => (
+                        <option key={ex.id} value={`${ex.shortName} (${ex.conductedBy})`}>
+                          {ex.shortName} — {ex.name}
                         </option>
                       ))}
                     </select>
@@ -601,6 +645,41 @@ export const AuthModal: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+                      I am a / Learner Type
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={persona}
+                        onChange={(e) => setPersona(e.target.value as UserPersona)}
+                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
+                      >
+                        <option value="kids">👧 Kids (Class 1–5)</option>
+                        <option value="school">🎒 School (Class 6–10 / Matric)</option>
+                        <option value="college">📚 College (Inter / Entry Test)</option>
+                        <option value="university">🎓 University & Scholarships</option>
+                        <option value="jobs">💼 Job Seeker (STS, NTS, Govt)</option>
+                        <option value="competitive">🏆 CSS & Provincial PMS</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
+                      Grade / Level (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={gradeOrClass}
+                      onChange={(e) => setGradeOrClass(e.target.value)}
+                      placeholder="e.g. Class 10th / BPS-14"
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1">
                       Target Exam
                     </label>
                     <select
@@ -608,9 +687,9 @@ export const AuthModal: React.FC = () => {
                       onChange={(e) => setTargetExam(e.target.value)}
                       className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
                     >
-                      {TARGET_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
+                      {EXAMS_DATA.map((ex) => (
+                        <option key={ex.id} value={`${ex.shortName} (${ex.conductedBy})`}>
+                          {ex.shortName} ({ex.conductedBy})
                         </option>
                       ))}
                     </select>

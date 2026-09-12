@@ -10,6 +10,7 @@ import { Footer } from './components/Footer';
 import { SearchModal } from './components/SearchModal';
 import { AuthModal } from './components/AuthModal';
 import { CustomDomainModal } from './components/CustomDomainModal';
+import { CertificateModal } from './components/CertificateModal';
 import { AttractiveBackground } from './components/AttractiveBackground';
 
 import { HomeView } from './views/HomeView';
@@ -25,7 +26,15 @@ import { AboutView } from './views/AboutView';
 import { SavedMcqsView } from './views/SavedMcqsView';
 
 const MainContent: React.FC = () => {
-  const { tab, domainModalOpen, setDomainModalOpen } = useApp();
+  const { 
+    tab, 
+    domainModalOpen, 
+    setDomainModalOpen,
+    activeCertificate,
+    isCertificateModalOpen,
+    closeCertificateModal,
+    updateCertificateCandidateName,
+  } = useApp();
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50/80 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors relative selection:bg-emerald-500 selection:text-white">
@@ -56,6 +65,14 @@ const MainContent: React.FC = () => {
         isOpen={domainModalOpen} 
         onClose={() => setDomainModalOpen(false)} 
       />
+      {activeCertificate && (
+        <CertificateModal
+          certificate={activeCertificate}
+          isOpen={isCertificateModalOpen}
+          onClose={closeCertificateModal}
+          onUpdateCandidateName={updateCertificateCandidateName}
+        />
+      )}
     </div>
   );
 };
