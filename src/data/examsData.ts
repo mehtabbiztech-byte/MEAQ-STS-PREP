@@ -292,9 +292,9 @@ export const EXAMS_DATA: ExamInfo[] = [
     fullName: 'Sukkur IBA Testing Services (STS)',
     conductedBy: 'Sukkur IBA University',
     description: 'High-reputation testing body for Government of Sindh BPS-05 to BPS-15 recruitment, Municipal Officer (MO), Town Officer (TO), PST/JEST, and SELD jobs.',
-    eligibility: 'Intermediate (for Intermediate Category) or Graduate (for Graduation Category).',
-    ageLimit: '18 to 30 years (+ 15 years general relaxation notified by Sindh Government).',
-    screeningStructure: '100 MCQs. English (40%), Mathematics (20%), General Knowledge & Science (40%). Time: 100 Minutes.',
+    eligibility: 'Matriculation, Intermediate and Graduation screening categories are separate. Post-specific eligibility is set in the relevant advertisement.',
+    ageLimit: 'Check the applicable project advertisement; limits and any relaxation depend on the recruitment notice.',
+    screeningStructure: 'SGA&CD BPS 05–15 screening: 100 MCQs (English 40%, Mathematics 20%, General Knowledge 40%). Other STS posts have separate test specifications; see the syllabus tab.',
     syllabus: [
       {
         section: 'Part-I: English (40 Marks)',
@@ -313,11 +313,10 @@ export const EXAMS_DATA: ExamInfo[] = [
       },
     ],
     subjects: ['English', 'Mathematics', 'Everyday Science', 'General Knowledge', 'Computer Basics', 'Pak Studies', 'Islamiyat'],
-    pastPapersCount: 38,
-    mockTestsCount: 42,
+    pastPapersCount: 1,
+    mockTestsCount: 0,
     resources: [
-      { title: 'STS IBA BPS 5 to 15 Master Solved Papers', type: 'Book', description: 'Complete authentic past papers of Graduation & Intermediate categories.' },
-      { title: 'STS Town Officer & Municipal Officer Guide', type: 'Guide', description: 'Targeted preparation for local government recruitment.' },
+      { title: 'STS official announcements and test specifications', type: 'Official Link', url: 'https://www.iba-suk.edu.pk/sts/announcements', description: 'Find the current specification and sample paper for your exact project and post.' },
     ],
   },
   {

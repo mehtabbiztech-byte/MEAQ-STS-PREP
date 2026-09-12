@@ -15,6 +15,7 @@ import {
 import { EXAMS_DATA } from '../data/examsData';
 import { MCQS_DATA } from '../data/mcqsData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
+import { STSSyllabusExplorer } from './STSSyllabusExplorer';
 
 export const ExamsView: React.FC = () => {
   const { 
@@ -271,7 +272,8 @@ export const ExamsView: React.FC = () => {
           )}
 
           {/* Sub-tab 2: Syllabus */}
-          {activeTab === 'syllabus' && (
+          {activeTab === 'syllabus' && currentExam.id === 'sts' && <STSSyllabusExplorer />}
+          {activeTab === 'syllabus' && currentExam.id !== 'sts' && (
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs animate-in fade-in duration-150">
               <div className="flex items-center justify-between">
                 <div>

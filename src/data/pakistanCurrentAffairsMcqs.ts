@@ -1,6 +1,8 @@
 import { MCQ } from '../types';
+import { SOURCED_CURRENT_AFFAIRS_MCQS } from './sourcedCurrentAffairsMcqs';
 
 export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
+  ...SOURCED_CURRENT_AFFAIRS_MCQS,
   // Page 1
   {
     id: 'pca-001',
