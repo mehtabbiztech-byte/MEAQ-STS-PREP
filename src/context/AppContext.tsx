@@ -184,11 +184,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Theme Style
   const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
+    if (localStorage.getItem('matb_theme_version') !== '3') {
+      localStorage.setItem('matb_theme_version', '3');
+      return 'pastel-network';
+    }
     const saved = (localStorage.getItem('matb_theme_style') ?? localStorage.getItem('meaq_theme_style')) as ThemeStyle;
     if (saved && ['emerald', 'sapphire', 'sunset', 'rose', 'lavender', 'cyber', 'ocean', 'pastel-network', 'pastel-ribbons'].includes(saved)) {
       return saved;
     }
-    return 'pastel-ribbons';
+    return 'pastel-network';
   });
 
   useEffect(() => {

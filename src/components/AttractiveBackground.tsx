@@ -132,7 +132,7 @@ export const THEME_OPTIONS: {
 export const AttractiveBackground: React.FC = () => {
   const { themeStyle, darkMode } = useApp();
 
-  const currentTheme = THEME_OPTIONS.find((t) => t.id === themeStyle) || THEME_OPTIONS.find((t) => t.id === 'pastel-ribbons')!;
+  const currentTheme = THEME_OPTIONS.find((t) => t.id === themeStyle) || THEME_OPTIONS.find((t) => t.id === 'pastel-network')!;
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
