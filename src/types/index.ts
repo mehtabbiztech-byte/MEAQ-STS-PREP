@@ -97,6 +97,10 @@ export interface PastPaper {
   totalQuestions: number;
   solvedDate?: string;
   mcqs: MCQ[];
+  recordType?: 'Official Past Paper' | 'Official Sample Paper' | 'Official Answer Key / Date Record' | 'Reconstructed Practice Paper';
+  testDateLabel?: string;
+  sourceUrl?: string;
+  sourceNote?: string;
 }
 
 export interface JobAlert {

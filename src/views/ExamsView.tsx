@@ -379,10 +379,10 @@ export const ExamsView: React.FC = () => {
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs animate-in fade-in duration-150">
               <div>
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white font-display">
-                  Solved Past Papers for {currentExam.shortName}
+                  Papers & Official Records for {currentExam.shortName}
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Year-wise official questions with verified answers
+                  Official samples and dated records are separated from reconstructed practice papers.
                 </p>
               </div>
 
@@ -396,8 +396,12 @@ export const ExamsView: React.FC = () => {
                     <div
                       key={paper.id}
                       onClick={() => {
-                        setSelectedPastPaperId(paper.id);
-                        setTab('past-papers');
+                        if (paper.mcqs.length) {
+                          setSelectedPastPaperId(paper.id);
+                          setTab('past-papers');
+                        } else if (paper.sourceUrl) {
+                          window.open(paper.sourceUrl, '_blank', 'noopener,noreferrer');
+                        }
                       }}
                       className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-purple-500 transition flex items-center justify-between group cursor-pointer"
                     >
@@ -406,11 +410,11 @@ export const ExamsView: React.FC = () => {
                           {paper.title}
                         </div>
                         <div className="text-xs text-slate-500 mt-0.5">
-                          {paper.postName} • Conducted in {paper.year}
+                          {paper.postName} • {paper.testDateLabel || `Conducted in ${paper.year}`}
                         </div>
                       </div>
                       <span className="text-xs font-bold text-purple-600 dark:text-pink-400 group-hover:underline">
-                        Solve Online →
+                        {paper.mcqs.length ? 'Solve Online →' : 'Official Reference ↗'}
                       </span>
                     </div>
                   ))}
@@ -451,10 +455,9 @@ export const ExamsView: React.FC = () => {
 
                     <div className="mt-4 pt-2 border-t border-slate-200 dark:border-slate-700/80 flex items-center justify-between text-xs">
                       <span className="text-slate-400 font-medium">Free Access</span>
-                      <span className="text-purple-600 dark:text-pink-400 font-bold flex items-center gap-1 cursor-pointer hover:underline">
-                        <span>Read Online</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </span>
+                      {res.url ? <a href={res.url} target="_blank" rel="noreferrer" className="text-purple-600 dark:text-pink-400 font-bold flex items-center gap-1 hover:underline">
+                        <span>Open Source</span><ExternalLink className="w-3.5 h-3.5" />
+                      </a> : <span className="text-slate-400 font-bold">Reference only</span>}
                     </div>
                   </div>
                 ))}
