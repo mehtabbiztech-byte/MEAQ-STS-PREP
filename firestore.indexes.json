@@ -1,0 +1,8 @@
+{
+  "indexes": [
+    { "collectionGroup": "cms_mcqs", "queryScope": "COLLECTION", "fields": [{ "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "publishAtEpoch", "order": "ASCENDING" }] },
+    { "collectionGroup": "cms_past_papers", "queryScope": "COLLECTION", "fields": [{ "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "publishAtEpoch", "order": "ASCENDING" }] },
+    { "collectionGroup": "cms_lessons", "queryScope": "COLLECTION", "fields": [{ "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "publishAtEpoch", "order": "ASCENDING" }] }
+  ],
+  "fieldOverrides": []
+}

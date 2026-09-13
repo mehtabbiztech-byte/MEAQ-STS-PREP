@@ -10,9 +10,41 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    function isAdmin() {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+
+    function isPublicContent() {
+      return resource.data.status == 'Published'
+        && (!('publishAtEpoch' in resource.data) || resource.data.publishAtEpoch == 0 || resource.data.publishAtEpoch <= request.time.toMillis());
+    }
+
+    match /admins/{userId} {
+      allow read: if isOwner(userId);
+      allow write: if false;
+    }
+
+    match /cms_mcqs/{contentId} {
+      allow read: if isAdmin() || isPublicContent();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /cms_past_papers/{contentId} {
+      allow read: if isAdmin() || isPublicContent();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /cms_lessons/{contentId} {
+      allow read: if isAdmin() || isPublicContent();
+      allow create, update, delete: if isAdmin();
+    }
+
     // Connection test document
     match /test/{docId} {
-      allow read: if true;
+      allow read: if isAuthenticated();
+      allow write: if false;
     }
 
     // User Profile Document

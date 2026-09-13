@@ -22,8 +22,11 @@ import {
 import { CURRENT_AFFAIRS_DATA } from '../data/currentAffairsData';
 import { CURRENT_AFFAIRS_2000, PAKISTAN_CURRENT_AFFAIRS_1000, WORLD_CURRENT_AFFAIRS_1000 } from '../data/currentAffairs2000';
 import { MCQ } from '../types';
+import { useCmsContent } from '../context/CmsContentContext';
 
 export const CurrentAffairsView: React.FC = () => {
+  const { mcqs: cmsMcqs } = useCmsContent();
+  const allCurrentMcqs = useMemo(() => [...cmsMcqs.filter(item => item.category === 'current-affairs'), ...CURRENT_AFFAIRS_2000], [cmsMcqs]);
   const { setTab, setSelectedCategorySlug, toggleBookmark, isBookmarked, addMistake } = useApp();
   
   const [activeTab, setActiveTab] = useState<'mcqs' | 'timeline'>('mcqs');
@@ -41,15 +44,15 @@ export const CurrentAffairsView: React.FC = () => {
   // Subtopics list for filter pills
   const subtopics = useMemo(() => {
     const set = new Set<string>();
-    CURRENT_AFFAIRS_2000.forEach((m) => {
+    allCurrentMcqs.forEach((m) => {
       if (m.subtopic) set.add(m.subtopic);
     });
     return ['All', ...Array.from(set)];
-  }, []);
+  }, [allCurrentMcqs]);
 
   // Filtered MCQs
   const filteredMcqs = useMemo(() => {
-    return CURRENT_AFFAIRS_2000.filter((mcq) => {
+    return allCurrentMcqs.filter((mcq) => {
       if (mcqScope !== 'All' && !mcq.subtopic?.startsWith(`${mcqScope}:`)) return false;
       if (subtopicFilter !== 'All' && mcq.subtopic !== subtopicFilter) {
         return false;
@@ -66,7 +69,7 @@ export const CurrentAffairsView: React.FC = () => {
       }
       return true;
     });
-  }, [subtopicFilter, searchQuery, mcqScope]);
+  }, [allCurrentMcqs, subtopicFilter, searchQuery, mcqScope]);
 
   useEffect(() => setPage(1), [subtopicFilter, searchQuery, mcqScope]);
   const totalPages = Math.max(1, Math.ceil(filteredMcqs.length / pageSize));
@@ -176,7 +179,7 @@ export const CurrentAffairsView: React.FC = () => {
             }`}
           >
             <Layers className="w-4 h-4" />
-            <span>MCQs Practice Bank ({CURRENT_AFFAIRS_2000.length.toLocaleString()})</span>
+            <span>MCQs Practice Bank ({allCurrentMcqs.length.toLocaleString()})</span>
           </button>
           <button
             onClick={() => setActiveTab('timeline')}

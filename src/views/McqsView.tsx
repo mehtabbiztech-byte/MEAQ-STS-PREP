@@ -20,8 +20,11 @@ import {
 import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ } from '../types';
+import { useCmsContent } from '../context/CmsContentContext';
 
 export const McqsView: React.FC = () => {
+  const { mcqs: liveMcqs } = useCmsContent();
+  const allMcqs = useMemo(() => [...liveMcqs, ...MCQS_DATA], [liveMcqs]);
   const pageSize = 24;
   const { 
     selectedCategorySlug, 
@@ -50,7 +53,7 @@ export const McqsView: React.FC = () => {
 
   // Filtered MCQs list
   const filteredMcqs = useMemo(() => {
-    return MCQS_DATA.filter((mcq) => {
+    return allMcqs.filter((mcq) => {
       // Category filter
       if (selectedCategorySlug && mcq.category !== selectedCategorySlug) {
         return false;
@@ -73,7 +76,7 @@ export const McqsView: React.FC = () => {
       }
       return true;
     });
-  }, [selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
+  }, [allMcqs, selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
   const pageCount = Math.max(1, Math.ceil(filteredMcqs.length / pageSize));
   const visibleMcqs = filteredMcqs.slice((page - 1) * pageSize, page * pageSize);
 
