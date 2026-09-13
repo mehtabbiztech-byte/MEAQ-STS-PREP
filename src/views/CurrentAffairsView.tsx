@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   Calendar, 
@@ -20,7 +20,7 @@ import {
   Check
 } from 'lucide-react';
 import { CURRENT_AFFAIRS_DATA } from '../data/currentAffairsData';
-import { PAKISTAN_CURRENT_AFFAIRS_MCQS } from '../data/pakistanCurrentAffairsMcqs';
+import { CURRENT_AFFAIRS_2000, PAKISTAN_CURRENT_AFFAIRS_1000, WORLD_CURRENT_AFFAIRS_1000 } from '../data/currentAffairs2000';
 import { MCQ } from '../types';
 
 export const CurrentAffairsView: React.FC = () => {
@@ -30,6 +30,9 @@ export const CurrentAffairsView: React.FC = () => {
   const [scopeFilter, setScopeFilter] = useState<'All' | 'Pakistan' | 'International'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [subtopicFilter, setSubtopicFilter] = useState<string>('All');
+  const [mcqScope, setMcqScope] = useState<'All' | 'Pakistan' | 'World'>('All');
+  const [page, setPage] = useState(1);
+  const pageSize = 24;
   
   // Interactive answers state for MCQs { [mcqId]: selectedOptionIndex }
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
@@ -38,7 +41,7 @@ export const CurrentAffairsView: React.FC = () => {
   // Subtopics list for filter pills
   const subtopics = useMemo(() => {
     const set = new Set<string>();
-    PAKISTAN_CURRENT_AFFAIRS_MCQS.forEach((m) => {
+    CURRENT_AFFAIRS_2000.forEach((m) => {
       if (m.subtopic) set.add(m.subtopic);
     });
     return ['All', ...Array.from(set)];
@@ -46,7 +49,8 @@ export const CurrentAffairsView: React.FC = () => {
 
   // Filtered MCQs
   const filteredMcqs = useMemo(() => {
-    return PAKISTAN_CURRENT_AFFAIRS_MCQS.filter((mcq) => {
+    return CURRENT_AFFAIRS_2000.filter((mcq) => {
+      if (mcqScope !== 'All' && !mcq.subtopic?.startsWith(`${mcqScope}:`)) return false;
       if (subtopicFilter !== 'All' && mcq.subtopic !== subtopicFilter) {
         return false;
       }
@@ -62,7 +66,11 @@ export const CurrentAffairsView: React.FC = () => {
       }
       return true;
     });
-  }, [subtopicFilter, searchQuery]);
+  }, [subtopicFilter, searchQuery, mcqScope]);
+
+  useEffect(() => setPage(1), [subtopicFilter, searchQuery, mcqScope]);
+  const totalPages = Math.max(1, Math.ceil(filteredMcqs.length / pageSize));
+  const visibleMcqs = filteredMcqs.slice((page - 1) * pageSize, page * pageSize);
 
   // Filtered Timeline Items
   const filteredTimeline = useMemo(() => {
@@ -105,28 +113,28 @@ export const CurrentAffairsView: React.FC = () => {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-800/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold mb-3 shadow-xs">
               <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>Latest 2024 - 2026 Pakistan & International Current Affairs Bank</span>
+              <span>Pakistan & World Current Affairs — source checked 13 September 2026</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-extrabold font-display tracking-tight text-white">
-              Pakistan Current Affairs <span className="text-emerald-400">MCQs Bank</span>
+              Pakistan & World Current Affairs <span className="text-emerald-400">MCQs Bank</span>
             </h1>
             <p className="text-emerald-100/90 text-xs sm:text-sm mt-2.5 leading-relaxed max-w-2xl">
-              Complete, authoritative collection of 100+ verified Pakistan & International Current Affairs MCQs covering the 26th Constitutional Amendment, SCO Summit, Key Appointments, 5G Auction, and Global Security.
+              2,000 source-aligned practice questions based on facts checked against official Pakistani and international sources. Repeated practice variants help candidates prepare for STS, SPSC, FPSC, NTS and PTS formats.
             </p>
 
             {/* Quick stats chips */}
             <div className="flex flex-wrap items-center gap-2 mt-4 text-xs font-semibold">
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                100+ MCQs Added
+                {CURRENT_AFFAIRS_2000.length.toLocaleString()} MCQs
               </span>
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Trophy className="w-3.5 h-3.5 text-emerald-400" />
-                FPSC • PPSC • SPSC • STS Tested
+                STS • SPSC • FPSC • NTS • PTS
               </span>
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-teal-400" />
-                March 2026 Updated
+                {PAKISTAN_CURRENT_AFFAIRS_1000.length.toLocaleString()} Pakistan + {WORLD_CURRENT_AFFAIRS_1000.length.toLocaleString()} World
               </span>
             </div>
           </div>
@@ -168,7 +176,7 @@ export const CurrentAffairsView: React.FC = () => {
             }`}
           >
             <Layers className="w-4 h-4" />
-            <span>MCQs Practice Bank ({PAKISTAN_CURRENT_AFFAIRS_MCQS.length})</span>
+            <span>MCQs Practice Bank ({CURRENT_AFFAIRS_2000.length.toLocaleString()})</span>
           </button>
           <button
             onClick={() => setActiveTab('timeline')}
@@ -194,14 +202,18 @@ export const CurrentAffairsView: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={activeTab === 'mcqs' ? 'Search 100+ MCQs, options, tags...' : 'Search events, summits, appointments...'}
+            placeholder={activeTab === 'mcqs' ? 'Search 2,000 MCQs, options, tags...' : 'Search events, summits, appointments...'}
             className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
         {/* Filters according to active tab */}
         {activeTab === 'mcqs' ? (
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+            <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+              {(['All', 'Pakistan', 'World'] as const).map(scope => <button key={scope} onClick={() => setMcqScope(scope)} className={`px-3 py-1.5 rounded-lg text-xs font-bold ${mcqScope === scope ? 'bg-emerald-600 text-white' : 'text-slate-600 dark:text-slate-300'}`}>{scope}</button>)}
+            </div>
+            <div className="flex items-center gap-1.5">
             <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1 shrink-0">
               <Filter className="w-3.5 h-3.5 text-emerald-500" />
               Subtopic:
@@ -219,6 +231,7 @@ export const CurrentAffairsView: React.FC = () => {
                 {topic}
               </button>
             ))}
+            </div>
           </div>
         ) : (
           <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
@@ -245,7 +258,7 @@ export const CurrentAffairsView: React.FC = () => {
         </span>
       </div>
 
-      {/* TAB 1: MCQS PRACTICE BANK (100+ MCQS) */}
+      {/* TAB 1: MCQS PRACTICE BANK */}
       {activeTab === 'mcqs' && (
         <div className="space-y-4">
           {filteredMcqs.length === 0 ? (
@@ -263,7 +276,7 @@ export const CurrentAffairsView: React.FC = () => {
               </button>
             </div>
           ) : (
-            filteredMcqs.map((mcq, idx) => {
+            visibleMcqs.map((mcq, idx) => {
               const selectedOpt = selectedAnswers[mcq.id];
               const isAnswered = selectedOpt !== undefined;
               const isCorrect = isAnswered && selectedOpt === mcq.correctIndex;
@@ -279,7 +292,7 @@ export const CurrentAffairsView: React.FC = () => {
                   <div className="flex items-center justify-between gap-3 text-xs mb-3">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2.5 py-0.5 rounded-md font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[11px]">
-                        Q{idx + 1}
+                        Q{(page - 1) * pageSize + idx + 1}
                       </span>
                       {mcq.subtopic && (
                         <span className="px-2.5 py-0.5 rounded-md font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px]">
@@ -407,6 +420,7 @@ export const CurrentAffairsView: React.FC = () => {
               );
             })
           )}
+          {filteredMcqs.length > pageSize && <div className="flex items-center justify-center gap-3 pt-4"><button disabled={page === 1} onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-4 py-2 rounded-xl border disabled:opacity-40">Previous</button><span className="text-sm font-bold">Page {page} of {totalPages}</span><button disabled={page === totalPages} onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-4 py-2 rounded-xl bg-emerald-600 text-white disabled:opacity-40">Next</button></div>}
         </div>
       )}
 
