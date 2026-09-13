@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
               Ready to crack your upcoming FPSC, PPSC, SPSC, or STS Test?
             </h3>
             <p className="text-slate-400 text-sm mt-1 max-w-xl">
-              Practice over 50,000+ authentic MCQs, analyze past papers with detailed explanations, and review your mistakes with our smart study engine.
+              Practice 5,000+ source-aligned STS IBA MCQs, analyze past papers with detailed explanations, and review your mistakes with our smart study engine.
             </p>
           </div>
 

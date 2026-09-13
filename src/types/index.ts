@@ -40,6 +40,10 @@ export interface MCQ {
   difficulty: 'Easy' | 'Medium' | 'Hard';
   viewsCount?: number;
   submittedBy?: string;
+  sourceId?: string;
+  sourceUrl?: string;
+  verificationStatus?: 'source-aligned' | 'editor-reviewed' | 'official-paper';
+  verificationMethod?: string;
 }
 
 export interface Category {
