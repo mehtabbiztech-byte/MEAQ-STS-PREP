@@ -80,6 +80,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   --theme-accent: #0284c7;
 }
 
+[data-theme='pastel-network'] {
+  --theme-accent: #8b5cf6;
+}
+
+[data-theme='pastel-ribbons'] {
+  --theme-accent: #0d9488;
+}
+
 [data-theme='emerald'] {
   --theme-accent: #059669;
 }
