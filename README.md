@@ -126,7 +126,7 @@ npm run preview
 ---
 
 ## 📁 Key Features Included
-- **50,000+ Verified MCQs** across 20 core subjects (Pak Affairs, General Knowledge, Science, Islamiyat, English, etc.)
+- **5,000+ STS IBA source-aligned MCQs** with answer validation and source provenance. Editorial verification is tracked separately.
 - **16 Commission Portals**: CSS, PMS, FPSC, PPSC, SPSC, KPPSC, BPSC, STS IBA Sukkur, FIA, and more.
 - **PPSC 0.25 Negative Marking Engine**: Authentic examination penalty simulation.
 - **Mistakes Notebook**: Automatic logging of wrong answers for focused revision.

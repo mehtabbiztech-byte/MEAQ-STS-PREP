@@ -202,7 +202,7 @@ export const SearchModal: React.FC = () => {
                         {sub.name}
                       </div>
                       <div className="text-xs text-slate-500 dark:text-slate-400">
-                        {sub.totalMcqs.toLocaleString()} MCQs available
+                        {MCQS_DATA.filter(item => item.category === sub.slug).length.toLocaleString()} MCQs available
                       </div>
                     </div>
                     <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transform group-hover:translate-x-0.5 transition" />

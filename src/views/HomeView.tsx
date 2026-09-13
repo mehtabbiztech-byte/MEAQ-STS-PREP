@@ -202,10 +202,10 @@ export const HomeView: React.FC = () => {
             
             <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-950/60">
               <div className="font-extrabold text-2xl sm:text-3xl text-purple-400 font-display">
-                50,000+
+                5,000+
               </div>
               <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">
-                Verified MCQs
+                STS Source-Aligned MCQs
               </div>
             </div>
 
@@ -403,7 +403,7 @@ export const HomeView: React.FC = () => {
                     {iconMap[cat.iconName] || <BookOpen className="w-5 h-5 text-emerald-600" />}
                   </div>
                   <span className="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
-                    {cat.totalMcqs.toLocaleString()} MCQs
+                    {MCQS_DATA.filter(item => item.category === cat.slug).length.toLocaleString()} MCQs
                   </span>
                 </div>
 

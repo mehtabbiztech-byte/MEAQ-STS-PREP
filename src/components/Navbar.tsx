@@ -68,7 +68,7 @@ export const Navbar: React.FC = () => {
       id: 'mcqs', 
       label: 'MCQs', 
       icon: <BookOpen className="w-4 h-4 shrink-0" />,
-      desc: '50,000+ Subject-wise verified MCQs with detailed explanations'
+      desc: '5,000+ STS source-aligned MCQs with answers and provenance'
     },
     { 
       id: 'quiz', 
@@ -165,7 +165,7 @@ export const Navbar: React.FC = () => {
               </button>
               <span className="text-purple-500 mx-1 hidden md:inline">•</span>
               <span className="text-purple-200/80 hidden md:inline truncate">
-                50,000+ Verified MCQs for FPSC, SPSC, PPSC, STS & CSS
+                5,000+ source-aligned MCQs for STS IBA preparation
               </span>
             </div>
 
@@ -443,7 +443,7 @@ export const Navbar: React.FC = () => {
                   className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-left"
                 >
                   <Search className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span className="truncate">Search 50,000+ MCQs, exams, past papers...</span>
+                  <span className="truncate">Search 5,000+ STS MCQs, exams and past papers...</span>
                 </button>
               </div>
 

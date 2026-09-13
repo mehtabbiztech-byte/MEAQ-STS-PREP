@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   Filter, 
@@ -22,6 +22,7 @@ import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ } from '../types';
 
 export const McqsView: React.FC = () => {
+  const pageSize = 24;
   const { 
     selectedCategorySlug, 
     setSelectedCategorySlug, 
@@ -40,6 +41,7 @@ export const McqsView: React.FC = () => {
   const [reportedMcqId, setReportedMcqId] = useState<string | null>(null);
   const [reportSuccess, setReportSuccess] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   // Active category object
   const activeCategory = useMemo(() => {
@@ -72,6 +74,11 @@ export const McqsView: React.FC = () => {
       return true;
     });
   }, [selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
+  const pageCount = Math.max(1, Math.ceil(filteredMcqs.length / pageSize));
+  const visibleMcqs = filteredMcqs.slice((page - 1) * pageSize, page * pageSize);
+
+  useEffect(() => setPage(1), [selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
+  useEffect(() => { if (page > pageCount) setPage(pageCount); }, [page, pageCount]);
 
   const toggleReveal = (id: string) => {
     setRevealedAnswers((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -234,7 +241,7 @@ export const McqsView: React.FC = () => {
           </div>
 
           <div className="text-xs text-slate-500 dark:text-slate-400 font-medium pl-2 whitespace-nowrap">
-            Showing <strong className="text-purple-600 dark:text-pink-400">{filteredMcqs.length}</strong> questions
+            Found <strong className="text-purple-600 dark:text-pink-400">{filteredMcqs.length.toLocaleString()}</strong> questions
           </div>
         </div>
       </div>
@@ -259,7 +266,7 @@ export const McqsView: React.FC = () => {
             </button>
           </div>
         ) : (
-          filteredMcqs.map((mcq, mcqIndex) => {
+          visibleMcqs.map((mcq, mcqIndex) => {
             const isRevealed = revealedAnswers[mcq.id] || false;
             const userChoice = userSelections[mcq.id];
             const bookmarked = isBookmarked(mcq.id);
@@ -274,7 +281,7 @@ export const McqsView: React.FC = () => {
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs">
                   <div className="flex items-center gap-2">
                     <span className="font-extrabold text-purple-700 dark:text-pink-400 uppercase tracking-wider text-[11px] bg-purple-50 dark:bg-purple-950/60 px-2.5 py-0.5 rounded-md">
-                      Q {mcqIndex + 1} • {mcq.category.replace('-', ' ')}
+                      Q {(page - 1) * pageSize + mcqIndex + 1} • {mcq.category.replace('-', ' ')}
                     </span>
                     {mcq.subtopic && (
                       <span className="text-slate-500 dark:text-slate-400 hidden sm:inline">
@@ -361,12 +368,11 @@ export const McqsView: React.FC = () => {
                     <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                       {mcq.explanation}
                     </p>
-                    {mcq.submittedBy && (
-                      <div className="mt-2 text-[11px] text-slate-400 flex items-center gap-1">
-                        <span>Academic reference verified by:</span>
-                        <strong className="text-slate-500 dark:text-slate-300">{mcq.submittedBy}</strong>
-                      </div>
-                    )}
+                    {mcq.verificationStatus && <div className="mt-3 rounded-lg border border-purple-200 dark:border-purple-800 bg-white/70 dark:bg-slate-900/60 p-3 text-[11px] text-slate-600 dark:text-slate-300">
+                      <strong className="uppercase tracking-wide">{mcq.verificationStatus.replace('-', ' ')}</strong>
+                      {mcq.verificationMethod && <span> · {mcq.verificationMethod}</span>}
+                      {mcq.sourceUrl && <a className="block mt-1 text-purple-700 dark:text-pink-300 underline" href={mcq.sourceUrl} target="_blank" rel="noreferrer">Open reference source</a>}
+                    </div>}
                   </div>
                 )}
 
@@ -450,6 +456,12 @@ export const McqsView: React.FC = () => {
           })
         )}
       </div>
+
+      {filteredMcqs.length > pageSize && <nav aria-label="MCQ pages" className="flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+        <button className="px-4 py-2 rounded-xl border disabled:opacity-40" disabled={page === 1} onClick={() => { setPage(p => p - 1); window.scrollTo({top:0,behavior:'smooth'}); }}>Previous</button>
+        <span className="text-sm font-semibold">Page {page.toLocaleString()} of {pageCount.toLocaleString()}</span>
+        <button className="px-4 py-2 rounded-xl border disabled:opacity-40" disabled={page === pageCount} onClick={() => { setPage(p => p + 1); window.scrollTo({top:0,behavior:'smooth'}); }}>Next</button>
+      </nav>}
 
     </div>
   );
