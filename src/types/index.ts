@@ -7,7 +7,9 @@ export type ThemeStyle =
   | 'emerald' 
   | 'sapphire' 
   | 'sunset' 
-  | 'ocean';
+  | 'ocean'
+  | 'pastel-network'
+  | 'pastel-ribbons';
 
 export type UserPersona = 'kids' | 'school' | 'college' | 'university' | 'jobs' | 'competitive';
 

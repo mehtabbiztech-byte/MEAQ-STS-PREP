@@ -13,6 +13,7 @@ export const THEME_OPTIONS: {
   tagline: string;
   lightBg: string;
   darkBg: string;
+  imageTheme?: boolean;
 }[] = [
   {
     id: 'aurora',
@@ -112,6 +113,30 @@ export const THEME_OPTIONS: {
     tagline: 'Mediterranean Azure & Gentle Sea Wave',
     lightBg: 'radial-gradient(circle at 20% 15%, rgba(207, 250, 254, 0.85) 0%, transparent 60%), radial-gradient(circle at 85% 25%, rgba(224, 242, 254, 0.85) 0%, transparent 60%), radial-gradient(circle at 50% 80%, rgba(165, 243, 252, 0.5) 0%, transparent 70%), #f3fcfd',
     darkBg: 'radial-gradient(circle at 20% 20%, rgba(19, 78, 74, 0.5) 0%, transparent 60%), radial-gradient(circle at 80% 30%, rgba(3, 105, 161, 0.4) 0%, transparent 65%), #03141c'
+  },
+  {
+    id: 'pastel-network',
+    name: 'Pastel Network',
+    badge: 'Pink · Blue Geometry',
+    primaryColor: '#a78bfa',
+    secondaryColor: '#38bdf8',
+    accentGlow: 'rgba(167, 139, 250, 0.28)',
+    tagline: 'Soft connected learning constellation',
+    lightBg: "linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.32)), url('/themes/pastel-network.jpeg') center / cover fixed no-repeat",
+    darkBg: "linear-gradient(rgba(2,6,23,.68), rgba(15,23,42,.74)), url('/themes/pastel-network.jpeg') center / cover fixed no-repeat",
+    imageTheme: true
+  },
+  {
+    id: 'pastel-ribbons',
+    name: 'Pastel Light Ribbons',
+    badge: 'Mint · Gold · Lilac',
+    primaryColor: '#14b8a6',
+    secondaryColor: '#f59e0b',
+    accentGlow: 'rgba(20, 184, 166, 0.24)',
+    tagline: 'Gentle aqua glow with golden ribbons',
+    lightBg: "linear-gradient(rgba(255,255,255,.12), rgba(255,255,255,.28)), url('/themes/pastel-light-ribbons.jpeg') center / cover fixed no-repeat",
+    darkBg: "linear-gradient(rgba(2,6,23,.66), rgba(15,23,42,.76)), url('/themes/pastel-light-ribbons.jpeg') center / cover fixed no-repeat",
+    imageTheme: true
   }
 ];
 
@@ -132,21 +157,21 @@ export const AttractiveBackground: React.FC = () => {
 
       {/* Floating Vibrant Blur Spheres according to selected theme */}
       <div 
-        className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full filter blur-[110px] opacity-60 dark:opacity-40 transition-all duration-700 animate-pulse"
+        className={`absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full filter blur-[110px] transition-all duration-700 animate-pulse ${currentTheme.imageTheme ? 'opacity-20 dark:opacity-15' : 'opacity-60 dark:opacity-40'}`}
         style={{ 
           background: `radial-gradient(circle, ${currentTheme.primaryColor} 0%, transparent 70%)` 
         }}
       />
 
       <div 
-        className="absolute top-16 -right-28 w-[550px] h-[550px] rounded-full filter blur-[100px] opacity-55 dark:opacity-35 transition-all duration-700"
+        className={`absolute top-16 -right-28 w-[550px] h-[550px] rounded-full filter blur-[100px] transition-all duration-700 ${currentTheme.imageTheme ? 'opacity-15 dark:opacity-10' : 'opacity-55 dark:opacity-35'}`}
         style={{ 
           background: `radial-gradient(circle, ${currentTheme.secondaryColor} 0%, transparent 70%)` 
         }}
       />
 
       <div 
-        className="absolute top-2/3 left-1/4 w-[650px] h-[450px] rounded-full filter blur-[120px] opacity-45 dark:opacity-30 transition-all duration-700"
+        className={`absolute top-2/3 left-1/4 w-[650px] h-[450px] rounded-full filter blur-[120px] transition-all duration-700 ${currentTheme.imageTheme ? 'opacity-15 dark:opacity-10' : 'opacity-45 dark:opacity-30'}`}
         style={{ 
           background: `radial-gradient(circle, ${currentTheme.primaryColor} 0%, ${currentTheme.secondaryColor} 50%, transparent 75%)` 
         }}
@@ -217,7 +242,7 @@ export const ThemeSwitcherWidget: React.FC = () => {
                 <span>Workable App Themes</span>
               </div>
               <span className="text-[10px] text-purple-600 dark:text-pink-400 font-bold px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800">
-                9 Live Palettes (3×3)
+                {THEME_OPTIONS.length} Live Palettes
               </span>
             </div>
 

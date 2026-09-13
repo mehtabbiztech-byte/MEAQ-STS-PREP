@@ -185,7 +185,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Theme Style (aurora/Purple-Pink, emerald, sapphire, sunset, rose, lavender, cyber, ocean)
   const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
     const saved = (localStorage.getItem('matb_theme_style') ?? localStorage.getItem('meaq_theme_style')) as ThemeStyle;
-    if (saved && ['aurora', 'emerald', 'sapphire', 'sunset', 'rose', 'lavender', 'cyber', 'ocean'].includes(saved)) {
+    if (saved && ['aurora', 'emerald', 'sapphire', 'sunset', 'rose', 'lavender', 'cyber', 'ocean', 'pastel-network', 'pastel-ribbons'].includes(saved)) {
       return saved;
     }
     return 'aurora';
