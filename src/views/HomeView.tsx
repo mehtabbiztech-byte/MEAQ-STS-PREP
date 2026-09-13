@@ -96,16 +96,17 @@ export const HomeView: React.FC = () => {
     <div className="space-y-16 pb-16">
       
       {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-purple-950 via-slate-900 to-slate-950 text-white pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-b border-purple-900/40">
+      <section className="relative overflow-hidden text-white pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-y border-white/15 shadow-2xl" style={{ backgroundImage: "linear-gradient(125deg, rgba(8,18,52,.94) 0%, rgba(42,35,110,.88) 48%, rgba(5,100,138,.82) 100%), url('/themes/pastel-network-uhd.webp')", backgroundPosition: 'center', backgroundSize: 'cover' }}>
         
         {/* Subtle decorative background pattern */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ec4899_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-pink-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(rgba(255,255,255,.65)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="absolute -top-28 -right-20 w-[32rem] h-[32rem] bg-cyan-400/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-28 -left-20 w-[34rem] h-[34rem] bg-violet-500/25 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/90 to-transparent" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-900/60 border border-purple-500/30 text-pink-300 text-xs font-semibold mb-6 shadow-inner">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-cyan-200/30 text-cyan-100 text-xs font-semibold mb-6 shadow-lg shadow-cyan-950/20">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Pakistan’s Most Comprehensive Competitive Exam Portal</span>
           </div>
@@ -113,13 +114,13 @@ export const HomeView: React.FC = () => {
           {/* Hero Headline */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-display">
             Prepare for Pakistan's <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-pink-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-violet-200 to-fuchsia-300 drop-shadow-sm">
               Competitive & Government Exams
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-4 text-base sm:text-xl text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
+          <p className="mt-5 text-base sm:text-xl text-blue-50/90 max-w-2xl mx-auto font-normal leading-relaxed">
             “Practice thousands of MCQs, solve past papers, take timed quizzes, and track your preparation.”
           </p>
 
@@ -131,7 +132,7 @@ export const HomeView: React.FC = () => {
                 setTab('mcqs');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-base shadow-lg shadow-purple-900/40 hover:shadow-purple-600/30 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-bold text-base shadow-xl shadow-cyan-950/40 hover:shadow-cyan-400/20 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 border border-white/20"
             >
               <span>Start Practicing</span>
               <ArrowRight className="w-5 h-5" />
@@ -143,7 +144,7 @@ export const HomeView: React.FC = () => {
                 setTab('quiz');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="px-8 py-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-100 font-semibold text-base border border-slate-700/80 hover:border-purple-500/50 shadow-md transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+              className="px-8 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 backdrop-blur-xl text-white font-semibold text-base border border-white/20 hover:border-cyan-200/50 shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
             >
               <Trophy className="w-5 h-5 text-amber-400" />
               <span>Take a Timed Quiz</span>
@@ -153,7 +154,7 @@ export const HomeView: React.FC = () => {
           {/* Prominent Global Search Bar */}
           <div className="mt-10 max-w-2xl mx-auto">
             <form onSubmit={handleHeroSearchSubmit} className="relative group">
-              <div className="relative flex items-center bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border-2 border-purple-500/60 group-focus-within:border-pink-400 transition-all overflow-hidden p-1.5">
+              <div className="relative flex items-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-950/30 border-2 border-white/40 group-focus-within:border-cyan-300 transition-all overflow-hidden p-1.5">
                 <Search className="w-6 h-6 text-purple-600 dark:text-pink-400 ml-3.5 shrink-0" />
                 <input
                   type="text"
@@ -166,7 +167,7 @@ export const HomeView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSearchOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-sm transition shrink-0 cursor-pointer hidden sm:block"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-semibold text-sm transition shrink-0 cursor-pointer hidden sm:block"
                 >
                   Search
                 </button>
@@ -200,7 +201,7 @@ export const HomeView: React.FC = () => {
         <div className="mt-16 max-w-6xl mx-auto pt-10 border-t border-purple-900/40">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 text-center">
             
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-950/60">
+            <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-lg">
               <div className="font-extrabold text-2xl sm:text-3xl text-purple-400 font-display">
                 5,000+
               </div>
@@ -209,7 +210,7 @@ export const HomeView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-950/60">
+            <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-lg">
               <div className="font-extrabold text-2xl sm:text-3xl text-pink-400 font-display">
                 100+
               </div>
@@ -218,7 +219,7 @@ export const HomeView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+            <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-lg">
               <div className="font-extrabold text-2xl sm:text-3xl text-amber-400 font-display">
                 500+
               </div>
@@ -227,7 +228,7 @@ export const HomeView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+            <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-lg">
               <div className="font-extrabold text-2xl sm:text-3xl text-sky-400 font-display">
                 100+
               </div>
@@ -236,7 +237,7 @@ export const HomeView: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-950/60 col-span-2 md:col-span-1">
+            <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-lg col-span-2 md:col-span-1">
               <div className="font-extrabold text-2xl sm:text-3xl text-pink-300 font-display">
                 Thousands
               </div>
