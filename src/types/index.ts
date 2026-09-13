@@ -27,6 +27,56 @@ export type NavigationTab =
   | 'bookmarks'
   | 'mistakes';
 
+export type ContentStatus = 'Draft' | 'Reviewed' | 'Published';
+
+export interface CmsBase {
+  id: string;
+  status: ContentStatus;
+  sourceUrls: string[];
+  syllabusReferences: string[];
+  publishAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
+export interface CmsMcq extends CmsBase {
+  kind: 'mcq';
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+  category: string;
+  subtopic?: string;
+  examTags: string[];
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  normalizedQuestion: string;
+}
+
+export interface CmsPastPaper extends CmsBase {
+  kind: 'past-paper';
+  title: string;
+  exam: string;
+  conductedBy: string;
+  year: number;
+  postName: string;
+  bps: string;
+  durationMinutes: number;
+  questions: Omit<CmsMcq, keyof CmsBase | 'kind'>[];
+}
+
+export interface CmsLesson extends CmsBase {
+  kind: 'lesson';
+  subject: string;
+  chapter: string;
+  topic: string;
+  title: string;
+  explanation: string;
+  importantPoints: string[];
+  examples: string[];
+}
+
 export interface MCQ {
   id: string;
   question: string;

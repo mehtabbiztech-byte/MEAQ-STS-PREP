@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { AppProvider, useApp } from './context/AppContext';
+import { CmsContentProvider } from './context/CmsContentContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { SearchModal } from './components/SearchModal';
@@ -24,6 +25,7 @@ import { StudyNotesView } from './views/StudyNotesView';
 import { RankingsView } from './views/RankingsView';
 import { AboutView } from './views/AboutView';
 import { SavedMcqsView } from './views/SavedMcqsView';
+import { AdminView } from './views/AdminView';
 
 const MainContent: React.FC = () => {
   const { 
@@ -36,6 +38,7 @@ const MainContent: React.FC = () => {
     updateCertificateCandidateName,
   } = useApp();
 
+  if (window.location.pathname.startsWith('/admin')) return <AdminView />;
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-500 relative selection:bg-purple-600 selection:text-white w-full max-w-full overflow-x-hidden">
       {/* Eye-catching ambient background lighting & patterns */}
@@ -78,9 +81,10 @@ const MainContent: React.FC = () => {
 };
 
 export default function App() {
+  const isAdminPath = window.location.pathname.replace(/\/$/, '') === '/admin';
   return (
     <AppProvider>
-      <MainContent />
+      <CmsContentProvider>{isAdminPath ? <AdminView /> : <MainContent />}</CmsContentProvider>
     </AppProvider>
   );
 }
