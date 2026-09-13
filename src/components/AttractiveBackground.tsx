@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { ThemeStyle } from '../types';
-import { Palette, Check, Sparkles, Heart } from 'lucide-react';
+import { Palette, Check, Sparkles } from 'lucide-react';
 
 export const THEME_OPTIONS: {
   id: ThemeStyle;
@@ -15,17 +15,6 @@ export const THEME_OPTIONS: {
   darkBg: string;
   imageTheme?: boolean;
 }[] = [
-  {
-    id: 'aurora',
-    name: 'Royal Aurora',
-    badge: 'Purple · Light Pink',
-    primaryColor: '#9333ea',
-    secondaryColor: '#ec4899',
-    accentGlow: 'rgba(147, 51, 234, 0.35)',
-    tagline: 'Amethyst Velvet & Radiant Light Pink',
-    lightBg: 'radial-gradient(circle at 15% 15%, rgba(243, 232, 255, 0.85) 0%, transparent 65%), radial-gradient(circle at 85% 20%, rgba(252, 231, 243, 0.9) 0%, transparent 65%), radial-gradient(circle at 50% 60%, rgba(250, 232, 255, 0.65) 0%, transparent 70%), radial-gradient(circle at 80% 85%, rgba(253, 226, 243, 0.8) 0%, transparent 65%), #fdf7fc',
-    darkBg: 'radial-gradient(circle at 20% 20%, rgba(88, 28, 135, 0.45) 0%, transparent 60%), radial-gradient(circle at 80% 30%, rgba(157, 23, 77, 0.35) 0%, transparent 65%), radial-gradient(circle at 50% 80%, rgba(76, 29, 149, 0.4) 0%, transparent 70%), #0d0414'
-  },
   {
     id: 'rose',
     name: 'Blossom Rose',
@@ -122,8 +111,8 @@ export const THEME_OPTIONS: {
     secondaryColor: '#38bdf8',
     accentGlow: 'rgba(167, 139, 250, 0.28)',
     tagline: 'Soft connected learning constellation',
-    lightBg: "linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.32)), url('/themes/pastel-network.jpeg') center / cover fixed no-repeat",
-    darkBg: "linear-gradient(rgba(2,6,23,.68), rgba(15,23,42,.74)), url('/themes/pastel-network.jpeg') center / cover fixed no-repeat",
+    lightBg: "linear-gradient(rgba(255,255,255,.18), rgba(255,255,255,.32)), url('/themes/pastel-network-uhd.webp') center / cover fixed no-repeat",
+    darkBg: "linear-gradient(rgba(2,6,23,.68), rgba(15,23,42,.74)), url('/themes/pastel-network-uhd.webp') center / cover fixed no-repeat",
     imageTheme: true
   },
   {
@@ -134,8 +123,8 @@ export const THEME_OPTIONS: {
     secondaryColor: '#f59e0b',
     accentGlow: 'rgba(20, 184, 166, 0.24)',
     tagline: 'Gentle aqua glow with golden ribbons',
-    lightBg: "linear-gradient(rgba(255,255,255,.12), rgba(255,255,255,.28)), url('/themes/pastel-light-ribbons.jpeg') center / cover fixed no-repeat",
-    darkBg: "linear-gradient(rgba(2,6,23,.66), rgba(15,23,42,.76)), url('/themes/pastel-light-ribbons.jpeg') center / cover fixed no-repeat",
+    lightBg: "linear-gradient(rgba(255,255,255,.12), rgba(255,255,255,.28)), url('/themes/pastel-light-ribbons-uhd.webp') center / cover fixed no-repeat",
+    darkBg: "linear-gradient(rgba(2,6,23,.66), rgba(15,23,42,.76)), url('/themes/pastel-light-ribbons-uhd.webp') center / cover fixed no-repeat",
     imageTheme: true
   }
 ];
@@ -143,7 +132,7 @@ export const THEME_OPTIONS: {
 export const AttractiveBackground: React.FC = () => {
   const { themeStyle, darkMode } = useApp();
 
-  const currentTheme = THEME_OPTIONS.find((t) => t.id === themeStyle) || THEME_OPTIONS[0];
+  const currentTheme = THEME_OPTIONS.find((t) => t.id === themeStyle) || THEME_OPTIONS.find((t) => t.id === 'pastel-ribbons')!;
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
@@ -280,9 +269,6 @@ export const ThemeSwitcherWidget: React.FC = () => {
                         <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
                           {item.name}
                         </span>
-                        {item.id === 'aurora' && (
-                          <Heart className="w-3 h-3 text-pink-500 fill-pink-500 shrink-0" />
-                        )}
                       </div>
                       <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-300 block truncate">
                         {item.badge}

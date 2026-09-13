@@ -60,10 +60,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   --theme-accent: #9333ea;
 }
 
-[data-theme='aurora'] {
-  --theme-accent: #9333ea;
-}
-
 [data-theme='rose'] {
   --theme-accent: #e11d48;
 }

@@ -1,5 +1,4 @@
 export type ThemeStyle = 
-  | 'aurora' 
   | 'rose' 
   | 'lavender' 
   | 'galaxy' 
