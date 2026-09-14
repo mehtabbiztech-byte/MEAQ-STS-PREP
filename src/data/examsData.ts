@@ -390,22 +390,37 @@ export const EXAMS_DATA: ExamInfo[] = [
     screeningStructure: 'Mid-term (30 marks), Sessional/Quizzes (20 marks), and Final Exam (50 marks).',
     syllabus: [
       {
-        section: 'Foundational University Courses (HEC Core)',
-        weightage: 'Core Curriculum',
-        topics: ['Functional English & Technical Writing', 'Pakistan Studies & Constitutional Law', 'Islamic Studies & Philosophy of Ethics', 'Calculus-I & Linear Algebra', 'Introduction to Programming & Data Analytics'],
+        section: 'Department of Computer Science & IT (NCEAC/HEC)',
+        weightage: 'Core Computing Track',
+        topics: ['Data Structures & Algorithms (DSA)', 'Object-Oriented Programming (OOP)', 'Database Management Systems (SQL/NoSQL)', 'Operating Systems (Concurrency, Scheduling)', 'Computer Networks & Security', 'Artificial Intelligence & Machine Learning', 'Software Engineering & Agile'],
       },
       {
-        section: 'Business & Social Sciences',
-        weightage: 'Discipline Track',
-        topics: ['Principles of Management & Marketing', 'Microeconomics & Macroeconomics', 'Introduction to Sociology & Psychology', 'Research Methodology & SPSS'],
+        section: 'Department of Engineering & Applied Tech (PEC)',
+        weightage: 'Engineering Track',
+        topics: ['Electric Circuit Analysis & Electronics', 'Signals & Systems', 'Engineering Thermodynamics & Fluid Mechanics', 'Mechanics of Materials & Structural Analysis', 'Linear Control Systems & PID'],
       },
       {
-        section: 'Computer Science & IT',
-        weightage: 'Computing Track',
-        topics: ['Object-Oriented Programming (OOP)', 'Data Structures & Algorithms', 'Database Systems (SQL)', 'Software Engineering & Agile Methodologies'],
+        section: 'Department of Medical & Health Sciences (PMDC/PCP)',
+        weightage: 'Clinical & Biomedical Track',
+        topics: ['Human Gross Anatomy & Histology', 'General & Systemic Physiology', 'Medical Pharmacology & Therapeutics', 'General & Systemic Pathology', 'Microbiology & Immunology'],
+      },
+      {
+        section: 'Department of Business & Management (NBEAC)',
+        weightage: 'Business & Finance Track',
+        topics: ['Financial Accounting & Reporting (IFRS)', 'Corporate Finance & Valuation (CAPM/WACC)', 'Microeconomics & Macroeconomics', 'Marketing Management & Digital Strategy', 'Organizational Behavior & HRM'],
+      },
+      {
+        section: 'Department of Law & Legal Studies (PBC/HEC)',
+        weightage: 'Law (LLB/LLM) Track',
+        topics: ['Constitutional Law of Pakistan (1973 Constitution)', 'Jurisprudence & Legal Theory', 'Criminal Law & Pakistan Penal Code (PPC)', 'Civil Law & Law of Contract', 'Qanun-e-Shahadat Order 1984 (Evidence)'],
+      },
+      {
+        section: 'Department of Social Sciences & Natural Sciences',
+        weightage: 'Liberal Arts & Physical Sciences Track',
+        topics: ['International Relations Theories & Foreign Policy', 'General & Clinical Psychology (DSM-5)', 'Quantum Mechanics & Modern Physics', 'Multivariable Calculus & Linear Algebra'],
       },
     ],
-    subjects: ['Functional English', 'Technical Report Writing', 'Calculus & Analytical Geometry', 'Programming Fundamentals', 'Principles of Management', 'Research Methodology'],
+    subjects: ['Data Structures & Algorithms', 'Operating Systems', 'Circuit Analysis', 'Gross Anatomy', 'Financial Accounting', 'Corporate Finance', 'Constitutional Law', 'Quantum Mechanics', 'Multivariable Calculus', 'Principles of Management'],
     pastPapersCount: 20,
     mockTestsCount: 25,
     resources: [

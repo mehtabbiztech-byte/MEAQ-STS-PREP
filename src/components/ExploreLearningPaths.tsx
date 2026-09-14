@@ -7,7 +7,24 @@ export const ExploreLearningPaths: React.FC = () => {
   const { setTab, setSelectedExamId, updateTargetExam } = useApp();
   const [active, setActive] = useState(LEARNING_PATHS[0].id);
   const path = LEARNING_PATHS.find(item => item.id === active)!;
-  const examIds: Record<string, string> = { CSS: 'css', PMS: 'pms', SPSC: 'spsc-cce', PPSC: 'ppsc', KPPSC: 'kppsc', BPSC: 'bpsc', STS: 'sts', NTS: 'nts', ETEA: 'etea' };
+  const examIds: Record<string, string> = { 
+    CSS: 'css', 
+    PMS: 'pms', 
+    SPSC: 'spsc-cce', 
+    PPSC: 'ppsc', 
+    KPPSC: 'kppsc', 
+    BPSC: 'bpsc', 
+    STS: 'sts', 
+    NTS: 'nts', 
+    ETEA: 'etea',
+    'MDCAT (Medical)': 'mdcat',
+    'ECAT (Engineering)': 'ecat',
+    'NUST (NET)': 'nust-net',
+    'LAT (Law)': 'lat-law',
+    'FSc Pre-Medical': 'intermediate-fsc',
+    'FSc Pre-Engineering': 'intermediate-fsc',
+    'ICS (Computer)': 'intermediate-fsc'
+  };
 
   const choose = (option: string) => {
     updateTargetExam(`${path.label}: ${option}`);

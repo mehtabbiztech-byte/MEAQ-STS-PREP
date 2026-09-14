@@ -74,6 +74,7 @@ interface AppContextType {
   updateUserName: (name: string) => void;
   updateProvince: (province: string) => void;
   updatePersona: (persona: UserPersona, gradeOrClass?: string) => void;
+  addLearningPoints: (points: number) => void;
 
   // Certificate Modal State & Actions
   activeCertificate: QuizCertificate | null;
@@ -184,15 +185,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Theme Style
   const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
-    if (localStorage.getItem('matb_theme_version') !== '3') {
-      localStorage.setItem('matb_theme_version', '3');
-      return 'pastel-network';
+    if (localStorage.getItem('matb_theme_version') !== '5') {
+      localStorage.setItem('matb_theme_version', '5');
+      localStorage.setItem('matb_theme_style', 'emerald');
+      return 'emerald';
     }
     const saved = (localStorage.getItem('matb_theme_style') ?? localStorage.getItem('meaq_theme_style')) as ThemeStyle;
     if (saved && ['emerald', 'sapphire', 'sunset', 'rose', 'lavender', 'cyber', 'ocean', 'pastel-network', 'pastel-ribbons'].includes(saved)) {
       return saved;
     }
-    return 'pastel-network';
+    return 'emerald';
   });
 
   useEffect(() => {
@@ -488,6 +490,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
+  const addLearningPoints = (points: number) => {
+    if (points <= 0) return;
+    syncProfileChange({
+      ...userProfile,
+      points: (userProfile.points || 0) + points
+    });
+  };
+
   // Keyboard shortcut Ctrl+K / Cmd+K for search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -543,6 +553,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateUserName,
         updateProvince,
         updatePersona,
+        addLearningPoints,
         activeCertificate,
         isCertificateModalOpen,
         openCertificateModal,

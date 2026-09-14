@@ -5,8 +5,11 @@ import { getLearnerStage } from '../data/learnerPaths';
 
 const dashboards = {
   kids: { title: "Today's Learning", progress: 58, tasks: [['Mathematics', '10 questions', 62], ['English', '1 lesson', 48], ['General Knowledge', '10 questions', 70]] },
-  school: { title: 'Your Board Preparation', progress: 64, tasks: [['Mathematics', 'Chapter practice', 68], ['Science', '15 questions', 59], ['English', 'Grammar revision', 72]] },
-  college: { title: 'Your College Preparation', progress: 61, tasks: [['Core Subjects', '20 questions', 65], ['Entry Test', 'Timed practice', 56], ['English', 'Vocabulary review', 73]] },
+  middle: { title: 'Your Middle School Preparation (Class 6–8)', progress: 62, tasks: [['General Science', 'Chapter practice', 65], ['Mathematics', 'Pre-Algebra & Geometry', 70], ['English', 'Grammar & reading', 68], ['Social Studies', 'History & Geography', 58]] },
+  matric: { title: 'Your Matric Board Preparation (9th & 10th)', progress: 68, tasks: [['Physics & Chemistry', 'Board MCQs & numericals', 72], ['Mathematics', 'Science Group chapters', 65], ['Biology / Computer', 'Concepts & diagrams', 70], ['English & Pak Studies', 'Board past papers', 76]] },
+  school: { title: 'Your School & Board Preparation', progress: 65, tasks: [['Core Subjects', '20 questions', 68], ['Mathematics', 'Board practice', 70], ['Science', 'Formula review', 62]] },
+  college: { title: 'Your 1st & 2nd Year Intermediate Preparation', progress: 61, tasks: [['Biology / Mathematics', '1st & 2nd Year Chapters', 65], ['Physics & Chemistry', 'Board Numericals & Reactions', 68], ['English & Urdu', 'Grammar & Translation', 73]] },
+  'entry-test': { title: 'Your Entry Test Preparation (MDCAT, ECAT, NET)', progress: 74, tasks: [['Biology / Advanced Math', 'High-yield MCQs drill', 78], ['Physics & Chemistry', 'Speed calculations & mechanisms', 71], ['Logical & Analytical Reasoning', 'Rapid series & deduction practice', 80], ['English & Negative-marking drill', 'Timed full mock', 66]] },
   university: { title: 'Your University Goals', progress: 63, tasks: [['University Exams', 'Continue revision', 69], ['Entry Tests', 'Practice set', 57], ['Scholarships', 'Review opportunities', 48]] },
   jobs: { title: 'Your Job-Test Preparation', progress: 72, tasks: [['English', '10 weak questions', 74], ['Mathematics', '10 weak questions', 66], ['General Knowledge', '5 current topics', 71]] },
   competitive: { title: 'Your Competitive Preparation', progress: 67, tasks: [['English', 'Precis & grammar', 74], ['Current Affairs', 'Daily review', 61], ['Pakistan Affairs', 'Past questions', 78], ['General Science', 'Weak topics', 53]] },

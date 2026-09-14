@@ -37,6 +37,217 @@ interface NavItemConfig {
   desc: string;
 }
 
+interface NavThemePalette {
+  microBarBg: string;
+  microBarText: string;
+  microBarTargetText: string;
+  microBarBorder: string;
+  logoBg: string;
+  logoRing: string;
+  brandTextGradient: string;
+  searchBorderHover: string;
+  searchIcon: string;
+  searchKbd: string;
+  navBorder: string;
+  activeBtn: string;
+  activeIcon: string;
+  inactiveIcon: string;
+  inactiveBtnHover: string;
+  badgeYearActive: string;
+  badgeYearInactive: string;
+  badgeLiveActive: string;
+  badgeLiveInactive: string;
+  badgeAlertActive: string;
+  badgeAlertInactive: string;
+  bookmarkActive: string;
+  bookmarkBadge: string;
+  authLoggedIn: string;
+  authGuest: string;
+  mobileMenuBtn: string;
+  mobileBottomActive: string;
+}
+
+const NAV_THEME_PALETTES: Record<string, NavThemePalette> = {
+  emerald: {
+    microBarBg: 'bg-[#042017]',
+    microBarText: 'text-emerald-100',
+    microBarTargetText: 'text-amber-300 font-bold',
+    microBarBorder: 'border-emerald-900/60',
+    logoBg: 'bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700',
+    logoRing: 'ring-emerald-400/40 shadow-emerald-950/20',
+    brandTextGradient: 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-300',
+    searchBorderHover: 'hover:border-emerald-400 dark:hover:border-emerald-500 hover:bg-emerald-50/40',
+    searchIcon: 'text-emerald-600 dark:text-emerald-400',
+    searchKbd: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-slate-900 border-emerald-200 dark:border-slate-700',
+    navBorder: 'border-emerald-100 dark:border-emerald-950/40',
+    activeBtn: 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-extrabold shadow-md shadow-emerald-950/25 ring-2 ring-emerald-400/50 border border-emerald-400/40',
+    activeIcon: 'text-white',
+    inactiveIcon: 'text-emerald-600 dark:text-emerald-400',
+    inactiveBtnHover: 'hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 hover:border-emerald-400/80',
+    badgeYearActive: 'bg-amber-400 text-slate-950 shadow-xs font-black',
+    badgeYearInactive: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700',
+    badgeLiveActive: 'bg-white/25 text-white',
+    badgeLiveInactive: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    badgeAlertActive: 'bg-white text-rose-700 font-black',
+    badgeAlertInactive: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    bookmarkActive: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60',
+    bookmarkBadge: 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white',
+    authLoggedIn: 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white',
+    authGuest: 'bg-white/90 dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 border border-emerald-400/60 hover:bg-emerald-50 dark:hover:bg-slate-750',
+    mobileMenuBtn: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50/80 hover:bg-emerald-100 dark:bg-slate-800 dark:hover:bg-slate-700',
+    mobileBottomActive: 'text-emerald-600 dark:text-emerald-400',
+  },
+  sapphire: {
+    microBarBg: 'bg-[#071630]',
+    microBarText: 'text-blue-100',
+    microBarTargetText: 'text-cyan-300 font-bold',
+    microBarBorder: 'border-blue-900/60',
+    logoBg: 'bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-600',
+    logoRing: 'ring-blue-400/40 shadow-blue-950/20',
+    brandTextGradient: 'text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-300',
+    searchBorderHover: 'hover:border-blue-400 dark:hover:border-cyan-500 hover:bg-blue-50/40',
+    searchIcon: 'text-blue-600 dark:text-cyan-400',
+    searchKbd: 'text-blue-700 dark:text-cyan-300 bg-blue-50 dark:bg-slate-900 border-blue-200 dark:border-slate-700',
+    navBorder: 'border-blue-100 dark:border-blue-950/40',
+    activeBtn: 'bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 text-white font-extrabold shadow-md shadow-blue-900/25 ring-2 ring-blue-400/50 border border-blue-400/40',
+    activeIcon: 'text-white',
+    inactiveIcon: 'text-blue-600 dark:text-cyan-400',
+    inactiveBtnHover: 'hover:text-blue-700 dark:hover:text-cyan-300 hover:bg-blue-50/80 dark:hover:bg-blue-950/40 hover:border-blue-400/80',
+    badgeYearActive: 'bg-cyan-400 text-slate-950 shadow-xs font-black',
+    badgeYearInactive: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border border-blue-300 dark:border-blue-700',
+    badgeLiveActive: 'bg-white/25 text-white',
+    badgeLiveInactive: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    badgeAlertActive: 'bg-white text-rose-700 font-black',
+    badgeAlertInactive: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    bookmarkActive: 'text-blue-600 bg-blue-50 dark:bg-blue-950/60',
+    bookmarkBadge: 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white',
+    authLoggedIn: 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white',
+    authGuest: 'bg-white/90 dark:bg-slate-800 text-blue-700 dark:text-cyan-300 border border-blue-400/60 hover:bg-blue-50 dark:hover:bg-slate-750',
+    mobileMenuBtn: 'text-blue-700 dark:text-cyan-300 bg-blue-50/80 hover:bg-blue-100 dark:bg-slate-800 dark:hover:bg-slate-700',
+    mobileBottomActive: 'text-blue-600 dark:text-cyan-400',
+  },
+  sunset: {
+    microBarBg: 'bg-[#251204]',
+    microBarText: 'text-amber-100',
+    microBarTargetText: 'text-amber-300 font-bold',
+    microBarBorder: 'border-amber-900/60',
+    logoBg: 'bg-gradient-to-br from-amber-600 via-orange-600 to-rose-600',
+    logoRing: 'ring-amber-400/40 shadow-amber-950/20',
+    brandTextGradient: 'text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-300',
+    searchBorderHover: 'hover:border-amber-400 dark:hover:border-amber-500 hover:bg-amber-50/40',
+    searchIcon: 'text-amber-600 dark:text-amber-400',
+    searchKbd: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-slate-900 border-amber-200 dark:border-slate-700',
+    navBorder: 'border-amber-100 dark:border-amber-950/40',
+    activeBtn: 'bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 text-white font-extrabold shadow-md shadow-amber-900/25 ring-2 ring-amber-400/50 border border-amber-400/40',
+    activeIcon: 'text-white',
+    inactiveIcon: 'text-amber-600 dark:text-orange-400',
+    inactiveBtnHover: 'hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-50/80 dark:hover:bg-amber-950/40 hover:border-amber-400/80',
+    badgeYearActive: 'bg-amber-300 text-slate-950 shadow-xs font-black',
+    badgeYearInactive: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-700',
+    badgeLiveActive: 'bg-white/25 text-white',
+    badgeLiveInactive: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    badgeAlertActive: 'bg-white text-rose-700 font-black',
+    badgeAlertInactive: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    bookmarkActive: 'text-amber-600 bg-amber-50 dark:bg-amber-950/60',
+    bookmarkBadge: 'bg-gradient-to-r from-amber-600 to-rose-600 text-white',
+    authLoggedIn: 'bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white',
+    authGuest: 'bg-white/90 dark:bg-slate-800 text-amber-700 dark:text-amber-300 border border-amber-400/60 hover:bg-amber-50 dark:hover:bg-slate-750',
+    mobileMenuBtn: 'text-amber-700 dark:text-amber-300 bg-amber-50/80 hover:bg-amber-100 dark:bg-slate-800 dark:hover:bg-slate-700',
+    mobileBottomActive: 'text-amber-600 dark:text-amber-400',
+  },
+  cyber: {
+    microBarBg: 'bg-[#0d041e]',
+    microBarText: 'text-cyan-100',
+    microBarTargetText: 'text-cyan-300 font-bold',
+    microBarBorder: 'border-cyan-900/60',
+    logoBg: 'bg-gradient-to-br from-cyan-600 via-violet-600 to-fuchsia-600',
+    logoRing: 'ring-cyan-400/40 shadow-cyan-950/20',
+    brandTextGradient: 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-violet-600 dark:from-cyan-400 dark:to-violet-300',
+    searchBorderHover: 'hover:border-cyan-400 dark:hover:border-cyan-500 hover:bg-cyan-50/40',
+    searchIcon: 'text-cyan-600 dark:text-cyan-400',
+    searchKbd: 'text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-slate-900 border-cyan-200 dark:border-slate-700',
+    navBorder: 'border-cyan-100 dark:border-cyan-950/40',
+    activeBtn: 'bg-gradient-to-r from-cyan-600 via-indigo-600 to-violet-600 text-white font-extrabold shadow-md shadow-cyan-900/25 ring-2 ring-cyan-400/50 border border-cyan-400/40',
+    activeIcon: 'text-white',
+    inactiveIcon: 'text-cyan-600 dark:text-violet-400',
+    inactiveBtnHover: 'hover:text-cyan-700 dark:hover:text-cyan-300 hover:bg-cyan-50/80 dark:hover:bg-cyan-950/40 hover:border-cyan-400/80',
+    badgeYearActive: 'bg-cyan-400 text-slate-950 shadow-xs font-black',
+    badgeYearInactive: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-700',
+    badgeLiveActive: 'bg-white/25 text-white',
+    badgeLiveInactive: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    badgeAlertActive: 'bg-white text-rose-700 font-black',
+    badgeAlertInactive: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    bookmarkActive: 'text-cyan-600 bg-cyan-50 dark:bg-cyan-950/60',
+    bookmarkBadge: 'bg-gradient-to-r from-cyan-600 to-violet-600 text-white',
+    authLoggedIn: 'bg-gradient-to-r from-cyan-600 to-violet-600 hover:from-cyan-500 hover:to-violet-500 text-white',
+    authGuest: 'bg-white/90 dark:bg-slate-800 text-cyan-700 dark:text-cyan-300 border border-cyan-400/60 hover:bg-cyan-50 dark:hover:bg-slate-750',
+    mobileMenuBtn: 'text-cyan-700 dark:text-cyan-300 bg-cyan-50/80 hover:bg-cyan-100 dark:bg-slate-800 dark:hover:bg-slate-700',
+    mobileBottomActive: 'text-cyan-600 dark:text-cyan-400',
+  },
+  ocean: {
+    microBarBg: 'bg-[#031521]',
+    microBarText: 'text-cyan-100',
+    microBarTargetText: 'text-cyan-300 font-bold',
+    microBarBorder: 'border-cyan-900/60',
+    logoBg: 'bg-gradient-to-br from-cyan-600 via-teal-600 to-sky-600',
+    logoRing: 'ring-cyan-400/40 shadow-cyan-950/20',
+    brandTextGradient: 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-sky-600 dark:from-cyan-400 dark:to-sky-300',
+    searchBorderHover: 'hover:border-cyan-400 dark:hover:border-cyan-500 hover:bg-cyan-50/40',
+    searchIcon: 'text-cyan-600 dark:text-sky-400',
+    searchKbd: 'text-cyan-700 dark:text-sky-300 bg-cyan-50 dark:bg-slate-900 border-cyan-200 dark:border-slate-700',
+    navBorder: 'border-cyan-100 dark:border-cyan-950/40',
+    activeBtn: 'bg-gradient-to-r from-cyan-600 via-teal-600 to-sky-600 text-white font-extrabold shadow-md shadow-cyan-900/25 ring-2 ring-cyan-400/50 border border-cyan-400/40',
+    activeIcon: 'text-white',
+    inactiveIcon: 'text-cyan-600 dark:text-sky-400',
+    inactiveBtnHover: 'hover:text-cyan-700 dark:hover:text-sky-300 hover:bg-cyan-50/80 dark:hover:bg-cyan-950/40 hover:border-cyan-400/80',
+    badgeYearActive: 'bg-cyan-400 text-slate-950 shadow-xs font-black',
+    badgeYearInactive: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-700',
+    badgeLiveActive: 'bg-white/25 text-white',
+    badgeLiveInactive: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    badgeAlertActive: 'bg-white text-rose-700 font-black',
+    badgeAlertInactive: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    bookmarkActive: 'text-cyan-600 bg-cyan-50 dark:bg-cyan-950/60',
+    bookmarkBadge: 'bg-gradient-to-r from-cyan-600 to-sky-600 text-white',
+    authLoggedIn: 'bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white',
+    authGuest: 'bg-white/90 dark:bg-slate-800 text-cyan-700 dark:text-sky-300 border border-cyan-400/60 hover:bg-cyan-50 dark:hover:bg-slate-750',
+    mobileMenuBtn: 'text-cyan-700 dark:text-sky-300 bg-cyan-50/80 hover:bg-cyan-100 dark:bg-slate-800 dark:hover:bg-slate-700',
+    mobileBottomActive: 'text-cyan-600 dark:text-sky-400',
+  },
+  rose: {
+    microBarBg: 'bg-[#1e050f]',
+    microBarText: 'text-rose-100',
+    microBarTargetText: 'text-rose-300 font-bold',
+    microBarBorder: 'border-rose-900/60',
+    logoBg: 'bg-gradient-to-br from-rose-600 via-pink-600 to-rose-700',
+    logoRing: 'ring-rose-400/40 shadow-rose-950/20',
+    brandTextGradient: 'text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-pink-600 dark:from-rose-400 dark:to-pink-300',
+    searchBorderHover: 'hover:border-rose-400 dark:hover:border-rose-500 hover:bg-rose-50/40',
+    searchIcon: 'text-rose-600 dark:text-rose-400',
+    searchKbd: 'text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-slate-900 border-rose-200 dark:border-slate-700',
+    navBorder: 'border-rose-100 dark:border-rose-950/40',
+    activeBtn: 'bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 text-white font-extrabold shadow-md shadow-rose-900/25 ring-2 ring-rose-400/50 border border-rose-400/40',
+    activeIcon: 'text-white',
+    inactiveIcon: 'text-rose-600 dark:text-pink-400',
+    inactiveBtnHover: 'hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50/80 dark:hover:bg-rose-950/40 hover:border-rose-400/80',
+    badgeYearActive: 'bg-rose-400 text-slate-950 shadow-xs font-black',
+    badgeYearInactive: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    badgeLiveActive: 'bg-white/25 text-white',
+    badgeLiveInactive: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    badgeAlertActive: 'bg-white text-rose-700 font-black',
+    badgeAlertInactive: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700',
+    bookmarkActive: 'text-rose-600 bg-rose-50 dark:bg-rose-950/60',
+    bookmarkBadge: 'bg-gradient-to-r from-rose-600 to-pink-600 text-white',
+    authLoggedIn: 'bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white',
+    authGuest: 'bg-white/90 dark:bg-slate-800 text-rose-700 dark:text-rose-300 border border-rose-400/60 hover:bg-rose-50 dark:hover:bg-slate-750',
+    mobileMenuBtn: 'text-rose-700 dark:text-rose-300 bg-rose-50/80 hover:bg-rose-100 dark:bg-slate-800 dark:hover:bg-slate-700',
+    mobileBottomActive: 'text-rose-600 dark:text-rose-400',
+  },
+};
+
+const getNavPalette = (style: string): NavThemePalette => {
+  return NAV_THEME_PALETTES[style] || NAV_THEME_PALETTES.emerald;
+};
+
 export const Navbar: React.FC = () => {
   const { 
     tab, 
@@ -55,6 +266,7 @@ export const Navbar: React.FC = () => {
     setSelectedExamId
   } = useApp();
 
+  const palette = getNavPalette(themeStyle);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems: NavItemConfig[] = [
@@ -150,32 +362,32 @@ export const Navbar: React.FC = () => {
       <header className="sticky top-0 z-40 w-full max-w-full overflow-x-clip border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md transition-colors shadow-xs">
         
         {/* Top Micro-Bar: Announcements & Exam Target (Responsive & safely constrained) */}
-        <div className="bg-purple-950 text-purple-100 text-xs py-1.5 px-3 sm:px-4 hidden sm:block border-b border-purple-900/40 w-full max-w-full overflow-hidden">
+        <div className={`${palette.microBarBg} ${palette.microBarText} text-xs py-1.5 px-3 sm:px-4 hidden sm:block border-b ${palette.microBarBorder} w-full max-w-full overflow-hidden transition-colors`}>
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 overflow-hidden">
             <div className="flex items-center gap-2 truncate min-w-0">
-              <span className="inline-flex items-center gap-1 font-semibold text-pink-300 shrink-0">
+              <span className={`inline-flex items-center gap-1 font-semibold ${palette.microBarTargetText} shrink-0`}>
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 Targeting:
               </span>
               <button 
                 onClick={() => setAuthModalOpen(true)} 
-                className="text-purple-200 hover:text-white underline decoration-pink-500 font-medium cursor-pointer truncate"
+                className="text-white hover:underline underline-offset-2 font-medium cursor-pointer truncate"
               >
                 {userProfile.targetExam || 'Set Target Exam'}
               </button>
-              <span className="text-purple-500 mx-1 hidden md:inline">•</span>
-              <span className="text-purple-200/80 hidden md:inline truncate">
+              <span className="text-white/40 mx-1 hidden md:inline">•</span>
+              <span className="text-white/80 hidden md:inline truncate">
                 5,000+ source-aligned MCQs for STS IBA preparation
               </span>
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center gap-1.5 text-pink-200">
+              <div className="flex items-center gap-1.5 text-amber-200">
                 <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                 <span>Streak: <strong className="text-white">{userProfile.streakDays}d</strong></span>
               </div>
-              <span className="text-purple-700">|</span>
-              <div className="text-purple-200">
+              <span className="text-white/30">|</span>
+              <div className="text-white/90">
                 Score: <strong className="text-white">{userProfile.points} pts</strong>
               </div>
             </div>
@@ -193,12 +405,12 @@ export const Navbar: React.FC = () => {
                 onClick={() => handleNavClick('home')}
                 className="flex items-center gap-2 sm:gap-2.5 text-left group cursor-pointer focus:outline-hidden"
               >
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-purple-600 via-fuchsia-700 to-pink-600 flex items-center justify-center text-white shadow-md shadow-purple-900/30 ring-2 ring-purple-400/30 group-hover:scale-105 transition-transform shrink-0">
+                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl ${palette.logoBg} flex items-center justify-center text-white ${palette.logoRing} group-hover:scale-105 transition-transform shrink-0`}>
                   <BookOpenCheck className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div className="min-w-0">
                   <span className="font-extrabold text-base sm:text-xl tracking-tight text-slate-900 dark:text-white font-display block whitespace-nowrap">
-                    MATB <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 dark:from-purple-400 dark:to-pink-400">STS PREP</span>
+                    MATB <span className={palette.brandTextGradient}>STS PREP</span>
                   </span>
                   <p className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 tracking-wider uppercase font-semibold hidden md:block whitespace-nowrap">
                     By Mehtab Ali • Practice Smart
@@ -212,13 +424,13 @@ export const Navbar: React.FC = () => {
               <button
                 id="desktop-search-trigger"
                 onClick={() => setSearchOpen(true)}
-                className="w-full flex items-center justify-between px-3.5 py-2 text-sm text-slate-500 dark:text-slate-400 bg-white/90 dark:bg-slate-800/80 hover:bg-purple-50/50 dark:hover:bg-slate-800 border border-purple-200/80 dark:border-slate-700 rounded-xl transition cursor-pointer shadow-2xs"
+                className={`w-full flex items-center justify-between px-3.5 py-2 text-sm text-slate-500 dark:text-slate-400 bg-white/90 dark:bg-slate-800/80 ${palette.searchBorderHover} border border-slate-200 dark:border-slate-700 rounded-xl transition cursor-pointer shadow-2xs`}
               >
                 <span className="flex items-center gap-2 truncate">
-                  <Search className="w-4 h-4 text-purple-600 dark:text-pink-400 shrink-0" />
+                  <Search className={`w-4 h-4 ${palette.searchIcon} shrink-0`} />
                   <span className="truncate">Search MCQs, exams, topics...</span>
                 </span>
-                <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[11px] font-semibold text-purple-600 dark:text-pink-300 bg-purple-50 dark:bg-slate-900 border border-purple-200 dark:border-slate-700 rounded-sm shadow-2xs shrink-0">
+                <kbd className={`hidden sm:inline-block px-1.5 py-0.5 text-[11px] font-semibold ${palette.searchKbd} rounded-sm shadow-2xs shrink-0`}>
                   ⌘K
                 </kbd>
               </button>
@@ -245,15 +457,15 @@ export const Navbar: React.FC = () => {
                 onClick={() => setTab('bookmarks')}
                 className={`p-2 rounded-lg transition relative cursor-pointer ${
                   tab === 'bookmarks'
-                    ? 'text-purple-600 bg-purple-50 dark:bg-purple-950/60'
-                    : 'text-slate-600 dark:text-slate-300 hover:bg-purple-50/80 dark:hover:bg-slate-800'
+                    ? palette.bookmarkActive
+                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
                 title="Saved Bookmarks"
                 aria-label="Bookmarks"
               >
                 <Bookmark className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
                 {userProfile.bookmarks.length > 0 && (
-                  <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-[10px] font-bold text-white shadow-xs">
+                  <span className={`absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full ${palette.bookmarkBadge} text-[10px] font-bold text-white shadow-xs`}>
                     {userProfile.bookmarks.length}
                   </span>
                 )}
@@ -266,7 +478,7 @@ export const Navbar: React.FC = () => {
               <button
                 id="theme-toggle-btn"
                 onClick={toggleDarkMode}
-                className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-slate-800 transition cursor-pointer"
+                className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
                 title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                 aria-label="Toggle Theme"
               >
@@ -282,22 +494,20 @@ export const Navbar: React.FC = () => {
                 id="auth-profile-btn"
                 onClick={() => setAuthModalOpen(true)}
                 className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:pl-2.5 sm:pr-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition cursor-pointer shadow-2xs ${
-                  user 
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white' 
-                    : 'bg-white/90 dark:bg-slate-800 text-purple-700 dark:text-pink-300 border border-purple-400/50 hover:bg-purple-50 dark:hover:bg-slate-750'
+                  user ? palette.authLoggedIn : palette.authGuest
                 }`}
                 title={user ? `Signed in as ${user.email || user.displayName}` : 'Guest Mode - Click to Sign In'}
               >
                 {user ? (
                   user.photoURL ? (
-                    <img src={user.photoURL} alt="" className="w-4.5 h-4.5 rounded-full object-cover border border-purple-200" />
+                    <img src={user.photoURL} alt="" className="w-4.5 h-4.5 rounded-full object-cover border border-white/50" />
                   ) : (
-                    <span className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-white flex items-center justify-center text-[10px] font-bold">
+                    <span className="w-4.5 h-4.5 rounded-full bg-white/20 text-white flex items-center justify-center text-[10px] font-bold">
                       {userProfile.name.charAt(0).toUpperCase() || 'A'}
                     </span>
                   )
                 ) : (
-                  <User className="w-4 h-4 text-purple-600 dark:text-pink-400 shrink-0" />
+                  <User className={`w-4 h-4 ${palette.searchIcon} shrink-0`} />
                 )}
 
                 <span className="hidden sm:inline-block max-w-[85px] truncate font-bold">
@@ -307,9 +517,9 @@ export const Navbar: React.FC = () => {
                 {user && (
                   <span className="hidden sm:flex h-2 w-2 relative">
                     {isSyncing && (
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                     )}
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-400"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
                   </span>
                 )}
               </button>
@@ -318,10 +528,10 @@ export const Navbar: React.FC = () => {
               <button
                 id="mobile-menu-toggle-btn"
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
-                className="p-2 rounded-lg text-slate-700 dark:text-slate-200 bg-purple-50/70 hover:bg-purple-100 dark:bg-slate-800 dark:hover:bg-slate-700 transition cursor-pointer ml-0.5"
+                className={`p-2 rounded-lg ${palette.mobileMenuBtn} transition cursor-pointer ml-0.5`}
                 aria-label="Toggle navigation menu"
               >
-                {mobileMenuOpen ? <X className="w-5 h-5 text-rose-500" /> : <Menu className="w-5 h-5 text-purple-600 dark:text-pink-400" />}
+                {mobileMenuOpen ? <X className="w-5 h-5 text-rose-500" /> : <Menu className="w-5 h-5" />}
               </button>
 
             </div>
@@ -333,7 +543,7 @@ export const Navbar: React.FC = () => {
         <nav 
           id="official-headers-navigation" 
           aria-label="Official Portal Navigation"
-          className="w-full border-t border-purple-100 dark:border-purple-950/40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md py-2 px-2.5 sm:px-6 lg:px-8 shadow-xs overflow-hidden"
+          className={`w-full border-t ${palette.navBorder} bg-white/90 dark:bg-slate-900/90 backdrop-blur-md py-2 px-2.5 sm:px-6 lg:px-8 shadow-xs overflow-hidden`}
         >
           <div className="max-w-7xl mx-auto w-full">
             {/* Scrollable container with no scrollbars; smooth horizontal touch pan without spilling to body */}
@@ -347,15 +557,15 @@ export const Navbar: React.FC = () => {
                     onClick={() => handleNavClick(item.id)}
                     className={`group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 lg:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all duration-200 shrink-0 cursor-pointer select-none whitespace-nowrap ${
                       isActive
-                        ? 'bg-gradient-to-r from-purple-700 via-fuchsia-600 to-pink-600 text-white font-extrabold shadow-md shadow-purple-900/30 ring-2 ring-purple-400/50 border border-purple-300/40'
-                        : 'bg-white/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-purple-50/80 dark:hover:bg-purple-950/40 border border-slate-200/90 dark:border-slate-700 hover:border-purple-400/80 shadow-2xs hover:shadow-xs'
+                        ? palette.activeBtn
+                        : `bg-white/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 ${palette.inactiveBtnHover} border border-slate-200/90 dark:border-slate-700 shadow-2xs hover:shadow-xs`
                     }`}
                   >
                     {/* Official Icon */}
                     <span className={`transition-colors ${
                       isActive 
-                        ? 'text-white' 
-                        : 'text-purple-600 dark:text-pink-400 group-hover:scale-110'
+                        ? palette.activeIcon 
+                        : `${palette.inactiveIcon} group-hover:scale-110`
                     }`}>
                       {item.icon}
                     </span>
@@ -371,19 +581,13 @@ export const Navbar: React.FC = () => {
                     {item.badge && (
                       <span className={`text-[10px] font-black uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full flex items-center gap-1 transition-all ${
                         item.badgeType === 'live'
-                          ? isActive 
-                            ? 'bg-white/25 text-white' 
-                            : 'bg-pink-100 text-pink-800 dark:bg-pink-950 dark:text-pink-300 border border-pink-300 dark:border-pink-700'
+                          ? isActive ? palette.badgeLiveActive : palette.badgeLiveInactive
                           : item.badgeType === 'year'
-                          ? isActive
-                            ? 'bg-amber-400 text-slate-950 shadow-xs'
-                            : 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 border border-purple-300 dark:border-purple-700'
-                          : isActive
-                          ? 'bg-white text-rose-700 font-black'
-                          : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-700'
+                          ? isActive ? palette.badgeYearActive : palette.badgeYearInactive
+                          : isActive ? palette.badgeAlertActive : palette.badgeAlertInactive
                       }`}>
                         {item.badgeType === 'live' && (
-                          <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-white' : 'bg-pink-500 animate-ping'} inline-block`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-white' : 'bg-rose-500 animate-ping'} inline-block`} />
                         )}
                         {item.badge}
                       </span>
@@ -534,7 +738,7 @@ export const Navbar: React.FC = () => {
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                      <Palette className="w-3.5 h-3.5 text-purple-600 dark:text-pink-400" />
+                      <Palette className={`w-3.5 h-3.5 ${palette.searchIcon}`} />
                       Visual Theme:
                     </span>
                     <span className="text-[10px] text-slate-400 font-semibold capitalize">
@@ -548,7 +752,7 @@ export const Navbar: React.FC = () => {
                         onClick={() => setThemeStyle(item.id)}
                         className={`flex items-center gap-2 p-2 rounded-lg text-xs font-semibold border text-left transition cursor-pointer ${
                           themeStyle === item.id
-                            ? 'bg-purple-50 dark:bg-purple-950/60 border-purple-500 text-purple-700 dark:text-purple-300 font-bold shadow-2xs'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-700 dark:text-emerald-300 font-bold shadow-2xs'
                             : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300'
                         }`}
                       >
@@ -572,14 +776,14 @@ export const Navbar: React.FC = () => {
       {/* Mobile Sticky Bottom Navigation Bar (Ultra-Convenient One-Thumb Navigation) */}
       <div 
         id="mobile-bottom-navigation-bar" 
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-purple-100 dark:border-slate-800 shadow-2xl py-1.5 px-3 flex items-center justify-around w-full max-w-full overflow-hidden"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-2xl py-1.5 px-3 flex items-center justify-around w-full max-w-full overflow-hidden"
       >
         <button
           id="mobile-bottom-home"
           onClick={() => handleNavClick('home')}
           className={`flex flex-col items-center gap-0.5 p-1 rounded-lg text-xs font-bold transition cursor-pointer ${
             tab === 'home'
-              ? 'text-purple-600 dark:text-pink-400'
+              ? palette.mobileBottomActive
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
           }`}
         >
@@ -592,7 +796,7 @@ export const Navbar: React.FC = () => {
           onClick={() => handleNavClick('mcqs')}
           className={`flex flex-col items-center gap-0.5 p-1 rounded-lg text-xs font-bold transition cursor-pointer ${
             tab === 'mcqs'
-              ? 'text-purple-600 dark:text-pink-400'
+              ? palette.mobileBottomActive
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
           }`}
         >
@@ -605,15 +809,15 @@ export const Navbar: React.FC = () => {
           onClick={() => handleNavClick('quiz')}
           className={`flex flex-col items-center gap-0.5 p-1 rounded-lg text-xs font-bold transition cursor-pointer relative ${
             tab === 'quiz'
-              ? 'text-purple-600 dark:text-pink-400'
+              ? palette.mobileBottomActive
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
           }`}
         >
           <div className="relative">
             <Trophy className="w-5 h-5 text-amber-500" />
             <span className="absolute -top-1 -right-1.5 flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
           </div>
           <span className="text-[10px] font-bold">Quiz</span>
@@ -624,7 +828,7 @@ export const Navbar: React.FC = () => {
           onClick={() => handleNavClick('past-papers')}
           className={`flex flex-col items-center gap-0.5 p-1 rounded-lg text-xs font-bold transition cursor-pointer ${
             tab === 'past-papers'
-              ? 'text-purple-600 dark:text-pink-400'
+              ? palette.mobileBottomActive
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
           }`}
         >
@@ -637,7 +841,7 @@ export const Navbar: React.FC = () => {
           onClick={() => setMobileMenuOpen((prev) => !prev)}
           className={`flex flex-col items-center gap-0.5 p-1 rounded-lg text-xs font-bold transition cursor-pointer ${
             mobileMenuOpen
-              ? 'text-purple-600 dark:text-pink-400'
+              ? palette.mobileBottomActive
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
           }`}
         >

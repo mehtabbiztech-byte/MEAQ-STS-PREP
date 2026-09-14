@@ -57,7 +57,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Theme Accents and Ambient Backdrops */
 :root {
-  --theme-accent: #9333ea;
+  --theme-accent: #059669;
+  --theme-secondary: #0d9488;
 }
 
 [data-theme='rose'] {

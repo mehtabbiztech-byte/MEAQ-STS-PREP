@@ -29,6 +29,11 @@ import {
 } from 'lucide-react';
 import { CssSyllabusExplorer } from './CssSyllabusExplorer';
 import { KidsPlayground } from './KidsPlayground';
+import { MiddleSchoolHub } from './MiddleSchoolHub';
+import { MatricBoardHub } from './MatricBoardHub';
+import { IntermediateBoardHub } from './IntermediateBoardHub';
+import { EntryTestPrepHub } from './EntryTestPrepHub';
+import { UniversityHub } from './UniversityHub';
 
 export const PersonalizedDashboard: React.FC = () => {
   const { 
@@ -55,17 +60,17 @@ export const PersonalizedDashboard: React.FC = () => {
     <section id="kids-hub" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-28">
       
       {/* Container Card */}
-      <div className="bg-white/95 dark:bg-slate-900/95 border-2 border-purple-500/30 dark:border-purple-500/20 rounded-3xl p-6 sm:p-8 shadow-xl shadow-purple-950/5 relative overflow-hidden backdrop-blur-md">
+      <div className="bg-white/95 dark:bg-slate-900/95 border-2 border-emerald-500/30 dark:border-emerald-500/20 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-950/5 relative overflow-hidden backdrop-blur-md">
         
         {/* Subtle background glow */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Section Header with Persona Switcher in Sequence of 3 and 3 */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/80 text-purple-800 dark:text-purple-300 text-xs font-bold mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-pink-500" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Smart Adaptive Learning Hub</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
@@ -76,26 +81,28 @@ export const PersonalizedDashboard: React.FC = () => {
             </p>
           </div>
 
-          {/* Persona Switcher in Sequence of 3 and 3 */}
-          <div className="w-full lg:max-w-xl bg-slate-100/90 dark:bg-slate-800/90 p-2 rounded-2xl border border-purple-200/60 dark:border-slate-700/80 shadow-xs">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {/* Persona Switcher with Middle 6-8 and Matric 9-10 separated */}
+          <div className="w-full lg:max-w-2xl bg-slate-100/90 dark:bg-slate-800/90 p-2 rounded-2xl border border-emerald-200/60 dark:border-slate-700/80 shadow-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
               {[
-                { id: 'kids' as UserPersona, label: 'Kids (Class 1–5)', emoji: '👧', icon: Baby },
-                { id: 'school' as UserPersona, label: 'School (6–10)', emoji: '🎒', icon: School },
-                { id: 'college' as UserPersona, label: 'College & Entry', emoji: '📚', icon: GraduationCap },
-                { id: 'university' as UserPersona, label: 'University', emoji: '🎓', icon: Building },
-                { id: 'jobs' as UserPersona, label: 'Job Seekers', emoji: '💼', icon: Briefcase },
-                { id: 'competitive' as UserPersona, label: 'CSS & Commissions', emoji: '🏆', icon: Trophy },
+                { id: 'kids' as UserPersona, label: 'Kids (1–5)', emoji: '👧' },
+                { id: 'middle' as UserPersona, label: 'Middle (6–8)', emoji: '🎒' },
+                { id: 'matric' as UserPersona, label: 'Matric (9–10)', emoji: '🏫' },
+                { id: 'college' as UserPersona, label: '1st & 2nd Year', emoji: '📚' },
+                { id: 'entry-test' as UserPersona, label: 'Entry Test Prep', emoji: '🎯' },
+                { id: 'university' as UserPersona, label: 'University', emoji: '🎓' },
+                { id: 'jobs' as UserPersona, label: 'Job Seekers', emoji: '💼' },
+                { id: 'competitive' as UserPersona, label: 'CSS & FPSC', emoji: '🏆' },
               ].map((item) => {
                 const isSelected = activeTab === item.id;
                 return (
                   <button
                     key={item.id}
                     onClick={() => handlePersonaChange(item.id)}
-                    className={`flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer text-center select-none ${
+                    className={`flex items-center justify-center gap-1.5 px-2.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer text-center select-none ${
                       isSelected
-                        ? 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white shadow-md shadow-purple-600/30 ring-2 ring-purple-400/50'
-                        : 'bg-white/95 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-purple-50/80 dark:hover:bg-purple-950/40 border border-slate-200/80 dark:border-slate-700'
+                        ? 'bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white shadow-md shadow-emerald-600/30 ring-2 ring-emerald-400/50'
+                        : 'bg-white/95 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 border border-slate-200/80 dark:border-slate-700'
                     }`}
                   >
                     <span className="text-sm leading-none">{item.emoji}</span>
@@ -116,212 +123,29 @@ export const PersonalizedDashboard: React.FC = () => {
           {activeTab === 'kids' && <KidsPlayground />}
 
           {/* ========================================================= */}
-          {/* 2. 🎒 SCHOOL DASHBOARD (Class 6–10 / Matric / Boards)     */}
+          {/* 2. 🎒 MIDDLE SCHOOL DASHBOARD (Class 6–8)                 */}
           {/* ========================================================= */}
-          {activeTab === 'school' && (
-            <div className="space-y-8 animate-fadeIn">
-              
-              <div className="bg-gradient-to-r from-blue-900/10 via-indigo-900/10 to-emerald-900/10 border border-blue-200 dark:border-blue-900/50 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                <div>
-                  <div className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">
-                    Secondary Education & Board Target
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-                    Matric & Board Preparation (Class 9 & 10)
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">
-                    Targeting FBISE Federal Board, BISE Lahore, BISE Karachi, and provincial boards. Master textbook SLO concepts and past board objective papers.
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-3 text-xs font-bold">
-                    <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">
-                      Syllabus Coverage: 68%
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
-                      50+ Board Past Papers
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setSelectedExamId('matric-board');
-                    setTab('exams');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition cursor-pointer flex items-center gap-2 shrink-0"
-                >
-                  <FileText className="w-4 h-4" />
-                  <span>Explore Matric Board Hub</span>
-                </button>
-              </div>
-
-              {/* School Subjects Breakdown */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[
-                  { name: 'Physics (9th & 10th)', progress: 75, slug: 'physics', desc: 'Kinematics, Dynamics, Current Electricity' },
-                  { name: 'Chemistry (9th & 10th)', progress: 62, slug: 'chemistry', desc: 'Atomic Structure, Bonding, Organic Chemistry' },
-                  { name: 'Mathematics', progress: 84, slug: 'mathematics', desc: 'Matrices, Quadratic Equations, Theorems' },
-                  { name: 'Biology & Computer', progress: 70, slug: 'biology', desc: 'Bioenergetics, Enzymes, C++ / Python' },
-                ].map((item, idx) => (
-                  <div 
-                    key={idx}
-                    onClick={() => {
-                      setSelectedCategorySlug(item.slug);
-                      setTab('mcqs');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 hover:border-blue-500 transition cursor-pointer"
-                  >
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-slate-900 dark:text-white">{item.name}</span>
-                      <span className="text-blue-600 dark:text-blue-400">{item.progress}%</span>
-                    </div>
-                    <div className="mt-2 w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-blue-600 h-full rounded-full" style={{ width: `${item.progress}%` }} />
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                      {item.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          )}
+          {activeTab === 'middle' && <MiddleSchoolHub />}
 
           {/* ========================================================= */}
-          {/* 3. 📚 COLLEGE DASHBOARD (Inter, FSc, MDCAT, ECAT)        */}
+          {/* 3. 🏫 MATRIC BOARD DASHBOARD (Class 9 & 10)               */}
           {/* ========================================================= */}
-          {activeTab === 'college' && (
-            <div className="space-y-8 animate-fadeIn">
-              
-              <div className="bg-gradient-to-r from-teal-900/10 via-emerald-900/10 to-sky-900/10 border border-teal-200 dark:border-teal-900/50 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                <div>
-                  <div className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider mb-1">
-                    College Intermediate & Professional Admissions
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-                    FSc, Intermediate & Entry-Test Preparation
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">
-                    High aggregate mastery for MBBS/BDS (MDCAT PMDC) and Engineering/Computing (ECAT UET, FAST, NUST). Practice negative-marking simulations and speed math.
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <button
-                      onClick={() => {
-                        setSelectedExamId('mdcat');
-                        setTab('exams');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition cursor-pointer"
-                    >
-                      MDCAT Hub (MBBS) →
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedExamId('ecat');
-                        setTab('exams');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition cursor-pointer"
-                    >
-                      ECAT Hub (Engineering) →
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedExamId('intermediate-fsc');
-                        setTab('exams');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white text-xs font-bold transition cursor-pointer"
-                    >
-                      FSc 1st & 2nd Year →
-                    </button>
-                  </div>
-                </div>
-
-                <div className="text-center bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs shrink-0">
-                  <div className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                    Entry-Test Readiness
-                  </div>
-                  <div className="text-3xl font-extrabold text-teal-600 dark:text-teal-400 font-display mt-1">
-                    74%
-                  </div>
-                  <div className="text-xs text-slate-400 mt-1">Target: 85%+</div>
-                </div>
-              </div>
-
-            </div>
-          )}
+          {(activeTab === 'matric' || activeTab === 'school') && <MatricBoardHub />}
 
           {/* ========================================================= */}
-          {/* 4. 🎓 UNIVERSITY DASHBOARD (Semester, Entry, Scholarships)*/}
+          {/* 4. 📚 1ST & 2ND YEAR INTERMEDIATE HUB                     */}
           {/* ========================================================= */}
-          {activeTab === 'university' && (
-            <div className="space-y-8 animate-fadeIn">
-              
-              <div className="bg-gradient-to-r from-purple-900/10 via-indigo-900/10 to-slate-900/10 border border-purple-200 dark:border-purple-900/50 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                <div>
-                  <div className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1">
-                    Undergraduate, Graduate & Licensing
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-                    University Exams, GAT & Scholarships
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">
-                    Higher education assessments including HEC USAT, NUST NET, FAST, GAT General & Subject, HEC Indigenous/Overseas scholarships, and professional licensing (LAW-GAT, PMDC NRE).
-                  </p>
+          {(activeTab === 'college' || activeTab === 'intermediate') && <IntermediateBoardHub />}
 
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <button
-                      onClick={() => {
-                        setSelectedExamId('hec-usat-gat');
-                        setTab('exams');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition cursor-pointer"
-                    >
-                      HEC USAT & GAT →
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedExamId('scholarships-pk');
-                        setTab('exams');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition cursor-pointer"
-                    >
-                      Scholarships Guide →
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedExamId('professional-licensing');
-                        setTab('exams');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white text-xs font-bold transition cursor-pointer"
-                    >
-                      LAW-GAT & NRE →
-                    </button>
-                  </div>
-                </div>
+          {/* ========================================================= */}
+          {/* 5. 🎯 ENTRY TEST PREPARATION HUB (MDCAT, ECAT, NET, LAT)  */}
+          {/* ========================================================= */}
+          {activeTab === 'entry-test' && <EntryTestPrepHub />}
 
-                <button
-                  onClick={() => {
-                    setTab('quiz');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-6 py-3.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm shadow-md transition cursor-pointer flex items-center gap-2 shrink-0"
-                >
-                  <Brain className="w-4 h-4" />
-                  <span>Take Analytical Logic Test</span>
-                </button>
-              </div>
-
-            </div>
-          )}
+          {/* ========================================================= */}
+          {/* 4. 🎓 UNIVERSITY HUB (Departments, Subjects, CGPA & Exams) */}
+          {/* ========================================================= */}
+          {activeTab === 'university' && <UniversityHub />}
 
           {/* ========================================================= */}
           {/* 5. 💼 JOB SEEKERS DASHBOARD (Exact STS & NTS layout)      */}
@@ -436,19 +260,19 @@ export const PersonalizedDashboard: React.FC = () => {
           {activeTab === 'competitive' && (
             <div className="space-y-8 animate-fadeIn">
               
-              {/* CSS Aspirant Welcome Card (Updated to Purple & Light Pink Theme) */}
-              <div className="bg-gradient-to-r from-purple-950/85 via-slate-900/95 to-pink-950/75 border border-purple-500/40 rounded-3xl p-6 sm:p-8 shadow-xl shadow-purple-950/25 relative overflow-hidden backdrop-blur-xl">
-                {/* Decorative purple-pink ambient glow inside card */}
-                <div className="absolute -top-24 -right-24 w-64 h-64 bg-pink-500/15 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
+              {/* CSS Aspirant Welcome Card (Updated to Emerald Theme) */}
+              <div className="bg-gradient-to-r from-emerald-950/85 via-slate-900/95 to-teal-950/75 border border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-xl shadow-emerald-950/25 relative overflow-hidden backdrop-blur-xl">
+                {/* Decorative emerald ambient glow inside card */}
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-teal-500/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-purple-900/40 relative z-10">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-emerald-900/40 relative z-10">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-extrabold shadow-xs">
+                      <span className="px-3 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-extrabold shadow-xs">
                         Civil Services of Pakistan
                       </span>
-                      <span className="text-xs text-purple-200/70 font-medium">
+                      <span className="text-xs text-emerald-200/70 font-medium">
                         Central Superior Services (CSS) & Provincial PMS
                       </span>
                     </div>
@@ -456,16 +280,16 @@ export const PersonalizedDashboard: React.FC = () => {
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-display mt-2">
                       👋 Welcome back, {userProfile.name}!
                     </h3>
-                    <p className="text-xs sm:text-sm text-purple-200/80 mt-0.5">
+                    <p className="text-xs sm:text-sm text-emerald-200/80 mt-0.5">
                       Your Preparation Dashboard & Compulsory Subjects Mastery
                     </p>
                   </div>
 
                   <div className="text-left sm:text-right">
-                    <div className="text-xs text-purple-200/70 font-medium">
+                    <div className="text-xs text-emerald-200/70 font-medium">
                       Overall Progress
                     </div>
-                    <div className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-pink-300 font-display">
+                    <div className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-emerald-200 to-cyan-300 font-display">
                       67%
                     </div>
                   </div>
@@ -481,14 +305,14 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('mcqs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-purple-500 transition cursor-pointer shadow-2xs"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-emerald-100 dark:border-emerald-900/40 hover:border-emerald-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">English Precis & Vocab</span>
-                      <span className="text-purple-600 dark:text-purple-400 font-extrabold">74%</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">74%</span>
                     </div>
-                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-gradient-to-r from-purple-600 to-pink-500 h-full rounded-full" style={{ width: '74%' }} />
+                    <div className="mt-2 w-full bg-emerald-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-emerald-600 to-teal-500 h-full rounded-full" style={{ width: '74%' }} />
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                       Dawn Vocabulary, Idioms, Prepositions
@@ -501,14 +325,14 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('current-affairs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-pink-500 transition cursor-pointer shadow-2xs"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-emerald-100 dark:border-emerald-900/40 hover:border-teal-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">Current Affairs</span>
-                      <span className="text-pink-600 dark:text-pink-400 font-extrabold">61%</span>
+                      <span className="text-teal-600 dark:text-teal-400 font-extrabold">61%</span>
                     </div>
-                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-gradient-to-r from-fuchsia-600 to-pink-500 h-full rounded-full" style={{ width: '61%' }} />
+                    <div className="mt-2 w-full bg-emerald-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-teal-600 to-cyan-500 h-full rounded-full" style={{ width: '61%' }} />
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                       2025-2026 Summits, Economy, Foreign Policy
@@ -522,14 +346,14 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('mcqs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-purple-500 transition cursor-pointer shadow-2xs"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-emerald-100 dark:border-emerald-900/40 hover:border-emerald-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">Pakistan Affairs</span>
-                      <span className="text-purple-600 dark:text-purple-400 font-extrabold">78%</span>
+                      <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">78%</span>
                     </div>
-                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-                      <div className="bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 h-full rounded-full" style={{ width: '78%' }} />
+                    <div className="mt-2 w-full bg-emerald-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                      <div className="bg-gradient-to-r from-emerald-600 to-cyan-500 h-full rounded-full" style={{ width: '78%' }} />
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                       1857-1947 Movement & 1973 Constitution
@@ -543,13 +367,13 @@ export const PersonalizedDashboard: React.FC = () => {
                       setTab('mcqs');
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-purple-100 dark:border-purple-900/40 hover:border-amber-500 transition cursor-pointer shadow-2xs"
+                    className="p-4 rounded-2xl bg-white/95 dark:bg-slate-800/90 border border-emerald-100 dark:border-emerald-900/40 hover:border-amber-500 transition cursor-pointer shadow-2xs"
                   >
                     <div className="flex justify-between items-center text-xs font-bold">
                       <span className="text-slate-900 dark:text-white">General Science & Ability</span>
                       <span className="text-amber-500 dark:text-amber-400 font-extrabold">53%</span>
                     </div>
-                    <div className="mt-2 w-full bg-purple-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                    <div className="mt-2 w-full bg-emerald-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
                       <div className="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full" style={{ width: '53%' }} />
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
@@ -560,9 +384,9 @@ export const PersonalizedDashboard: React.FC = () => {
                 </div>
 
                 {/* CSS Actions */}
-                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-purple-900/40 relative z-10">
-                  <div className="text-xs text-purple-200/90">
-                    Target Exam: <span className="text-pink-300 font-bold">CSS MPT 2026 (200 MCQs Screening) & Main (1200 Marks)</span>
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-emerald-900/40 relative z-10">
+                  <div className="text-xs text-emerald-200/90">
+                    Target Exam: <span className="text-teal-300 font-bold">CSS MPT 2026 (200 MCQs Screening) & Main (1200 Marks)</span>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <button
@@ -578,7 +402,7 @@ export const PersonalizedDashboard: React.FC = () => {
                         setTab('exams');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-purple-900/30"
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-emerald-900/30"
                     >
                       <span>Full CSS Portal</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -588,7 +412,7 @@ export const PersonalizedDashboard: React.FC = () => {
                         setTab('quiz');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-purple-200 text-xs font-bold transition cursor-pointer border border-purple-500/30"
+                      className="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-emerald-200 text-xs font-bold transition cursor-pointer border border-emerald-500/30"
                     >
                       Start MPT Mock Quiz
                     </button>

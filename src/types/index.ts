@@ -10,9 +10,9 @@ export type ThemeStyle =
   | 'pastel-network'
   | 'pastel-ribbons';
 
-export type UserPersona = 'kids' | 'school' | 'college' | 'university' | 'jobs' | 'competitive';
+export type UserPersona = 'kids' | 'middle' | 'matric' | 'school' | 'college' | 'intermediate' | 'entry-test' | 'university' | 'jobs' | 'competitive';
 
-export type ExamCategory = 'school' | 'college' | 'university' | 'jobs' | 'competitive' | 'general';
+export type ExamCategory = 'middle' | 'matric' | 'school' | 'college' | 'intermediate' | 'entry-test' | 'university' | 'jobs' | 'competitive' | 'general';
 
 export type NavigationTab = 
   | 'home' 
