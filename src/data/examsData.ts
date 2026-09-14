@@ -1094,7 +1094,7 @@ export const EXAMS_DATA: ExamInfo[] = [
     description: 'The supreme provincial competitive examination in Sindh for induction of Assistant Commissioner (BPS-17), Section Officer, Excise & Taxation Officer, Municipal Commissioner, and Assistant Registrar.',
     eligibility: 'Graduate degree with minimum 2nd class from recognized university.',
     ageLimit: '21 to 30 years (with Sindh domicile age concession where applicable).',
-    screeningStructure: 'CCE Screening Test: 100 MCQs (General Knowledge, English, Sindhi/Urdu, Pakistan Studies, Current Affairs). Passing threshold: 50%.',
+    screeningStructure: 'Written examination: 1,000 marks (600 compulsory + 400 optional), followed by 200-mark viva voce. Screening requirements, where applicable, must be confirmed from the active advertisement.',
     syllabus: [
       {
         section: 'General Knowledge & Current Affairs',
@@ -1116,6 +1116,7 @@ export const EXAMS_DATA: ExamInfo[] = [
     pastPapersCount: 22,
     mockTestsCount: 28,
     resources: [
+      { title: 'Official Revised SPSC CCE Syllabus', type: 'Syllabus PDF', url: 'https://spsc.gos.pk/Syllabus/Dec2023/Revised-Syallabus-CCE.pdf', description: 'Official written-examination scheme, subjects, detailed syllabus and recommended readings.' },
       { title: 'SPSC CCE Screening Past Papers Archive', type: 'Book', description: 'Solved papers from 2018 to latest screening exams.' },
       { title: 'Sindh History & Cultural Heritage Compendium', type: 'Guide', description: 'Specialized focus on Indus Valley, Sufi shrines, and barrages.' },
     ],
