@@ -17,6 +17,7 @@ import { MCQS_DATA } from '../data/mcqsData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { ExamCategory } from '../types';
 import { CssSyllabusExplorer } from '../components/CssSyllabusExplorer';
+import { PreparationRoomDashboard } from '../components/PreparationRoomDashboard';
 
 export const ExamsView: React.FC = () => {
   const { 
@@ -220,6 +221,19 @@ export const ExamsView: React.FC = () => {
               </div>
             </div>
           </div>
+
+          <PreparationRoomDashboard
+            examId={currentExam.id}
+            onStartMock={() => {
+              setTab('quiz');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenPapers={() => {
+              if (examPastPapers[0]) setSelectedPastPaperId(examPastPapers[0].id);
+              setTab('past-papers');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
 
           {/* Sub-tab 1: Overview */}
           {activeTab === 'overview' && (
