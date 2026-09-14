@@ -25,6 +25,8 @@ import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
 import { getRankTierBadge } from '../lib/certificateService';
+import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
+import { buildExactPatternQuestions, SimulatorLaunch } from '../data/examSimulatorData';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -44,6 +46,9 @@ export const QuizView: React.FC = () => {
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [negativeMarking, setNegativeMarking] = useState<boolean>(true);
   const [timeMinutes, setTimeMinutes] = useState<number>(10);
+  const [activeExamTitle, setActiveExamTitle] = useState('Competitive Mock Test');
+  const [exactPatternMode, setExactPatternMode] = useState(false);
+  const [questionOpenedAt, setQuestionOpenedAt] = useState(Date.now());
 
   // Active Quiz State
   const [activeQuestions, setActiveQuestions] = useState<MCQ[]>([]);
@@ -55,6 +60,28 @@ export const QuizView: React.FC = () => {
 
   // Results State
   const [completedAttempt, setCompletedAttempt] = useState<QuizAttempt | null>(null);
+
+  const startExactPatternQuiz = (config: SimulatorLaunch) => {
+    const questions = buildExactPatternQuestions(MCQS_DATA, config);
+    setActiveQuestions(questions);
+    setCurrentIndex(0);
+    setUserAnswers({});
+    setFlaggedQuestions({});
+    setQuestionCount(config.questionCount);
+    setTimeMinutes(config.durationMinutes);
+    setNegativeMarking(config.negativeMarking);
+    setSecondsRemaining(config.durationMinutes * 60);
+    setQuizStartTime(Date.now());
+    setQuestionOpenedAt(Date.now());
+    setActiveExamTitle(config.title);
+    setExactPatternMode(true);
+    setQuizState('in-progress');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    setQuestionOpenedAt(Date.now());
+  }, [currentIndex]);
 
   // Start Quiz Handler
   const startQuiz = () => {
@@ -75,6 +102,9 @@ export const QuizView: React.FC = () => {
     const totalSecs = timeMinutes * 60;
     setSecondsRemaining(totalSecs);
     setQuizStartTime(Date.now());
+    setQuestionOpenedAt(Date.now());
+    setActiveExamTitle('Competitive Mock Test');
+    setExactPatternMode(false);
     setQuizState('in-progress');
   };
 
@@ -173,6 +203,8 @@ export const QuizView: React.FC = () => {
       {/* 1. CONFIGURATION VIEW */}
       {quizState === 'config' && (
         <div className="space-y-8 animate-in fade-in duration-200">
+
+          <ExactPatternSimulators onLaunch={startExactPatternQuiz} />
           
           <div className="text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3">
@@ -319,7 +351,7 @@ export const QuizView: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-                Competitive Mock Test
+                {activeExamTitle}
               </div>
               <div className="font-extrabold text-base text-slate-900 dark:text-white">
                 Question {currentIndex + 1} of {activeQuestions.length}
@@ -343,6 +375,12 @@ export const QuizView: React.FC = () => {
               Submit Test
             </button>
           </div>
+
+          {exactPatternMode && Math.floor((Date.now() - questionOpenedAt) / 1000) > 72 && (
+            <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+              Pacing alert: more than 1.2 minutes on this question. Mark it for review and protect time for the remaining sections.
+            </div>
+          )}
 
           {/* Current Question Box */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xs">
