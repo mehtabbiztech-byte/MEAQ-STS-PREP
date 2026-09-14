@@ -122,7 +122,7 @@ export const CurrentAffairsView: React.FC = () => {
               Pakistan & World Current Affairs <span className="text-emerald-400">MCQs Bank</span>
             </h1>
             <p className="text-emerald-100/90 text-xs sm:text-sm mt-2.5 leading-relaxed max-w-2xl">
-              2,000 source-aligned practice questions based on facts checked against official Pakistani and international sources. Repeated practice variants help candidates prepare for STS, SPSC, FPSC, NTS and PTS formats.
+              A growing library of distinct questions based on facts checked against official Pakistani and international sources. Every published count reflects a real question—never a rewritten duplicate.
             </p>
 
             {/* Quick stats chips */}
@@ -205,7 +205,7 @@ export const CurrentAffairsView: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={activeTab === 'mcqs' ? 'Search 2,000 MCQs, options, tags...' : 'Search events, summits, appointments...'}
+            placeholder={activeTab === 'mcqs' ? `Search ${allCurrentMcqs.length.toLocaleString()} verified MCQs...` : 'Search events, summits, appointments...'}
             className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
           />
         </div>
