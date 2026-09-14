@@ -18,6 +18,7 @@ import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { ExamCategory } from '../types';
 import { CssSyllabusExplorer } from '../components/CssSyllabusExplorer';
 import { CceSyllabusExplorer } from '../components/CceSyllabusExplorer';
+import { StsExamSimulator } from '../components/StsExamSimulator';
 import { PreparationRoomDashboard } from '../components/PreparationRoomDashboard';
 
 export const ExamsView: React.FC = () => {
@@ -31,7 +32,7 @@ export const ExamsView: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ExamCategory | 'all'>('all');
-  const [activeTab, setActiveTab] = useState<'overview' | 'syllabus' | 'mcqs' | 'papers' | 'resources'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'syllabus' | 'simulator' | 'mcqs' | 'papers' | 'resources'>('overview');
 
   // Currently selected exam
   const currentExam = useMemo(() => {
@@ -201,6 +202,9 @@ export const ExamsView: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-center gap-2.5">
                 {[
                   { id: 'overview', label: 'Exam Overview & Eligibility', icon: BookOpen },
+                  ...(currentExam.id === 'sts'
+                    ? [{ id: 'simulator', label: '⚡ STS 40–20–40 Simulator (100 Marks)', icon: Trophy }]
+                    : []),
                   { id: 'syllabus', label: 'Official Syllabus & Weightage', icon: FileText },
                   { id: 'mcqs', label: `Targeted MCQs (${examMcqs.length})`, icon: CheckCircle2 },
                   { id: 'papers', label: `Past Papers (${examPastPapers.length})`, icon: GraduationCap },
@@ -226,7 +230,11 @@ export const ExamsView: React.FC = () => {
           <PreparationRoomDashboard
             examId={currentExam.id}
             onStartMock={() => {
-              setTab('quiz');
+              if (currentExam.id === 'sts') {
+                setActiveTab('simulator');
+              } else {
+                setTab('quiz');
+              }
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onOpenPapers={() => {
@@ -235,6 +243,11 @@ export const ExamsView: React.FC = () => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
+
+          {/* Sub-tab 0: STS 100-Mark Simulator */}
+          {activeTab === 'simulator' && currentExam.id === 'sts' && (
+            <StsExamSimulator />
+          )}
 
           {/* Sub-tab 1: Overview */}
           {activeTab === 'overview' && (
@@ -301,6 +314,8 @@ export const ExamsView: React.FC = () => {
               <CssSyllabusExplorer />
             ) : currentExam.id === 'spsc-cce' ? (
               <CceSyllabusExplorer />
+            ) : currentExam.id === 'sts' ? (
+              <StsExamSimulator />
             ) : (
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs animate-in fade-in duration-150">
               <div className="flex items-center justify-between">

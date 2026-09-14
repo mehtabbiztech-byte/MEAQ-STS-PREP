@@ -25,8 +25,7 @@ import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
 import { getRankTierBadge } from '../lib/certificateService';
-import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
-import { buildExactPatternQuestions, SimulatorLaunch } from '../data/examSimulatorData';
+import { StsExamSimulator } from '../components/StsExamSimulator';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -40,15 +39,15 @@ export const QuizView: React.FC = () => {
     openCertificateModal
   } = useApp();
 
+  // Mode: Standard Quiz vs Dedicated STS 40-20-40 Simulator
+  const [simulatorMode, setSimulatorMode] = useState<'standard' | 'sts'>('standard');
+
   // Quiz Configuration State
   const [quizState, setQuizState] = useState<'config' | 'in-progress' | 'results'>('config');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [negativeMarking, setNegativeMarking] = useState<boolean>(true);
   const [timeMinutes, setTimeMinutes] = useState<number>(10);
-  const [activeExamTitle, setActiveExamTitle] = useState('Competitive Mock Test');
-  const [exactPatternMode, setExactPatternMode] = useState(false);
-  const [questionOpenedAt, setQuestionOpenedAt] = useState(Date.now());
 
   // Active Quiz State
   const [activeQuestions, setActiveQuestions] = useState<MCQ[]>([]);
@@ -60,28 +59,6 @@ export const QuizView: React.FC = () => {
 
   // Results State
   const [completedAttempt, setCompletedAttempt] = useState<QuizAttempt | null>(null);
-
-  const startExactPatternQuiz = (config: SimulatorLaunch) => {
-    const questions = buildExactPatternQuestions(MCQS_DATA, config);
-    setActiveQuestions(questions);
-    setCurrentIndex(0);
-    setUserAnswers({});
-    setFlaggedQuestions({});
-    setQuestionCount(config.questionCount);
-    setTimeMinutes(config.durationMinutes);
-    setNegativeMarking(config.negativeMarking);
-    setSecondsRemaining(config.durationMinutes * 60);
-    setQuizStartTime(Date.now());
-    setQuestionOpenedAt(Date.now());
-    setActiveExamTitle(config.title);
-    setExactPatternMode(true);
-    setQuizState('in-progress');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    setQuestionOpenedAt(Date.now());
-  }, [currentIndex]);
 
   // Start Quiz Handler
   const startQuiz = () => {
@@ -102,9 +79,6 @@ export const QuizView: React.FC = () => {
     const totalSecs = timeMinutes * 60;
     setSecondsRemaining(totalSecs);
     setQuizStartTime(Date.now());
-    setQuestionOpenedAt(Date.now());
-    setActiveExamTitle('Competitive Mock Test');
-    setExactPatternMode(false);
     setQuizState('in-progress');
   };
 
@@ -198,13 +172,44 @@ export const QuizView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+      {/* Top Mode Segmented Switcher */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+          <button
+            onClick={() => setSimulatorMode('standard')}
+            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+              simulatorMode === 'standard'
+                ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Clock className="w-4 h-4" />
+            <span>Custom Subject Quiz</span>
+          </button>
+          
+          <button
+            onClick={() => setSimulatorMode('sts')}
+            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+              simulatorMode === 'sts'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300'
+            }`}
+          >
+            <Trophy className="w-4 h-4 text-amber-300" />
+            <span>⚡ STS 40–20–40 Screening Simulator (100 Marks / 100 Mins)</span>
+          </button>
+        </div>
+      </div>
+
+      {simulatorMode === 'sts' ? (
+        <StsExamSimulator />
+      ) : (
+      <div className="max-w-5xl mx-auto space-y-8">
       {/* 1. CONFIGURATION VIEW */}
       {quizState === 'config' && (
         <div className="space-y-8 animate-in fade-in duration-200">
-
-          <ExactPatternSimulators onLaunch={startExactPatternQuiz} />
           
           <div className="text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3">
@@ -351,7 +356,7 @@ export const QuizView: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-                {activeExamTitle}
+                Competitive Mock Test
               </div>
               <div className="font-extrabold text-base text-slate-900 dark:text-white">
                 Question {currentIndex + 1} of {activeQuestions.length}
@@ -375,12 +380,6 @@ export const QuizView: React.FC = () => {
               Submit Test
             </button>
           </div>
-
-          {exactPatternMode && Math.floor((Date.now() - questionOpenedAt) / 1000) > 72 && (
-            <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-              Pacing alert: more than 1.2 minutes on this question. Mark it for review and protect time for the remaining sections.
-            </div>
-          )}
 
           {/* Current Question Box */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xs">
@@ -734,6 +733,9 @@ export const QuizView: React.FC = () => {
           </div>
 
         </div>
+      )}
+
+      </div>
       )}
 
     </div>
