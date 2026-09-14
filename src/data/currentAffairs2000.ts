@@ -85,24 +85,13 @@ const worldFacts: Fact[] = [
 
 const sources = Object.fromEntries(CURRENT_AFFAIRS_SOURCES.map(item => [item.id, item]));
 const examTags = ['STS', 'STS IBA', 'SPSC', 'FPSC', 'NTS', 'PTS'];
-const variants = [
-  (q: string, n: number) => `${q} (Practice set ${n})`,
-  (q: string, n: number) => `Select the correct answer for practice set ${n}: ${q}`,
-  (q: string, n: number) => `Current-affairs revision ${n}: ${q}`,
-  (q: string, n: number) => `Choose the verified fact in set ${n}: ${q}`,
-  (q: string, n: number) => `Test-preparation item ${n}: ${q}`,
-];
-const rotate = <T,>(items: T[], amount: number) => items.map((_, index) => items[(index + amount) % items.length]);
-
 function createBank(scope: 'Pakistan' | 'World', facts: Fact[]): MCQ[] {
-  return Array.from({ length: 1000 }, (_, index) => {
-    const fact = facts[index % facts.length];
-    const round = Math.floor(index / facts.length) + 1;
+  return facts.map((fact, index) => {
     const options = rotate([fact.answer, ...fact.distractors], index % 4);
     const source = sources[fact.sourceId];
     return {
       id: `${scope === 'Pakistan' ? 'pca' : 'wca'}-${String(index + 1).padStart(4, '0')}`,
-      question: variants[index % variants.length](fact.prompt, round),
+      question: fact.prompt,
       options,
       correctIndex: options.indexOf(fact.answer),
       explanation: `${fact.explanation} Verified against ${source.publisher}; source checked ${source.checkedOn}.`,
@@ -114,12 +103,17 @@ function createBank(scope: 'Pakistan' | 'World', facts: Fact[]): MCQ[] {
       sourceId: fact.sourceId,
       sourceUrl: source.url,
       verificationStatus: 'source-aligned',
-      verificationMethod: 'Answer mapped to a curated fact record checked against the linked official or intergovernmental source.',
+      verificationMethod: 'Answer mapped to one distinct curated fact checked against the linked official or intergovernmental source.',
       submittedBy: 'MEQSA Current Affairs Research Desk',
     };
   });
 }
 
+/**
+ * Compatibility aliases retained for existing imports.
+ * These arrays now contain distinct source-aligned questions only. Their
+ * lengths must never be padded with paraphrased duplicates.
+ */
 export const PAKISTAN_CURRENT_AFFAIRS_1000 = createBank('Pakistan', pakistanFacts);
 export const WORLD_CURRENT_AFFAIRS_1000 = createBank('World', worldFacts);
 export const CURRENT_AFFAIRS_2000 = [...PAKISTAN_CURRENT_AFFAIRS_1000, ...WORLD_CURRENT_AFFAIRS_1000];
