@@ -17,6 +17,7 @@ import { MCQS_DATA } from '../data/mcqsData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { ExamCategory } from '../types';
 import { CssSyllabusExplorer } from '../components/CssSyllabusExplorer';
+import { CceSyllabusExplorer } from '../components/CceSyllabusExplorer';
 import { PreparationRoomDashboard } from '../components/PreparationRoomDashboard';
 
 export const ExamsView: React.FC = () => {
@@ -298,6 +299,8 @@ export const ExamsView: React.FC = () => {
           {activeTab === 'syllabus' && (
             currentExam.id === 'css' ? (
               <CssSyllabusExplorer />
+            ) : currentExam.id === 'spsc-cce' ? (
+              <CceSyllabusExplorer />
             ) : (
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs animate-in fade-in duration-150">
               <div className="flex items-center justify-between">
