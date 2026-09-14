@@ -350,6 +350,13 @@ export const Navbar: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const openExamHub = (examId: 'sts' | 'fpsc' | 'spsc-cce') => {
+    setSelectedExamId(examId);
+    setTab('exams');
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const openKids = () => {
     updatePersona('kids');
     setTab('home');
@@ -597,6 +604,31 @@ export const Navbar: React.FC = () => {
                     {isActive && (
                       <span className="absolute -bottom-[1px] left-3 right-3 h-[2px] bg-white/70 rounded-full" />
                     )}
+                  </button>
+                );
+              })}
+
+              {/* One-click exam hubs: keep the selected exam and open its complete preparation room */}
+              {[
+                { id: 'sts' as const, label: 'STS IBA', tone: 'from-emerald-600 to-teal-600', dot: 'bg-emerald-300' },
+                { id: 'fpsc' as const, label: 'FPSC', tone: 'from-violet-600 to-indigo-600', dot: 'bg-violet-300' },
+                { id: 'spsc-cce' as const, label: 'SPSC', tone: 'from-sky-600 to-cyan-600', dot: 'bg-sky-300' },
+              ].map((exam) => {
+                const isSelected = tab === 'exams' && selectedExamId === exam.id;
+                return (
+                  <button
+                    key={exam.id}
+                    onClick={() => openExamHub(exam.id)}
+                    aria-label={`Open ${exam.label} complete preparation room`}
+                    className={`group inline-flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2.5 text-xs font-extrabold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                      isSelected
+                        ? `border-transparent bg-gradient-to-r ${exam.tone} text-white ring-2 ring-white/70`
+                        : 'border-slate-200 bg-white text-slate-800 hover:border-emerald-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
+                    }`}
+                  >
+                    <span className={`h-2 w-2 rounded-full ${isSelected ? 'bg-white' : exam.dot}`} />
+                    {exam.label}
+                    <ChevronRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                   </button>
                 );
               })}
