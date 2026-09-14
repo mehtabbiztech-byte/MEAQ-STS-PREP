@@ -165,11 +165,19 @@ export interface JobAlert {
   postsCount: number;
   vacancies?: number;
   lastDate: string;
+  publishedDate?: string;
   eligibility: string;
   qualification?: string;
+  experience?: string;
+  ageLimit?: string;
+  applicationMethod?: string;
   examCategory?: string;
   advertisementNo: string;
-  status: 'Active' | 'Closing Soon' | 'Announced';
+  sourceUrl?: string;
+  applyUrl?: string;
+  sourceLabel?: string;
+  verifiedAt?: string;
+  status: 'Active' | 'Closing Soon' | 'Announced' | 'Walk-in';
 }
 
 export interface StudyNote {
