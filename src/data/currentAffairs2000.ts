@@ -85,6 +85,8 @@ const worldFacts: Fact[] = [
 
 const sources = Object.fromEntries(CURRENT_AFFAIRS_SOURCES.map(item => [item.id, item]));
 const examTags = ['STS', 'STS IBA', 'SPSC', 'FPSC', 'NTS', 'PTS'];
+const rotate = <T,>(items: T[], amount: number) => items.map((_, index) => items[(index + amount) % items.length]);
+
 function createBank(scope: 'Pakistan' | 'World', facts: Fact[]): MCQ[] {
   return facts.map((fact, index) => {
     const options = rotate([fact.answer, ...fact.distractors], index % 4);
