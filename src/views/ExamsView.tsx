@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   GraduationCap, 
@@ -33,6 +33,13 @@ export const ExamsView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ExamCategory | 'all'>('all');
   const [activeTab, setActiveTab] = useState<'overview' | 'syllabus' | 'simulator' | 'mcqs' | 'papers' | 'resources'>('overview');
+
+  // Quick-access buttons always reopen the selected exam at its complete preparation-room overview.
+  useEffect(() => {
+    setActiveTab('overview');
+    setSearchQuery('');
+    setSelectedCategory('all');
+  }, [selectedExamId]);
 
   // Currently selected exam
   const currentExam = useMemo(() => {
