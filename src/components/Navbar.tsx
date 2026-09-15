@@ -263,6 +263,7 @@ export const Navbar: React.FC = () => {
     userProfile,
     updatePersona,
     setSelectedCategorySlug,
+    selectedExamId,
     setSelectedExamId
   } = useApp();
 
