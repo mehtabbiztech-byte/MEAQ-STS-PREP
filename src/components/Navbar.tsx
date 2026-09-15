@@ -555,7 +555,39 @@ export const Navbar: React.FC = () => {
         >
           <div className="max-w-7xl mx-auto w-full">
             {/* Scrollable container with no scrollbars; smooth horizontal touch pan without spilling to body */}
-            <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-2.5 overflow-x-auto no-scrollbar scroll-smooth py-0.5 w-full max-w-full touch-pan-x justify-start lg:justify-between">
+            <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-2.5 overflow-x-auto no-scrollbar scroll-smooth py-0.5 w-full max-w-full touch-pan-x justify-start">
+              {/* Main exam rooms stay first and visible; each tab opens its complete linked hub. */}
+              {[
+                { id: 'sts' as const, label: 'STS IBA', tone: 'from-emerald-600 to-teal-600', dot: 'bg-emerald-500' },
+                { id: 'spsc-cce' as const, label: 'SPSC', tone: 'from-sky-600 to-cyan-600', dot: 'bg-sky-500' },
+                { id: 'fpsc' as const, label: 'FPSC', tone: 'from-violet-600 to-indigo-600', dot: 'bg-violet-500' },
+              ].map((exam) => {
+                const isSelected = tab === 'exams' && selectedExamId === exam.id;
+                return (
+                  <button
+                    key={exam.id}
+                    id={`main-exam-tab-${exam.id}`}
+                    onClick={() => openExamHub(exam.id)}
+                    aria-label={`Open ${exam.label} complete preparation room`}
+                    aria-current={isSelected ? 'page' : undefined}
+                    className={`group relative inline-flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm font-extrabold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                      isSelected
+                        ? `border-transparent bg-gradient-to-r ${exam.tone} text-white ring-2 ring-white/70`
+                        : 'border-slate-200 bg-white text-slate-900 hover:border-emerald-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
+                    }`}
+                  >
+                    <span className={`h-2 w-2 rounded-full ${isSelected ? 'bg-white' : exam.dot}`} />
+                    {exam.label}
+                    <span className={`hidden xl:inline rounded-full px-1.5 py-0.5 text-[9px] font-black tracking-wider ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300'}`}>
+                      MAIN
+                    </span>
+                    <ChevronRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                  </button>
+                );
+              })}
+
+              <span className="mx-0.5 h-7 w-px shrink-0 bg-slate-200 dark:bg-slate-700" aria-hidden="true" />
+
               {navItems.map((item) => {
                 const isActive = tab === item.id;
                 return (
@@ -609,30 +641,6 @@ export const Navbar: React.FC = () => {
                 );
               })}
 
-              {/* One-click exam hubs: keep the selected exam and open its complete preparation room */}
-              {[
-                { id: 'sts' as const, label: 'STS IBA', tone: 'from-emerald-600 to-teal-600', dot: 'bg-emerald-300' },
-                { id: 'fpsc' as const, label: 'FPSC', tone: 'from-violet-600 to-indigo-600', dot: 'bg-violet-300' },
-                { id: 'spsc-cce' as const, label: 'SPSC', tone: 'from-sky-600 to-cyan-600', dot: 'bg-sky-300' },
-              ].map((exam) => {
-                const isSelected = tab === 'exams' && selectedExamId === exam.id;
-                return (
-                  <button
-                    key={exam.id}
-                    onClick={() => openExamHub(exam.id)}
-                    aria-label={`Open ${exam.label} complete preparation room`}
-                    className={`group inline-flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2.5 text-xs font-extrabold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-                      isSelected
-                        ? `border-transparent bg-gradient-to-r ${exam.tone} text-white ring-2 ring-white/70`
-                        : 'border-slate-200 bg-white text-slate-800 hover:border-emerald-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
-                    }`}
-                  >
-                    <span className={`h-2 w-2 rounded-full ${isSelected ? 'bg-white' : exam.dot}`} />
-                    {exam.label}
-                    <ChevronRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                  </button>
-                );
-              })}
             </div>
           </div>
         </nav>
@@ -682,6 +690,31 @@ export const Navbar: React.FC = () => {
                   <Search className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span className="truncate">Search 5,000+ STS MCQs, exams and past papers...</span>
                 </button>
+              </div>
+
+              {/* Mobile main exam rooms */}
+              <div className="grid grid-cols-3 gap-2" aria-label="Main exam preparation rooms">
+                {[
+                  { id: 'sts' as const, label: 'STS IBA', tone: 'from-emerald-600 to-teal-600' },
+                  { id: 'spsc-cce' as const, label: 'SPSC', tone: 'from-sky-600 to-cyan-600' },
+                  { id: 'fpsc' as const, label: 'FPSC', tone: 'from-violet-600 to-indigo-600' },
+                ].map((exam) => {
+                  const isSelected = tab === 'exams' && selectedExamId === exam.id;
+                  return (
+                    <button
+                      key={exam.id}
+                      onClick={() => openExamHub(exam.id)}
+                      aria-current={isSelected ? 'page' : undefined}
+                      className={`rounded-xl border px-2 py-3 text-xs font-extrabold shadow-sm transition ${
+                        isSelected
+                          ? `border-transparent bg-gradient-to-r ${exam.tone} text-white`
+                          : 'border-slate-200 bg-white text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
+                      }`}
+                    >
+                      {exam.label}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Official Mobile Headers as Bold Buttons with Space & Official Theme */}
