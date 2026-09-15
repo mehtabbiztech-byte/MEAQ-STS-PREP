@@ -26,6 +26,7 @@ import { RankingsView } from './views/RankingsView';
 import { AboutView } from './views/AboutView';
 import { SavedMcqsView } from './views/SavedMcqsView';
 import { AdminView } from './views/AdminView';
+import { LearningLabView } from './views/LearningLabView';
 
 const MainContent: React.FC = () => {
   const { 
@@ -56,6 +57,7 @@ const MainContent: React.FC = () => {
         {tab === 'jobs' && <JobsView />}
         {tab === 'study-notes' && <StudyNotesView />}
         {tab === 'rankings' && <RankingsView />}
+        {tab === 'learning-lab' && <LearningLabView />}
         {tab === 'about' && <AboutView />}
         {tab === 'bookmarks' && <SavedMcqsView initialSubTab="bookmarks" />}
         {tab === 'mistakes' && <SavedMcqsView initialSubTab="mistakes" />}
