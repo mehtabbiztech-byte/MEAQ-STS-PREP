@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { NavigationTab, UserProfile, QuizAttempt, ThemeStyle, UserPersona, QuizCertificate } from '../types';
+import { SimulatorLaunch } from '../data/examSimulatorData';
 import { 
   auth, 
   googleProvider, 
@@ -82,6 +83,11 @@ interface AppContextType {
   openCertificateModal: (cert: QuizCertificate) => void;
   closeCertificateModal: () => void;
   updateCertificateCandidateName: (newName: string) => void;
+
+  // Simulator Launch State & Actions
+  pendingSimulatorLaunch: SimulatorLaunch | null;
+  setPendingSimulatorLaunch: (launch: SimulatorLaunch | null) => void;
+  launchSimulator: (launch: SimulatorLaunch) => void;
 }
 
 const INITIAL_CERTIFICATE: QuizCertificate = {
@@ -152,6 +158,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Certificate Modal State
   const [activeCertificate, setActiveCertificate] = useState<QuizCertificate | null>(INITIAL_CERTIFICATE);
   const [isCertificateModalOpen, setIsCertificateModalOpen] = useState<boolean>(false);
+
+  // Exact Pattern Simulator Launch
+  const [pendingSimulatorLaunch, setPendingSimulatorLaunch] = useState<SimulatorLaunch | null>(null);
+
+  const launchSimulator = useCallback((launch: SimulatorLaunch) => {
+    setPendingSimulatorLaunch(launch);
+    setTab('quiz');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const openCertificateModal = useCallback((cert: QuizCertificate) => {
     setActiveCertificate(cert);
@@ -559,6 +574,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         openCertificateModal,
         closeCertificateModal,
         updateCertificateCandidateName,
+        pendingSimulatorLaunch,
+        setPendingSimulatorLaunch,
+        launchSimulator,
       }}
     >
       {children}

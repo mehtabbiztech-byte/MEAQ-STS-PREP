@@ -1,6 +1,6 @@
 {
   "name": "MATB STS PREP",
-  "description": "Pakistan's all-in-one learning and exam preparation platform for kids, school, college, university, job tests and competitive examinations.",
+  "description": "Pakistan's premier competitive exam portal featuring exact Sukkur IBA STS BPS 05–15 (40–20–40) Screening, FPSC One-Paper tests, FIA/Customs law modules, and Carbon-Copy OMR evaluation.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

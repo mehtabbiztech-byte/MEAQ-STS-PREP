@@ -72,7 +72,8 @@ export const HomeView: React.FC = () => {
     setSelectedPastPaperId,
     setSearchOpen,
     toggleBookmark,
-    isBookmarked
+    isBookmarked,
+    launchSimulator
   } = useApp();
 
   const [searchInput, setSearchInput] = useState('');
@@ -147,7 +148,7 @@ export const HomeView: React.FC = () => {
               className="px-8 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 backdrop-blur-xl text-white font-semibold text-base border border-white/20 hover:border-cyan-200/50 shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
             >
               <Trophy className="w-5 h-5 text-amber-400" />
-              <span>Take a Timed Quiz</span>
+              <span>⚡ STS & FPSC Simulator (100 Marks)</span>
             </button>
           </div>
 
@@ -358,6 +359,104 @@ export const HomeView: React.FC = () => {
             >
               Practice More Pakistan Studies MCQs →
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 3.5 OFFICIAL STS & FPSC PATTERN SIMULATORS & OMR CHECKER */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950 text-white rounded-3xl p-6 sm:p-10 border border-emerald-500/30 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="relative z-10 space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>Exact Official Blueprints & Carbon-Copy OMR Suite</span>
+              </div>
+              <span className="text-xs text-slate-400 font-mono">100 Marks • 100 Minutes • Official Blueprints</span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white font-display">
+                  STS BPS 05–15 & FPSC One-Paper Exam Simulators
+                </h3>
+                <p className="text-slate-300 text-sm sm:text-base mt-2 leading-relaxed">
+                  Practice under verified official test formats. Experience Sukkur IBA’s strict 40–20–40 sectional split, FPSC General Recruitment & Professional Law papers, and evaluate your responses with our virtual Carbon-Copy OMR Key Checker.
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  <button
+                    onClick={() => {
+                      launchSimulator({
+                        simulatorId: 'sts',
+                        category: 'Graduation (BPS 11–15)',
+                        negativeMarking: false,
+                        timeMinutes: 100,
+                      });
+                    }}
+                    className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-emerald-950/40 transition cursor-pointer flex items-center gap-2"
+                  >
+                    <Trophy className="w-4 h-4 text-amber-300" />
+                    <span>Launch STS 100-Mark Mock</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      launchSimulator({
+                        simulatorId: 'fpsc',
+                        category: 'General Recruitment',
+                        negativeMarking: false,
+                        timeMinutes: 100,
+                      });
+                    }}
+                    className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold text-xs sm:text-sm border border-slate-700 hover:border-slate-600 transition cursor-pointer flex items-center gap-2"
+                  >
+                    <BookOpenCheck className="w-4 h-4 text-cyan-300" />
+                    <span>Launch FPSC One-Paper Mock</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setTab('quiz');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs sm:text-sm border border-white/20 transition cursor-pointer flex items-center gap-2"
+                  >
+                    <span>Open Carbon-Copy OMR Suite →</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm space-y-2">
+                  <div className="flex items-center justify-between text-xs text-emerald-400 font-bold">
+                    <span>Sukkur IBA STS (40–20–40)</span>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 text-[10px]">Active</span>
+                  </div>
+                  <ul className="text-xs text-slate-300 space-y-1">
+                    <li>• English (40 Marks): RC, Syn/Ant, Spellings</li>
+                    <li>• Mathematics (20 Marks): Arithmetic, Algebra</li>
+                    <li>• General Knowledge (40 Marks): GK, Science, CA</li>
+                    <li>• Tiers: Graduation, Inter, Matric, PST/JEST</li>
+                  </ul>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm space-y-2">
+                  <div className="flex items-center justify-between text-xs text-cyan-400 font-bold">
+                    <span>FPSC One-Paper & Laws</span>
+                    <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 text-[10px]">Active</span>
+                  </div>
+                  <ul className="text-xs text-slate-300 space-y-1">
+                    <li>• Part I: English Grammar & Vocab (20%)</li>
+                    <li>• Part II: Professional & Law Modules (80%)</li>
+                    <li>• FIA Act 1974, PECA 2016, AML Act 2010</li>
+                    <li>• Customs Act 1969 & PPRA Rules 2004</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

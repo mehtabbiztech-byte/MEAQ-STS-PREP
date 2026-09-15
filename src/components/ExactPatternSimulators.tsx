@@ -12,6 +12,8 @@ import {
 
 interface Props {
   onLaunch: (config: SimulatorLaunch) => void;
+  defaultSimulator?: SimulatorId;
+  defaultTab?: 'patterns' | 'laws' | 'omr';
 }
 
 const STS_TIERS: StsTier[] = ['Graduation (BPS 11–15)', 'Intermediate (BPS 05–10)', 'Matric (BPS 05)', 'PST', 'JEST'];
@@ -19,9 +21,13 @@ const FPSC_TRACKS: FpscTrack[] = ['General Recruitment', 'FIA Professional', 'Cu
 const KEY_COLORS = ['Green', 'Pink', 'Blue', 'Yellow'] as const;
 const ANSWERS = ['A', 'B', 'C', 'D'];
 
-export const ExactPatternSimulators: React.FC<Props> = ({ onLaunch }) => {
-  const [tab, setTab] = useState<'patterns' | 'laws' | 'omr'>('patterns');
-  const [simulator, setSimulator] = useState<SimulatorId>('sts');
+export const ExactPatternSimulators: React.FC<Props> = ({ 
+  onLaunch,
+  defaultSimulator = 'sts',
+  defaultTab = 'patterns'
+}) => {
+  const [tab, setTab] = useState<'patterns' | 'laws' | 'omr'>(defaultTab);
+  const [simulator, setSimulator] = useState<SimulatorId>(defaultSimulator);
   const [stsTier, setStsTier] = useState<StsTier>('Graduation (BPS 11–15)');
   const [fpscTrack, setFpscTrack] = useState<FpscTrack>('General Recruitment');
   const [omrAnswers, setOmrAnswers] = useState<Record<number, number>>({});

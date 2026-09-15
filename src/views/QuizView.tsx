@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   Trophy, 
@@ -26,10 +26,8 @@ import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
 import { getRankTierBadge } from '../lib/certificateService';
 import { StsExamSimulator } from '../components/StsExamSimulator';
-import { AnswerEvent, RecallGrade, scheduleReview, SrsCard } from '../lib/adaptiveLearning';
-
-const ANSWER_EVENTS_KEY = 'matb_answer_events_v1';
-const SRS_STORAGE_KEY = 'matb_learning_engine_v1';
+import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
+import { buildExactPatternQuestions, SimulatorLaunch } from '../data/examSimulatorData';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -40,14 +38,17 @@ export const QuizView: React.FC = () => {
     isBookmarked,
     userProfile,
     setTab,
-    openCertificateModal
+    openCertificateModal,
+    pendingSimulatorLaunch,
+    setPendingSimulatorLaunch
   } = useApp();
 
-  // Mode: Standard Quiz vs Dedicated STS 40-20-40 Simulator
-  const [simulatorMode, setSimulatorMode] = useState<'standard' | 'sts'>('standard');
+  // Mode: Exact Pattern & OMR vs STS 40-20-40 Simulator vs Custom Quiz
+  const [simulatorMode, setSimulatorMode] = useState<'exact-pattern' | 'sts' | 'standard'>('exact-pattern');
 
   // Quiz Configuration State
   const [quizState, setQuizState] = useState<'config' | 'in-progress' | 'results'>('config');
+  const [quizTitle, setQuizTitle] = useState<string>('Full Competitive Mock');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [negativeMarking, setNegativeMarking] = useState<boolean>(true);
@@ -60,14 +61,35 @@ export const QuizView: React.FC = () => {
   const [flaggedQuestions, setFlaggedQuestions] = useState<Record<number, boolean>>({});
   const [secondsRemaining, setSecondsRemaining] = useState<number>(600);
   const [quizStartTime, setQuizStartTime] = useState<number>(0);
-  const [firstAnswers, setFirstAnswers] = useState<Record<number, number>>({});
-  const [questionTimeSeconds, setQuestionTimeSeconds] = useState<Record<number, number>>({});
-  const questionOpenedAt = useRef<number>(Date.now());
 
   // Results State
   const [completedAttempt, setCompletedAttempt] = useState<QuizAttempt | null>(null);
 
-  // Start Quiz Handler
+  // Launch from Exact Pattern Simulator
+  const handleLaunchFromSimulator = (launch: SimulatorLaunch) => {
+    const questions = buildExactPatternQuestions(MCQS_DATA, launch);
+    setActiveQuestions(questions);
+    setCurrentIndex(0);
+    setUserAnswers({});
+    setFlaggedQuestions({});
+    const duration = launch.timeMinutes || launch.durationMinutes || 100;
+    setNegativeMarking(launch.negativeMarking);
+    setTimeMinutes(duration);
+    setSecondsRemaining(duration * 60);
+    setQuizTitle(launch.title || `${launch.simulatorId.toUpperCase()} ${launch.category} Simulator`);
+    setQuizStartTime(Date.now());
+    setQuizState('in-progress');
+  };
+
+  // Consume any pending simulator launch from context
+  useEffect(() => {
+    if (pendingSimulatorLaunch) {
+      handleLaunchFromSimulator(pendingSimulatorLaunch);
+      setPendingSimulatorLaunch(null);
+    }
+  }, [pendingSimulatorLaunch, setPendingSimulatorLaunch]);
+
+  // Start Quiz Handler (Standard Custom Mode)
   const startQuiz = () => {
     let pool = [...MCQS_DATA];
     if (selectedCategory !== 'all') {
@@ -82,13 +104,11 @@ export const QuizView: React.FC = () => {
     setActiveQuestions(shuffled);
     setCurrentIndex(0);
     setUserAnswers({});
-    setFirstAnswers({});
-    setQuestionTimeSeconds({});
     setFlaggedQuestions({});
     const totalSecs = timeMinutes * 60;
     setSecondsRemaining(totalSecs);
+    setQuizTitle(selectedCategory === 'all' ? 'Full Competitive Mock' : `${selectedCategory.toUpperCase()} Subject Mock`);
     setQuizStartTime(Date.now());
-    questionOpenedAt.current = Date.now();
     setQuizState('in-progress');
   };
 
@@ -135,45 +155,10 @@ export const QuizView: React.FC = () => {
 
     const finalScore = Math.max(0, Number(rawScore.toFixed(2)));
 
-    const currentQuestionSeconds = Math.max(1, Math.round((Date.now() - questionOpenedAt.current) / 1000));
-    const finalTimes = {
-      ...questionTimeSeconds,
-      [currentIndex]: (questionTimeSeconds[currentIndex] || 0) + currentQuestionSeconds,
-    };
-    const answerEvents: AnswerEvent[] = activeQuestions.map((mcq, idx) => ({
-      questionId: mcq.id,
-      topic: mcq.subtopic || mcq.category,
-      firstAnswer: firstAnswers[idx] ?? userAnswers[idx] ?? -1,
-      finalAnswer: userAnswers[idx] ?? -1,
-      correctAnswer: mcq.correctIndex,
-      timeSpentSeconds: finalTimes[idx] || 0,
-      changedAnswer: firstAnswers[idx] !== undefined && firstAnswers[idx] !== userAnswers[idx],
-    }));
-    try {
-      const previousEvents: AnswerEvent[] = JSON.parse(localStorage.getItem(ANSWER_EVENTS_KEY) || '[]');
-      localStorage.setItem(ANSWER_EVENTS_KEY, JSON.stringify([...previousEvents, ...answerEvents].slice(-200)));
-      const previousCards: SrsCard[] = JSON.parse(localStorage.getItem(SRS_STORAGE_KEY) || '[]');
-      const cardMap = new Map(previousCards.map((card) => [card.questionId, card]));
-      answerEvents.forEach((event) => {
-        const card = cardMap.get(event.questionId) || {
-          questionId: event.questionId,
-          topic: event.topic,
-          repetitions: 0,
-          intervalDays: 1,
-          easeFactor: 2.5,
-          dueAt: new Date().toISOString(),
-          lastGrade: 0 as RecallGrade,
-        };
-        const grade: RecallGrade = event.finalAnswer === event.correctAnswer ? 4 : 2;
-        cardMap.set(event.questionId, scheduleReview(card, grade));
-      });
-      localStorage.setItem(SRS_STORAGE_KEY, JSON.stringify([...cardMap.values()]));
-    } catch { /* quiz completion must never fail because local analytics storage is unavailable */ }
-
     const attempt: QuizAttempt = {
       id: `attempt-${Date.now()}`,
       date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-      title: `${selectedCategory === 'all' ? 'Full Competitive Mock' : selectedCategory.toUpperCase()} Quiz`,
+      title: `${quizTitle} (${activeQuestions.length} MCQs)`,
       totalQuestions: activeQuestions.length,
       score: finalScore,
       timeSpentSeconds: timeSpent,
@@ -216,189 +201,193 @@ export const QuizView: React.FC = () => {
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  const moveToQuestion = (nextIndex: number) => {
-    const elapsed = Math.max(1, Math.round((Date.now() - questionOpenedAt.current) / 1000));
-    setQuestionTimeSeconds((previous) => ({ ...previous, [currentIndex]: (previous[currentIndex] || 0) + elapsed }));
-    questionOpenedAt.current = Date.now();
-    setCurrentIndex(nextIndex);
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
       {/* Top Mode Segmented Switcher */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
-          <button
-            onClick={() => setSimulatorMode('standard')}
-            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
-              simulatorMode === 'standard'
-                ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-            }`}
-          >
-            <Clock className="w-4 h-4" />
-            <span>Custom Subject Quiz</span>
-          </button>
-          
-          <button
-            onClick={() => setSimulatorMode('sts')}
-            className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
-              simulatorMode === 'sts'
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
-                : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300'
-            }`}
-          >
-            <Trophy className="w-4 h-4 text-amber-300" />
-            <span>⚡ STS 40–20–40 Screening Simulator (100 Marks / 100 Mins)</span>
-          </button>
-        </div>
-      </div>
-
-      {simulatorMode === 'sts' ? (
-        <StsExamSimulator />
-      ) : (
-      <div className="max-w-5xl mx-auto space-y-8">
-      {/* 1. CONFIGURATION VIEW */}
       {quizState === 'config' && (
-        <div className="space-y-8 animate-in fade-in duration-200">
-          
-          <div className="text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3">
-              <Trophy className="w-3.5 h-3.5 text-amber-500" />
-              <span>Real Exam Simulator</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-display">
-              Timed Online Competitive Quiz
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
-              Practice under exact examination conditions with timer countdown, negative marking penalty, and instant mistake notebook generation.
-            </p>
-          </div>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+            <button
+              onClick={() => setSimulatorMode('exact-pattern')}
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+                simulatorMode === 'exact-pattern'
+                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300'
+              }`}
+            >
+              <Trophy className="w-4 h-4 text-amber-300" />
+              <span>⚡ STS & FPSC Exact Pattern + OMR</span>
+            </button>
 
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-sm space-y-6">
-            
-            {/* Choose Subject */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                1. Select Subject Discipline
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <button
-                  onClick={() => setSelectedCategory('all')}
-                  className={`p-3 rounded-xl border text-xs font-bold transition cursor-pointer text-left ${
-                    selectedCategory === 'all'
-                      ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-700 dark:text-slate-300'
-                  }`}
-                >
-                  Mixed Grand Mock (All Subjects)
-                </button>
-                {POPULAR_CATEGORIES.slice(0, 7).map((cat) => (
+            <button
+              onClick={() => setSimulatorMode('sts')}
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+                simulatorMode === 'sts'
+                  ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>STS Screening Paper (40–20–40)</span>
+            </button>
+
+            <button
+              onClick={() => setSimulatorMode('standard')}
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+                simulatorMode === 'standard'
+                  ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Clock className="w-4 h-4" />
+              <span>Custom Subject Quiz</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {quizState === 'config' ? (
+        simulatorMode === 'exact-pattern' ? (
+          <ExactPatternSimulators onLaunch={handleLaunchFromSimulator} />
+        ) : simulatorMode === 'sts' ? (
+          <StsExamSimulator />
+        ) : (
+          <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-200">
+            <div className="text-center max-w-2xl mx-auto">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3">
+                <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                <span>Real Exam Simulator</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-display">
+                Timed Online Competitive Quiz
+              </h1>
+              <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
+                Practice under exact examination conditions with timer countdown, negative marking penalty, and instant mistake notebook generation.
+              </p>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-sm space-y-6">
+              {/* Choose Subject */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                  1. Select Subject Discipline
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.slug)}
+                    onClick={() => setSelectedCategory('all')}
                     className={`p-3 rounded-xl border text-xs font-bold transition cursor-pointer text-left ${
-                      selectedCategory === cat.slug
+                      selectedCategory === 'all'
                         ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500'
                         : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-700 dark:text-slate-300'
                     }`}
                   >
-                    {cat.name}
+                    Mixed Grand Mock (All Subjects)
                   </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Questions & Duration */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
-              
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  2. Number of Questions
-                </label>
-                <div className="flex gap-2">
-                  {[5, 10, 15, 20].map((num) => (
+                  {POPULAR_CATEGORIES.slice(0, 7).map((cat) => (
                     <button
-                      key={num}
-                      onClick={() => setQuestionCount(num)}
-                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
-                        questionCount === num
-                          ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
-                          : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.slug)}
+                      className={`p-3 rounded-xl border text-xs font-bold transition cursor-pointer text-left ${
+                        selectedCategory === cat.slug
+                          ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500'
+                          : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-700 dark:text-slate-300'
                       }`}
                     >
-                      {num} MCQs
+                      {cat.name}
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  3. Time Limit
-                </label>
-                <div className="flex gap-2">
-                  {[5, 10, 15, 20].map((mins) => (
-                    <button
-                      key={mins}
-                      onClick={() => setTimeMinutes(mins)}
-                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
-                        timeMinutes === mins
-                          ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
-                          : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      {mins} Mins
-                    </button>
-                  ))}
+              {/* Questions & Duration */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                    2. Number of Questions
+                  </label>
+                  <div className="flex gap-2">
+                    {[5, 10, 15, 20].map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => setQuestionCount(num)}
+                        className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
+                          questionCount === num
+                            ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
+                            : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {num} MCQs
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                    3. Time Limit
+                  </label>
+                  <div className="flex gap-2">
+                    {[5, 10, 15, 20].map((mins) => (
+                      <button
+                        key={mins}
+                        onClick={() => setTimeMinutes(mins)}
+                        className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
+                          timeMinutes === mins
+                            ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
+                            : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {mins} Mins
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-            </div>
-
-            {/* Negative Marking Toggle */}
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <span>PPSC / Commission Negative Marking (-0.25)</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Standard</span>
+              {/* Negative Marking Toggle */}
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <div className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span>PPSC / Commission Negative Marking (-0.25)</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Standard</span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Deduct 0.25 marks for every incorrect answer (identical to PPSC, SPSC, and PMS exams).
+                  </p>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Deduct 0.25 marks for every incorrect answer (identical to PPSC, SPSC, and PMS exams).
-                </p>
-              </div>
 
-              <button
-                type="button"
-                onClick={() => setNegativeMarking((prev) => !prev)}
-                className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  negativeMarking ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
-                }`}
-              >
-                <span
-                  className={`block w-4 h-4 rounded-full bg-white shadow-xs transform transition-transform ${
-                    negativeMarking ? 'translate-x-7' : 'translate-x-1'
+                <button
+                  type="button"
+                  onClick={() => setNegativeMarking((prev) => !prev)}
+                  className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
+                    negativeMarking ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
                   }`}
-                />
-              </button>
-            </div>
+                >
+                  <span
+                    className={`block w-4 h-4 rounded-full bg-white shadow-xs transform transition-transform ${
+                      negativeMarking ? 'translate-x-7' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
 
-            {/* Launch Button */}
-            <div className="pt-4">
-              <button
-                id="start-quiz-btn"
-                onClick={startQuiz}
-                className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-base shadow-lg shadow-emerald-900/30 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
-              >
-                <span>Start Timed Mock Exam Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              {/* Launch Button */}
+              <div className="pt-4">
+                <button
+                  id="start-quiz-btn"
+                  onClick={startQuiz}
+                  className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-base shadow-lg shadow-emerald-900/30 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span>Start Timed Mock Exam Now</span>
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-
           </div>
-        </div>
-      )}
+        )
+      ) : (
+        <div className="max-w-5xl mx-auto space-y-8">
 
       {/* 2. IN-PROGRESS QUIZ VIEW */}
       {quizState === 'in-progress' && activeQuestions.length > 0 && (
@@ -408,7 +397,7 @@ export const QuizView: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-                Competitive Mock Test
+                {quizTitle}
               </div>
               <div className="font-extrabold text-base text-slate-900 dark:text-white">
                 Question {currentIndex + 1} of {activeQuestions.length}
@@ -470,7 +459,6 @@ export const QuizView: React.FC = () => {
                   <button
                     key={idx}
                     onClick={() => {
-                      setFirstAnswers((prev) => prev[currentIndex] === undefined ? { ...prev, [currentIndex]: idx } : prev);
                       setUserAnswers((prev) => ({ ...prev, [currentIndex]: idx }));
                     }}
                     className={`w-full p-4 rounded-xl border text-left text-sm font-medium transition flex items-center justify-between cursor-pointer ${
@@ -502,7 +490,7 @@ export const QuizView: React.FC = () => {
             <div className="flex items-center justify-between gap-4 mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
               <button
                 disabled={currentIndex === 0}
-                onClick={() => moveToQuestion(Math.max(0, currentIndex - 1))}
+                onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
                 className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer flex items-center gap-1.5"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -515,7 +503,7 @@ export const QuizView: React.FC = () => {
 
               {currentIndex < activeQuestions.length - 1 ? (
                 <button
-                  onClick={() => moveToQuestion(Math.min(activeQuestions.length - 1, currentIndex + 1))}
+                  onClick={() => setCurrentIndex((prev) => Math.min(activeQuestions.length - 1, prev + 1))}
                   className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition cursor-pointer flex items-center gap-1.5"
                 >
                   <span>Next Question</span>
@@ -556,7 +544,7 @@ export const QuizView: React.FC = () => {
                 return (
                   <button
                     key={idx}
-                    onClick={() => moveToQuestion(idx)}
+                    onClick={() => setCurrentIndex(idx)}
                     className={`w-9 h-9 rounded-xl border text-xs font-bold transition flex items-center justify-center cursor-pointer ${cellStyle}`}
                   >
                     {idx + 1}

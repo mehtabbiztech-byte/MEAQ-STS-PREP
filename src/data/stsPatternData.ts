@@ -1441,3 +1441,32 @@ export function generateStsExamPaper(category: StsCategory): StsGeneratedPaper {
     readingPassages: STS_READING_PASSAGES,
   };
 }
+
+export function stsItemToMcq(item: StsQuestionItem): MCQ {
+  const cat = item.part === 'english'
+    ? 'english'
+    : item.part === 'mathematics'
+    ? 'basic-maths'
+    : item.subSection.toLowerCase().includes('science')
+    ? 'everyday-science'
+    : item.subSection.toLowerCase().includes('islam') || item.subSection.toLowerCase().includes('computer')
+    ? 'computer-skills'
+    : 'pakistan-affairs';
+
+  return {
+    id: item.id,
+    question: item.question,
+    options: item.options,
+    correctIndex: item.correctIndex,
+    explanation: item.explanation,
+    category: cat,
+    subtopic: item.subSection,
+    difficulty: item.difficulty,
+    examTags: ['STS', 'BPS-05-15', 'Sukkur-IBA'],
+  };
+}
+
+export const STS_100_PATTERN_MCQS: MCQ[] = generateStsExamPaper('graduation').allQuestions.map(stsItemToMcq);
+export const PST_PEDAGOGY_MCQS: MCQ[] = PST_JEST_PEDAGOGY_POOL.map(stsItemToMcq);
+export const PST_SINDHI_MCQS: MCQ[] = SINDHI_URDU_MOTHER_TONGUE_POOL.slice(0, 3).map(stsItemToMcq);
+export const PST_URDU_MCQS: MCQ[] = SINDHI_URDU_MOTHER_TONGUE_POOL.slice(3).map(stsItemToMcq);

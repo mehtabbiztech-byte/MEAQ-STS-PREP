@@ -19,6 +19,7 @@ import { ExamCategory } from '../types';
 import { CssSyllabusExplorer } from '../components/CssSyllabusExplorer';
 import { CceSyllabusExplorer } from '../components/CceSyllabusExplorer';
 import { StsExamSimulator } from '../components/StsExamSimulator';
+import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
 import { PreparationRoomDashboard } from '../components/PreparationRoomDashboard';
 
 export const ExamsView: React.FC = () => {
@@ -27,7 +28,8 @@ export const ExamsView: React.FC = () => {
     setSelectedExamId, 
     setTab, 
     setSelectedPastPaperId,
-    setSelectedCategorySlug 
+    setSelectedCategorySlug,
+    launchSimulator
   } = useApp();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -209,8 +211,14 @@ export const ExamsView: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-center gap-2.5">
                 {[
                   { id: 'overview', label: 'Exam Overview & Eligibility', icon: BookOpen },
-                  ...(currentExam.id === 'sts'
-                    ? [{ id: 'simulator', label: '⚡ STS 40–20–40 Simulator (100 Marks)', icon: Trophy }]
+                  ...(currentExam.id === 'sts' || currentExam.id === 'fpsc-gr'
+                    ? [{ 
+                        id: 'simulator', 
+                        label: currentExam.id === 'sts' 
+                          ? '⚡ STS 40–20–40 Simulator (100 Marks)' 
+                          : '⚡ FPSC One-Paper Simulator (100 Marks)', 
+                        icon: Trophy 
+                      }]
                     : []),
                   { id: 'syllabus', label: 'Official Syllabus & Weightage', icon: FileText },
                   { id: 'mcqs', label: `Targeted MCQs (${examMcqs.length})`, icon: CheckCircle2 },
@@ -237,7 +245,7 @@ export const ExamsView: React.FC = () => {
           <PreparationRoomDashboard
             examId={currentExam.id}
             onStartMock={() => {
-              if (currentExam.id === 'sts') {
+              if (currentExam.id === 'sts' || currentExam.id === 'fpsc-gr') {
                 setActiveTab('simulator');
               } else {
                 setTab('quiz');
@@ -251,9 +259,12 @@ export const ExamsView: React.FC = () => {
             }}
           />
 
-          {/* Sub-tab 0: STS 100-Mark Simulator */}
-          {activeTab === 'simulator' && currentExam.id === 'sts' && (
-            <StsExamSimulator />
+          {/* Sub-tab 0: STS or FPSC Pattern Simulator */}
+          {activeTab === 'simulator' && (currentExam.id === 'sts' || currentExam.id === 'fpsc-gr') && (
+            <ExactPatternSimulators 
+              defaultSimulator={currentExam.id === 'fpsc-gr' ? 'fpsc' : 'sts'}
+              onLaunch={(config) => launchSimulator(config)}
+            />
           )}
 
           {/* Sub-tab 1: Overview */}
