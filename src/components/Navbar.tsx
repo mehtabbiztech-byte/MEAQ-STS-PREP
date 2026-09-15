@@ -22,6 +22,7 @@ import {
   Briefcase,
   BookMarked,
   Award,
+  BrainCircuit,
   Info,
   ChevronRight,
   Check
@@ -332,6 +333,14 @@ export const Navbar: React.FC = () => {
       desc: 'Pakistan-wide merit standings & top aspirant percentiles'
     },
     { 
+      id: 'learning-lab',
+      label: 'AI Learning',
+      badge: 'NEW',
+      badgeType: 'live',
+      icon: <BrainCircuit className="w-4 h-4 shrink-0" />,
+      desc: 'Adaptive SRS, tutor, cognitive insights, battles & study circles'
+    },
+    {
       id: 'about', 
       label: 'About', 
       icon: <Info className="w-4 h-4 shrink-0" />,

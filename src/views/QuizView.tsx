@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   Trophy, 
@@ -26,6 +26,10 @@ import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
 import { getRankTierBadge } from '../lib/certificateService';
 import { StsExamSimulator } from '../components/StsExamSimulator';
+import { AnswerEvent, RecallGrade, scheduleReview, SrsCard } from '../lib/adaptiveLearning';
+
+const ANSWER_EVENTS_KEY = 'matb_answer_events_v1';
+const SRS_STORAGE_KEY = 'matb_learning_engine_v1';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -56,6 +60,9 @@ export const QuizView: React.FC = () => {
   const [flaggedQuestions, setFlaggedQuestions] = useState<Record<number, boolean>>({});
   const [secondsRemaining, setSecondsRemaining] = useState<number>(600);
   const [quizStartTime, setQuizStartTime] = useState<number>(0);
+  const [firstAnswers, setFirstAnswers] = useState<Record<number, number>>({});
+  const [questionTimeSeconds, setQuestionTimeSeconds] = useState<Record<number, number>>({});
+  const questionOpenedAt = useRef<number>(Date.now());
 
   // Results State
   const [completedAttempt, setCompletedAttempt] = useState<QuizAttempt | null>(null);
@@ -75,10 +82,13 @@ export const QuizView: React.FC = () => {
     setActiveQuestions(shuffled);
     setCurrentIndex(0);
     setUserAnswers({});
+    setFirstAnswers({});
+    setQuestionTimeSeconds({});
     setFlaggedQuestions({});
     const totalSecs = timeMinutes * 60;
     setSecondsRemaining(totalSecs);
     setQuizStartTime(Date.now());
+    questionOpenedAt.current = Date.now();
     setQuizState('in-progress');
   };
 
@@ -125,6 +135,41 @@ export const QuizView: React.FC = () => {
 
     const finalScore = Math.max(0, Number(rawScore.toFixed(2)));
 
+    const currentQuestionSeconds = Math.max(1, Math.round((Date.now() - questionOpenedAt.current) / 1000));
+    const finalTimes = {
+      ...questionTimeSeconds,
+      [currentIndex]: (questionTimeSeconds[currentIndex] || 0) + currentQuestionSeconds,
+    };
+    const answerEvents: AnswerEvent[] = activeQuestions.map((mcq, idx) => ({
+      questionId: mcq.id,
+      topic: mcq.subtopic || mcq.category,
+      firstAnswer: firstAnswers[idx] ?? userAnswers[idx] ?? -1,
+      finalAnswer: userAnswers[idx] ?? -1,
+      correctAnswer: mcq.correctIndex,
+      timeSpentSeconds: finalTimes[idx] || 0,
+      changedAnswer: firstAnswers[idx] !== undefined && firstAnswers[idx] !== userAnswers[idx],
+    }));
+    try {
+      const previousEvents: AnswerEvent[] = JSON.parse(localStorage.getItem(ANSWER_EVENTS_KEY) || '[]');
+      localStorage.setItem(ANSWER_EVENTS_KEY, JSON.stringify([...previousEvents, ...answerEvents].slice(-200)));
+      const previousCards: SrsCard[] = JSON.parse(localStorage.getItem(SRS_STORAGE_KEY) || '[]');
+      const cardMap = new Map(previousCards.map((card) => [card.questionId, card]));
+      answerEvents.forEach((event) => {
+        const card = cardMap.get(event.questionId) || {
+          questionId: event.questionId,
+          topic: event.topic,
+          repetitions: 0,
+          intervalDays: 1,
+          easeFactor: 2.5,
+          dueAt: new Date().toISOString(),
+          lastGrade: 0 as RecallGrade,
+        };
+        const grade: RecallGrade = event.finalAnswer === event.correctAnswer ? 4 : 2;
+        cardMap.set(event.questionId, scheduleReview(card, grade));
+      });
+      localStorage.setItem(SRS_STORAGE_KEY, JSON.stringify([...cardMap.values()]));
+    } catch { /* quiz completion must never fail because local analytics storage is unavailable */ }
+
     const attempt: QuizAttempt = {
       id: `attempt-${Date.now()}`,
       date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
@@ -169,6 +214,13 @@ export const QuizView: React.FC = () => {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
+
+  const moveToQuestion = (nextIndex: number) => {
+    const elapsed = Math.max(1, Math.round((Date.now() - questionOpenedAt.current) / 1000));
+    setQuestionTimeSeconds((previous) => ({ ...previous, [currentIndex]: (previous[currentIndex] || 0) + elapsed }));
+    questionOpenedAt.current = Date.now();
+    setCurrentIndex(nextIndex);
   };
 
   return (
@@ -418,6 +470,7 @@ export const QuizView: React.FC = () => {
                   <button
                     key={idx}
                     onClick={() => {
+                      setFirstAnswers((prev) => prev[currentIndex] === undefined ? { ...prev, [currentIndex]: idx } : prev);
                       setUserAnswers((prev) => ({ ...prev, [currentIndex]: idx }));
                     }}
                     className={`w-full p-4 rounded-xl border text-left text-sm font-medium transition flex items-center justify-between cursor-pointer ${
@@ -449,7 +502,7 @@ export const QuizView: React.FC = () => {
             <div className="flex items-center justify-between gap-4 mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
               <button
                 disabled={currentIndex === 0}
-                onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
+                onClick={() => moveToQuestion(Math.max(0, currentIndex - 1))}
                 className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer flex items-center gap-1.5"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -462,7 +515,7 @@ export const QuizView: React.FC = () => {
 
               {currentIndex < activeQuestions.length - 1 ? (
                 <button
-                  onClick={() => setCurrentIndex((prev) => Math.min(activeQuestions.length - 1, prev + 1))}
+                  onClick={() => moveToQuestion(Math.min(activeQuestions.length - 1, currentIndex + 1))}
                   className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition cursor-pointer flex items-center gap-1.5"
                 >
                   <span>Next Question</span>
@@ -503,7 +556,7 @@ export const QuizView: React.FC = () => {
                 return (
                   <button
                     key={idx}
-                    onClick={() => setCurrentIndex(idx)}
+                    onClick={() => moveToQuestion(idx)}
                     className={`w-9 h-9 rounded-xl border text-xs font-bold transition flex items-center justify-center cursor-pointer ${cellStyle}`}
                   >
                     {idx + 1}

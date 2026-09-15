@@ -24,6 +24,7 @@ export type NavigationTab =
   | 'jobs' 
   | 'study-notes' 
   | 'rankings' 
+  | 'learning-lab'
   | 'about'
   | 'bookmarks'
   | 'mistakes';
