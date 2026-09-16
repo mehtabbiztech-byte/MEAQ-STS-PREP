@@ -1,8 +1,32 @@
 import { JobAlert } from '../types';
 
-export const JOBS_LAST_VERIFIED = '14 September 2026';
+export const JOBS_LAST_VERIFIED = '16 September 2026';
 
 export const JOBS_DATA: JobAlert[] = [
+  {
+    id: 'sep26-nadra-junior-executive-sukkur',
+    title: 'Junior Executive (Data Entry Operator — Female) — Walk-in Test/Interview',
+    department: 'NADRA Regional Head Office Sukkur, Ministry of Interior and Anti-Narcotics',
+    agency: 'NADRA',
+    location: 'Garhi Yasin, Salehpat, Moro, Thul, Sakrand and Kingri (respective NRCs)',
+    bps: 'NADRA contract appointment',
+    postsCount: 6,
+    vacancies: 6,
+    publishedDate: 'September 2026 advertisement',
+    lastDate: 'Walk-in test: 29 September 2026, 9:00 AM–1:00 PM',
+    eligibility: 'Female residents of the respective advertised tehsil, supported by CNIC/domicile. Intermediate or equivalent; one year of relevant experience is preferred.',
+    qualification: 'Intermediate or equivalent. Bring original personal and educational documents, CV and professional credentials for the test.',
+    experience: 'Preferably one year of relevant experience.',
+    ageLimit: 'Maximum 25 years; the advertisement states that five years of age relaxation is already included.',
+    applicationMethod: 'Attend the walk-in test at NADRA Regional Head Office Sukkur on 29 September 2026. Candidates qualifying the test may be called for interview at the same venue on 30 September 2026 from 9:00 AM onwards.',
+    examCategory: 'NADRA Junior Executive / Data Entry Operator',
+    advertisementNo: 'PID(I) 2403/26',
+    sourceUrl: 'https://careers.nadra.gov.pk/',
+    applyUrl: 'https://careers.nadra.gov.pk/',
+    sourceLabel: 'Official NADRA careers portal and supplied recruitment advertisement',
+    verifiedAt: JOBS_LAST_VERIFIED,
+    status: 'Walk-in',
+  },
   {
     id: 'sep26-railways-advisor',
     title: 'Advisor (MP-I)',
