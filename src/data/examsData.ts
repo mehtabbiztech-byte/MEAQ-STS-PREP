@@ -390,22 +390,37 @@ export const EXAMS_DATA: ExamInfo[] = [
     screeningStructure: 'Mid-term (30 marks), Sessional/Quizzes (20 marks), and Final Exam (50 marks).',
     syllabus: [
       {
-        section: 'Foundational University Courses (HEC Core)',
-        weightage: 'Core Curriculum',
-        topics: ['Functional English & Technical Writing', 'Pakistan Studies & Constitutional Law', 'Islamic Studies & Philosophy of Ethics', 'Calculus-I & Linear Algebra', 'Introduction to Programming & Data Analytics'],
+        section: 'Department of Computer Science & IT (NCEAC/HEC)',
+        weightage: 'Core Computing Track',
+        topics: ['Data Structures & Algorithms (DSA)', 'Object-Oriented Programming (OOP)', 'Database Management Systems (SQL/NoSQL)', 'Operating Systems (Concurrency, Scheduling)', 'Computer Networks & Security', 'Artificial Intelligence & Machine Learning', 'Software Engineering & Agile'],
       },
       {
-        section: 'Business & Social Sciences',
-        weightage: 'Discipline Track',
-        topics: ['Principles of Management & Marketing', 'Microeconomics & Macroeconomics', 'Introduction to Sociology & Psychology', 'Research Methodology & SPSS'],
+        section: 'Department of Engineering & Applied Tech (PEC)',
+        weightage: 'Engineering Track',
+        topics: ['Electric Circuit Analysis & Electronics', 'Signals & Systems', 'Engineering Thermodynamics & Fluid Mechanics', 'Mechanics of Materials & Structural Analysis', 'Linear Control Systems & PID'],
       },
       {
-        section: 'Computer Science & IT',
-        weightage: 'Computing Track',
-        topics: ['Object-Oriented Programming (OOP)', 'Data Structures & Algorithms', 'Database Systems (SQL)', 'Software Engineering & Agile Methodologies'],
+        section: 'Department of Medical & Health Sciences (PMDC/PCP)',
+        weightage: 'Clinical & Biomedical Track',
+        topics: ['Human Gross Anatomy & Histology', 'General & Systemic Physiology', 'Medical Pharmacology & Therapeutics', 'General & Systemic Pathology', 'Microbiology & Immunology'],
+      },
+      {
+        section: 'Department of Business & Management (NBEAC)',
+        weightage: 'Business & Finance Track',
+        topics: ['Financial Accounting & Reporting (IFRS)', 'Corporate Finance & Valuation (CAPM/WACC)', 'Microeconomics & Macroeconomics', 'Marketing Management & Digital Strategy', 'Organizational Behavior & HRM'],
+      },
+      {
+        section: 'Department of Law & Legal Studies (PBC/HEC)',
+        weightage: 'Law (LLB/LLM) Track',
+        topics: ['Constitutional Law of Pakistan (1973 Constitution)', 'Jurisprudence & Legal Theory', 'Criminal Law & Pakistan Penal Code (PPC)', 'Civil Law & Law of Contract', 'Qanun-e-Shahadat Order 1984 (Evidence)'],
+      },
+      {
+        section: 'Department of Social Sciences & Natural Sciences',
+        weightage: 'Liberal Arts & Physical Sciences Track',
+        topics: ['International Relations Theories & Foreign Policy', 'General & Clinical Psychology (DSM-5)', 'Quantum Mechanics & Modern Physics', 'Multivariable Calculus & Linear Algebra'],
       },
     ],
-    subjects: ['Functional English', 'Technical Report Writing', 'Calculus & Analytical Geometry', 'Programming Fundamentals', 'Principles of Management', 'Research Methodology'],
+    subjects: ['Data Structures & Algorithms', 'Operating Systems', 'Circuit Analysis', 'Gross Anatomy', 'Financial Accounting', 'Corporate Finance', 'Constitutional Law', 'Quantum Mechanics', 'Multivariable Calculus', 'Principles of Management'],
     pastPapersCount: 20,
     mockTestsCount: 25,
     resources: [
@@ -524,12 +539,14 @@ export const EXAMS_DATA: ExamInfo[] = [
       },
     ],
     subjects: ['English', 'Mathematics', 'General Knowledge', 'Everyday Science', 'Computer', 'Sindh Studies & Culture', 'Islamiat / Ethics'],
-    pastPapersCount: 32,
+    pastPapersCount: 9,
     mockTestsCount: 40,
     resources: [
-      { title: 'STS BPS 5 to 15 Solved Past Papers (Matric, Inter & Graduate Categories)', type: 'Book', description: 'Over 40 solved official test papers from 2022 to 2025.' },
+      { title: 'Official STS Sample Papers', type: 'Official Link', url: 'https://www.iba-suk.edu.pk/sts/sample-papers', description: 'Sukkur IBA archive of official sample papers and test criteria.' },
+      { title: 'Official STS Answer Keys', type: 'Official Link', url: 'https://www.iba-suk.edu.pk/sts/answer-keys', description: 'Official answer-key archive used to confirm tests and reference dates.' },
+      { title: 'Official STS Announcements', type: 'Official Link', url: 'https://www.iba-suk.edu.pk/sts/announcements', description: 'Dated announcements, test specifications, sample papers, keys and result notices.' },
       { title: 'STS Sindh Studies & Culture Special Capsule', type: 'Guide', description: 'Comprehensive coverage of Mohenjo-daro, barrages, and personalities.' },
-      { title: 'Sukkur IBA Testing Service Portal', type: 'Official Link', description: 'Official portal for candidate slips and answer keys.' },
+      { title: 'Sukkur IBA Testing Service Portal', type: 'Official Link', url: 'https://apply.sts.net.pk/', description: 'Official portal for applications and candidate slips.' },
     ],
   },
   {
@@ -1092,7 +1109,7 @@ export const EXAMS_DATA: ExamInfo[] = [
     description: 'The supreme provincial competitive examination in Sindh for induction of Assistant Commissioner (BPS-17), Section Officer, Excise & Taxation Officer, Municipal Commissioner, and Assistant Registrar.',
     eligibility: 'Graduate degree with minimum 2nd class from recognized university.',
     ageLimit: '21 to 30 years (with Sindh domicile age concession where applicable).',
-    screeningStructure: 'CCE Screening Test: 100 MCQs (General Knowledge, English, Sindhi/Urdu, Pakistan Studies, Current Affairs). Passing threshold: 50%.',
+    screeningStructure: 'Written examination: 1,000 marks (600 compulsory + 400 optional), followed by 200-mark viva voce. Screening requirements, where applicable, must be confirmed from the active advertisement.',
     syllabus: [
       {
         section: 'General Knowledge & Current Affairs',
@@ -1114,6 +1131,7 @@ export const EXAMS_DATA: ExamInfo[] = [
     pastPapersCount: 22,
     mockTestsCount: 28,
     resources: [
+      { title: 'Official Revised SPSC CCE Syllabus', type: 'Syllabus PDF', url: 'https://spsc.gos.pk/Syllabus/Dec2023/Revised-Syallabus-CCE.pdf', description: 'Official written-examination scheme, subjects, detailed syllabus and recommended readings.' },
       { title: 'SPSC CCE Screening Past Papers Archive', type: 'Book', description: 'Solved papers from 2018 to latest screening exams.' },
       { title: 'Sindh History & Cultural Heritage Compendium', type: 'Guide', description: 'Specialized focus on Indus Valley, Sufi shrines, and barrages.' },
     ],

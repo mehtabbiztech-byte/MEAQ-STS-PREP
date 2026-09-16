@@ -59,8 +59,6 @@ export async function saveUserProfileToDb(userId: string, profile: Partial<UserP
     if (profile.email !== undefined) payload.email = profile.email;
     if (profile.targetExam !== undefined) payload.targetExam = profile.targetExam;
     if (profile.province !== undefined) payload.province = profile.province;
-    if (profile.points !== undefined) payload.points = Number(profile.points);
-    if (profile.streakDays !== undefined) payload.streakDays = Number(profile.streakDays);
     if (profile.bookmarks !== undefined) payload.bookmarks = profile.bookmarks;
     if (profile.mistakeIds !== undefined) payload.mistakes = profile.mistakeIds;
 
@@ -117,11 +115,9 @@ export async function recordQuizAttemptInDb(
     // Save attempt in subcollection
     await setDoc(quizRef, quizPayload);
 
-    // Update user document points and updatedAt
+    // Persist only the learner's mistake list. Points and national standings are
+    // intentionally not accepted as client-authored authoritative data.
     const userRef = doc(db, 'users', userId);
-    const pointsToAdd = Math.round(validation.sanitizedScore * 15);
-    
-    // Fetch current user doc to update points and mistakes atomically/safely
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
       const existing = userSnap.data();
@@ -134,7 +130,6 @@ export async function recordQuizAttemptInDb(
       }
 
       await updateDoc(userRef, {
-        points: (Number(existing.points) || 0) + pointsToAdd,
         mistakes: Array.from(newMistakes),
         updatedAt: new Date().toISOString(),
       });
@@ -256,8 +251,6 @@ export async function mergeGuestProfileIntoDb(
       email: newProfile.email,
       targetExam: newProfile.targetExam,
       province: newProfile.province,
-      points: newProfile.points,
-      streakDays: newProfile.streakDays,
       bookmarks: newProfile.bookmarks,
       mistakes: newProfile.mistakeIds,
       createdAt: new Date().toISOString(),

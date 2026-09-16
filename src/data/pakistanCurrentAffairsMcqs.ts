@@ -21,7 +21,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Medium',
     viewsCount: 9400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-002',
@@ -40,7 +40,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Medium',
     viewsCount: 8200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-003',
@@ -59,7 +59,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Hard',
     viewsCount: 15300,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-004',
@@ -97,7 +97,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Hard',
     viewsCount: 11200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-006',
@@ -116,7 +116,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Hard',
     viewsCount: 14000,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-007',
@@ -154,7 +154,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Medium',
     viewsCount: 9900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-009',
@@ -192,7 +192,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Hard',
     viewsCount: 17200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-011',
@@ -268,7 +268,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 21300,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-015',
@@ -306,7 +306,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Hard',
     viewsCount: 11400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 2
@@ -365,7 +365,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2026,
     difficulty: 'Hard',
     viewsCount: 9200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-020',
@@ -384,7 +384,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 17400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-021',
@@ -460,7 +460,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 13500,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-025',
@@ -498,7 +498,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 28900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-027',
@@ -517,7 +517,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 9100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-028',
@@ -536,7 +536,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 16200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-029',
@@ -555,7 +555,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 8800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 3
@@ -595,7 +595,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 21900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-032',
@@ -614,7 +614,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 11800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-033',
@@ -633,7 +633,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 13200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-034',
@@ -652,7 +652,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 18500,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-035',
@@ -671,7 +671,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 22100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 4
@@ -692,7 +692,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 14100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-037',
@@ -711,7 +711,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 12800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-038',
@@ -749,7 +749,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 11900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-040',
@@ -768,7 +768,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Hard',
     viewsCount: 16800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-041',
@@ -787,7 +787,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 18400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-042',
@@ -806,7 +806,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 15100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 5
@@ -827,7 +827,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 13900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-044',
@@ -846,7 +846,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 8100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-045',
@@ -903,7 +903,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 14700,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 6 & 7: Aman Exercise, UNSC, Appointments
@@ -924,7 +924,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 27400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-049',
@@ -943,7 +943,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 13300,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-050',
@@ -962,7 +962,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 23100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-051',
@@ -1000,7 +1000,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 32500,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-053',
@@ -1019,7 +1019,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 12200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-054',
@@ -1057,7 +1057,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 14600,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 8: Space, Maritime & Mountaineering
@@ -1078,7 +1078,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 13800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-057',
@@ -1097,7 +1097,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 19800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-058',
@@ -1116,7 +1116,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 17200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-059',
@@ -1135,7 +1135,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 14300,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 9 & 10: Airlines, Diplomacy & Governance
@@ -1156,7 +1156,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 25100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-061',
@@ -1194,7 +1194,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 19100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 11 & 12: Health, UNSC & Economy
@@ -1215,7 +1215,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 28400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-064',
@@ -1234,7 +1234,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 12600,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-065',
@@ -1253,7 +1253,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 23400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-066',
@@ -1291,7 +1291,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 16700,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-068',
@@ -1331,7 +1331,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 20100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-070',
@@ -1350,7 +1350,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 35000,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-071',
@@ -1369,7 +1369,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 38200,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-072',
@@ -1388,7 +1388,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 29500,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-073',
@@ -1407,7 +1407,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 34100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-074',
@@ -1426,7 +1426,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 27900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-075',
@@ -1445,7 +1445,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 21800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-076',
@@ -1464,7 +1464,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Hard',
     viewsCount: 22400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 16 & 17: SCO Summit & Diplomatic Milestones
@@ -1485,7 +1485,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 33400,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-078',
@@ -1504,7 +1504,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Hard',
     viewsCount: 11500,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-079',
@@ -1523,7 +1523,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 21600,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-080',
@@ -1542,7 +1542,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Easy',
     viewsCount: 26800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-081',
@@ -1561,7 +1561,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 18100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 18: Economy, FBR & Mountaineering
@@ -1601,7 +1601,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Easy',
     viewsCount: 34500,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-084',
@@ -1620,7 +1620,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 21900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-085',
@@ -1679,7 +1679,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Easy',
     viewsCount: 39500,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-088',
@@ -1698,7 +1698,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Easy',
     viewsCount: 31000,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-089',
@@ -1717,7 +1717,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 22300,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-090',
@@ -1736,7 +1736,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 19800,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
 
   // Page 27 & 29: Judiciary & Ambassadors
@@ -1776,7 +1776,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2025,
     difficulty: 'Easy',
     viewsCount: 28100,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-093',
@@ -1814,7 +1814,7 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 25900,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   },
   {
     id: 'pca-095',
@@ -1928,6 +1928,6 @@ export const PAKISTAN_CURRENT_AFFAIRS_MCQS: MCQ[] = [
     year: 2024,
     difficulty: 'Easy',
     viewsCount: 24700,
-    submittedBy: 'MATB Academic Team'
+    submittedBy: 'MEQSA Academic Team'
   }
 ];

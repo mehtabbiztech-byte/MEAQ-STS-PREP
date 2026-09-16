@@ -4,6 +4,7 @@ import { STUDY_CURRICULUM } from '../data/studyNotesData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { StudyLesson } from '../types';
 import { useApp } from '../context/AppContext';
+import { useCmsContent } from '../context/CmsContentContext';
 
 const panel = 'rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 sm:p-7';
 const button = 'rounded-xl px-4 py-2 bg-emerald-700 text-white font-semibold hover:bg-emerald-800 disabled:opacity-40';
@@ -30,6 +31,7 @@ function LessonReader({ lesson, onBack }: { lesson: StudyLesson; onBack: () => v
 }
 
 export const StudyNotesView: React.FC = () => {
+  const { lessons: cmsLessons } = useCmsContent();
   const [mode, setMode] = useState<'kids' | 'advanced'>('advanced');
   const [query, setQuery] = useState('');
   const [subjectId, setSubjectId] = useState('all');
@@ -42,6 +44,7 @@ export const StudyNotesView: React.FC = () => {
     <div className="flex flex-wrap gap-3">{(['kids', 'advanced'] as const).map(m => <button key={m} aria-pressed={mode === m} onClick={() => {setMode(m); setSubjectId('all');}} className={`flex items-center gap-2 rounded-xl border px-5 py-3 font-semibold ${mode === m ? 'bg-emerald-700 text-white border-emerald-700' : 'border-slate-300 dark:border-slate-700'}`}>{m === 'kids' ? <Sparkles size={18}/> : <GraduationCap size={18}/>} {m === 'kids' ? 'Kids · Simple & visual' : 'Advanced · Exam preparation'}</button>)}</div>
     <p className="text-sm text-slate-500">Starter lesson library — more subjects and chapters can be added as content is reviewed.</p>
     <div className="grid sm:grid-cols-[1fr_280px] gap-4"><label>Find a lesson<input value={query} onChange={e => setQuery(e.target.value)} className="block w-full border rounded-xl p-3 mt-1 bg-transparent" placeholder="Search subject, chapter or topic"/></label><label>Subject<select value={subjectId} onChange={e => setSubjectId(e.target.value)} className="block w-full border rounded-xl p-3 mt-1 bg-white dark:bg-slate-900"><option value="all">All subjects</option>{STUDY_CURRICULUM.filter(s => lessons.some(item => item.subject.id === s.id && item.lesson.audience === mode)).map(s => <option key={s.id} value={s.id}>{s.title}</option>)}</select></label></div>
+    {!!cmsLessons.length && <section className={panel}><h2 className="text-2xl font-bold mb-5">New published lessons</h2><div className="grid md:grid-cols-2 gap-3">{cmsLessons.filter(item => `${item.subject} ${item.chapter} ${item.topic} ${item.title}`.toLowerCase().includes(query.toLowerCase())).map(item => <details key={item.id} className="rounded-xl border border-slate-200 dark:border-slate-700 p-4"><summary className="font-bold cursor-pointer">{item.subject} → {item.chapter} → {item.topic} → {item.title}</summary><p className="mt-4 leading-7 whitespace-pre-line">{item.explanation}</p>{item.importantPoints.length > 0 && <ul className="list-disc pl-5 mt-4 space-y-2">{item.importantPoints.map(point => <li key={point}>{point}</li>)}</ul>}</details>)}</div></section>}
     <div className="space-y-6">{STUDY_CURRICULUM.filter(s => visible.some(i => i.subject.id === s.id)).map(subject => <section className={panel} key={subject.id}><h2 className="text-2xl font-bold mb-5">{subject.title}</h2>{subject.chapters.filter(c => visible.some(i => i.chapter.id === c.id)).map(chapter => <div key={chapter.id}><h3 className="font-semibold text-emerald-700 dark:text-emerald-400">{chapter.title}</h3>{chapter.topics.filter(t => visible.some(i => i.topic.id === t.id)).map(topic => <div key={topic.id} className="mt-4"><p className="text-sm text-slate-500 mb-2">{topic.title}</p><div className="grid md:grid-cols-2 gap-3">{visible.filter(i => i.topic.id === topic.id).map(({lesson}) => <button key={lesson.id} onClick={() => setLessonId(lesson.id)} className="text-left rounded-xl border border-slate-200 dark:border-slate-700 p-4 hover:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500"><span className="font-bold block">{lesson.title}</span><span className="block text-sm text-slate-500 mt-2">{lesson.readTime} · {lesson.mcqs.length} MCQs</span><span className="block mt-3 text-emerald-700 dark:text-emerald-400 font-semibold">Open lesson →</span></button>)}</div></div>)}</div>)}</section>)}</div>
     {!visible.length && <p className={panel}>No lessons match. Try another subject or search.</p>}
   </div>}</main>;

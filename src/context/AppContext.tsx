@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { NavigationTab, UserProfile, QuizAttempt, ThemeStyle, UserPersona, QuizCertificate } from '../types';
+import { SimulatorLaunch } from '../data/examSimulatorData';
 import { 
   auth, 
   googleProvider, 
@@ -74,6 +75,7 @@ interface AppContextType {
   updateUserName: (name: string) => void;
   updateProvince: (province: string) => void;
   updatePersona: (persona: UserPersona, gradeOrClass?: string) => void;
+  addLearningPoints: (points: number) => void;
 
   // Certificate Modal State & Actions
   activeCertificate: QuizCertificate | null;
@@ -81,10 +83,15 @@ interface AppContextType {
   openCertificateModal: (cert: QuizCertificate) => void;
   closeCertificateModal: () => void;
   updateCertificateCandidateName: (newName: string) => void;
+
+  // Simulator Launch State & Actions
+  pendingSimulatorLaunch: SimulatorLaunch | null;
+  setPendingSimulatorLaunch: (launch: SimulatorLaunch | null) => void;
+  launchSimulator: (launch: SimulatorLaunch) => void;
 }
 
 const INITIAL_CERTIFICATE: QuizCertificate = {
-  id: 'MATB-CERT-2026-INIT01',
+  id: 'MEQSA-PRACTICE-2026-INIT01',
   quizId: 'quiz-init-1',
   candidateName: 'Aspirant',
   quizTitle: 'Pakistan Studies & Current Affairs Booster',
@@ -94,16 +101,16 @@ const INITIAL_CERTIFICATE: QuizCertificate = {
   percentage: 80,
   grade: 'A',
   rankTier: 'Silver Merit',
-  rankPosition: 48,
-  percentile: 91.5,
+  rankPosition: 0,
+  percentile: 85,
   timeSpentSeconds: 340,
   issuedDate: '11 Sep 2026',
-  verificationCode: 'MATB-CERT-2026-INIT01',
+  verificationCode: 'MEQSA-PRACTICE-2026-INIT01',
 };
 
 const DEFAULT_PROFILE: UserProfile = {
   name: 'Aspirant',
-  email: 'aspirant@prep.pk',
+  email: '',
   targetExam: 'Jobs: STS',
   province: 'Sindh',
   persona: 'jobs',
@@ -152,6 +159,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeCertificate, setActiveCertificate] = useState<QuizCertificate | null>(INITIAL_CERTIFICATE);
   const [isCertificateModalOpen, setIsCertificateModalOpen] = useState<boolean>(false);
 
+  // Exact Pattern Simulator Launch
+  const [pendingSimulatorLaunch, setPendingSimulatorLaunch] = useState<SimulatorLaunch | null>(null);
+
+  const launchSimulator = useCallback((launch: SimulatorLaunch) => {
+    setPendingSimulatorLaunch(launch);
+    setTab('quiz');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   const openCertificateModal = useCallback((cert: QuizCertificate) => {
     setActiveCertificate(cert);
     setIsCertificateModalOpen(true);
@@ -182,10 +198,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
-  // Theme Style (emerald, sapphire, aurora, sunset)
+  // Theme Style
   const [themeStyle, setThemeStyle] = useState<ThemeStyle>(() => {
+    if (localStorage.getItem('matb_theme_version') !== '5') {
+      localStorage.setItem('matb_theme_version', '5');
+      localStorage.setItem('matb_theme_style', 'emerald');
+      return 'emerald';
+    }
     const saved = (localStorage.getItem('matb_theme_style') ?? localStorage.getItem('meaq_theme_style')) as ThemeStyle;
-    if (saved && ['emerald', 'sapphire', 'aurora', 'sunset'].includes(saved)) {
+    if (saved && ['emerald', 'sapphire', 'sunset', 'rose', 'lavender', 'cyber', 'ocean', 'pastel-network', 'pastel-ribbons'].includes(saved)) {
       return saved;
     }
     return 'emerald';
@@ -257,6 +278,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   // Real Auth Actions
+  const authErrorMessage = (err: any, fallback: string) => {
+    if (err?.code === 'auth/operation-not-allowed') {
+      return 'This sign-in method is not enabled yet. The project owner must enable it in Firebase Console → Authentication → Sign-in method.';
+    }
+    if (err?.code === 'auth/unauthorized-domain') {
+      return 'This website domain is not authorized in Firebase. Add the current Vercel domain under Authentication → Settings → Authorized domains.';
+    }
+    if (err?.code === 'auth/configuration-not-found') {
+      return 'Firebase Authentication has not been configured for this project. Open Firebase Console → Authentication and complete setup.';
+    }
+    if (err?.code === 'auth/network-request-failed') return 'Could not reach Firebase. Check your internet connection and try again.';
+    return err?.message || fallback;
+  };
+
   const loginWithEmail = async (email: string, pass: string): Promise<{ success: boolean; error?: string }> => {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), pass);
@@ -267,9 +302,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         message = 'Invalid email or password. Please check your credentials.';
       } else if (err.code === 'auth/too-many-requests') {
         message = 'Too many attempts. Please try again in a few minutes.';
-      } else if (err.message) {
-        message = err.message;
-      }
+      } else message = authErrorMessage(err, message);
       return { success: false, error: message };
     }
   };
@@ -310,9 +343,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         message = 'Password should be at least 6 characters long.';
       } else if (err.code === 'auth/invalid-email') {
         message = 'Please enter a valid email address.';
-      } else if (err.message) {
-        message = err.message;
-      }
+      } else message = authErrorMessage(err, message);
       return { success: false, error: message };
     }
   };
@@ -325,7 +356,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (err.code === 'auth/popup-closed-by-user') {
         return { success: false, error: 'Sign in popup closed before finishing.' };
       }
-      return { success: false, error: err.message || 'Google sign-in could not be completed.' };
+      return { success: false, error: authErrorMessage(err, 'Google sign-in could not be completed.') };
     }
   };
 
@@ -341,7 +372,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       await sendPasswordResetEmail(auth, email.trim());
       return { success: true };
     } catch (err: any) {
-      return { success: false, error: err.message || 'Unable to send password reset email.' };
+      return { success: false, error: authErrorMessage(err, 'Unable to send password reset email.') };
     }
   };
 
@@ -394,7 +425,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       score: validation.sanitizedScore,
     };
 
-    // 2. Generate official ranked certificate
+    // 2. Generate a transparent practice-completion record
     const cert = attempt.certificate || generateCertificateFromAttempt(
       sanitizedAttempt,
       userProfile.name || 'Aspirant',
@@ -474,6 +505,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
+  const addLearningPoints = (points: number) => {
+    if (points <= 0) return;
+    syncProfileChange({
+      ...userProfile,
+      points: (userProfile.points || 0) + points
+    });
+  };
+
   // Keyboard shortcut Ctrl+K / Cmd+K for search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -529,11 +568,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateUserName,
         updateProvince,
         updatePersona,
+        addLearningPoints,
         activeCertificate,
         isCertificateModalOpen,
         openCertificateModal,
         closeCertificateModal,
         updateCertificateCandidateName,
+        pendingSimulatorLaunch,
+        setPendingSimulatorLaunch,
+        launchSimulator,
       }}
     >
       {children}

@@ -3,8 +3,72 @@ import { MCQS_DATA } from './mcqsData';
 
 export const PAST_PAPERS_DATA: PastPaper[] = [
   {
+    id: 'sts-jest-2021-official-record', title: 'JEST (BPS-14) — Official STS Record', exam: 'STS',
+    conductedBy: 'SIBA Testing Services, Sukkur IBA University', year: 2021,
+    postName: 'Junior Elementary School Teacher (JEST)', bps: 'BPS-14', totalQuestions: 100,
+    testDateLabel: '13–19 September 2021', recordType: 'Official Answer Key / Date Record',
+    sourceUrl: 'https://apps.iba-suk.edu.pk/dashboard-admission-sts-hr/down/sts_documents/2021110816224691.pdf',
+    sourceNote: 'Official STS result record confirming the JEST testing window. This entry is a dated record, not a complete question paper.', mcqs: [],
+  },
+  {
+    id: 'sts-jest-official-sample', title: 'JEST — Official STS Sample Paper', exam: 'STS',
+    conductedBy: 'SIBA Testing Services, Sukkur IBA University', year: 2021,
+    postName: 'Junior Elementary School Teacher (JEST)', bps: 'BPS-14', totalQuestions: 100,
+    testDateLabel: 'Sample paper; associated recruitment cycle: 2021', recordType: 'Official Sample Paper',
+    sourceUrl: 'https://www.iba-suk.edu.pk/Content/pdf/sts/samples/Sample_Paper-JEST%20Related_RSU.pdf',
+    sourceNote: 'Official five-page sample showing subject-related, GK/IQ and pedagogy sections.', mcqs: [],
+  },
+  {
+    id: 'sts-pst-2021-official-record', title: 'PST (BPS-14) — Official STS Record', exam: 'STS',
+    conductedBy: 'SIBA Testing Services, Sukkur IBA University', year: 2021,
+    postName: 'Primary School Teacher (PST)', bps: 'BPS-14', totalQuestions: 100,
+    testDateLabel: '20–26 September 2021', recordType: 'Official Answer Key / Date Record',
+    sourceUrl: 'https://www.iba-suk.edu.pk/sts/results',
+    sourceNote: 'Official STS result archive confirms the PST test period. A complete official question-paper PDF was not located.', mcqs: [],
+  },
+  {
+    id: 'sts-matric-bps-5-15-2025-record', title: 'BPS-05–15 Matriculation Category — 2025 Archive', exam: 'STS',
+    conductedBy: 'SIBA Testing Services / SGA&CD, Government of Sindh', year: 2025,
+    postName: 'Matriculation Category Screening Test', bps: 'BPS-05 to BPS-15', totalQuestions: 100,
+    testDateLabel: '21 June–2 July 2025', recordType: 'Official Answer Key / Date Record',
+    sourceUrl: 'https://www.iba-suk.edu.pk/sts/announcements?page=19',
+    sourceNote: 'Official archive page containing the all-paper answer-key announcement and revised-key record.', mcqs: [],
+  },
+  {
+    id: 'sts-graduation-bps-5-15-2025-record', title: 'BPS-05–15 Graduation Category — 2025 Archive', exam: 'STS',
+    conductedBy: 'SIBA Testing Services / SGA&CD, Government of Sindh', year: 2025,
+    postName: 'Graduation Category Screening Test', bps: 'BPS-05 to BPS-15', totalQuestions: 100,
+    testDateLabel: '10 August 2025', recordType: 'Official Answer Key / Date Record',
+    sourceUrl: 'https://www.iba-suk.edu.pk/sts/announcements?page=16',
+    sourceNote: 'Official archive page listing the sample paper, specifications, original answer key and revised answer key.', mcqs: [],
+  },
+  {
+    id: 'sts-intermediate-bps-5-15-2026-record', title: 'BPS-05–15 Intermediate Category — 2026 Archive', exam: 'STS',
+    conductedBy: 'SIBA Testing Services / SGA&CD, Government of Sindh', year: 2026,
+    postName: 'Intermediate Category Screening Test', bps: 'BPS-05 to BPS-15', totalQuestions: 100,
+    testDateLabel: '7–8 February 2026', recordType: 'Official Answer Key / Date Record',
+    sourceUrl: 'https://www.iba-suk.edu.pk/sts/announcements?page=9',
+    sourceNote: 'Official archive page recording provisional and final results for the February 2026 test.', mcqs: [],
+  },
+  {
+    id: 'sts-graduation-bps-5-15-2023-record', title: 'BPS-05–15 Graduation Category — 2023 Reference', exam: 'STS',
+    conductedBy: 'SIBA Testing Services / Government of Sindh', year: 2023,
+    postName: 'Graduation Category Screening Test', bps: 'BPS-05 to BPS-15', totalQuestions: 100,
+    testDateLabel: '17–22 January 2023', recordType: 'Official Answer Key / Date Record',
+    sourceUrl: 'https://apps.iba-suk.edu.pk/dashboard-admission-sts-hr/down/sts_documents/20230807152334202.pdf',
+    sourceNote: 'Official SIBA record confirming the test dates.', mcqs: [],
+  },
+  {
+    id: 'sts-intermediate-bps-5-15-2023-record', title: 'BPS-05–15 Intermediate Category — 2023 Reference', exam: 'STS',
+    conductedBy: 'SIBA Testing Services / Government of Sindh', year: 2023,
+    postName: 'Intermediate Category Screening Test', bps: 'BPS-05 to BPS-15', totalQuestions: 100,
+    testDateLabel: '12–26 June 2023', recordType: 'Official Answer Key / Date Record',
+    sourceUrl: 'https://apps.iba-suk.edu.pk/dashboard-admission-sts-hr/down/sts_documents/20230807152334202.pdf',
+    sourceNote: 'Official SIBA record confirming the test dates.', mcqs: [],
+  },
+  {
     id: 'pp-css-mpt-2025',
-    title: 'CSS MPT (Screening) Solved Paper 2025',
+    title: 'CSS MPT 2025 — Tagged Practice Selection',
     exam: 'CSS',
     conductedBy: 'Federal Public Service Commission (FPSC)',
     year: 2025,
@@ -24,11 +88,15 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     bps: 'BPS-05 to BPS-15',
     totalQuestions: 100,
     solvedDate: 'January 2024',
-    mcqs: MCQS_DATA.filter((m) => m.examTags?.includes('STS')),
+    testDateLabel: 'Practice collection labeled 2024; official-paper provenance not established',
+    recordType: 'Reconstructed Practice Paper',
+    sourceUrl: 'https://www.iba-suk.edu.pk/sts/sample-papers',
+    sourceNote: 'A 100-question practice selection aligned to STS topics; it is not represented as a complete official paper.',
+    mcqs: MCQS_DATA.filter((m) => m.examTags?.includes('STS')).slice(0, 100),
   },
   {
     id: 'pp-ppsc-tehsildar-2024',
-    title: 'PPSC Tehsildar & Naib Tehsildar Solved Paper',
+    title: 'PPSC Tehsildar — Tagged Practice Selection',
     exam: 'PPSC',
     conductedBy: 'Punjab Public Service Commission (PPSC)',
     year: 2024,
@@ -40,7 +108,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-spsc-cce-screen-2024',
-    title: 'SPSC Combined Competitive Exam (CCE) Screening Paper',
+    title: 'SPSC CCE — Tagged Practice Selection',
     exam: 'SPSC / CCE',
     conductedBy: 'Sindh Public Service Commission (SPSC)',
     year: 2024,
@@ -52,7 +120,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-fpsc-inspector-customs-2024',
-    title: 'FPSC Inspector Customs & Intelligence Officer Solved Paper',
+    title: 'FPSC Inspector Customs — Tagged Practice Selection',
     exam: 'FPSC',
     conductedBy: 'Federal Public Service Commission (FPSC)',
     year: 2024,
@@ -64,7 +132,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-fia-sub-inspector-2024',
-    title: 'FIA Sub-Inspector (Investigation) Official Solved Test',
+    title: 'FIA Sub-Inspector — Tagged Practice Selection',
     exam: 'FIA',
     conductedBy: 'Federal Investigation Agency / FPSC',
     year: 2024,
@@ -76,7 +144,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-nts-gat-general-2024',
-    title: 'NTS GAT General Solved Model Paper 2024-IV',
+    title: 'NTS GAT General — Tagged Practice Selection',
     exam: 'NTS',
     conductedBy: 'National Testing Service (NTS)',
     year: 2024,
@@ -88,7 +156,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-police-asi-2024',
-    title: 'Punjab & Sindh Police ASI Written Solved Paper',
+    title: 'Police ASI — Tagged Practice Selection',
     exam: 'Police',
     conductedBy: 'Police Recruitment Board',
     year: 2024,
@@ -99,3 +167,11 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     mcqs: MCQS_DATA.filter((m) => m.examTags?.includes('Police')),
   },
 ];
+
+for (const paper of PAST_PAPERS_DATA) {
+  if (paper.mcqs.length && !paper.recordType) {
+    paper.recordType = 'Reconstructed Practice Paper';
+    paper.sourceNote = 'This set is assembled from exam-tagged MEQSA practice questions. It is not a complete official paper or official answer key.';
+    paper.testDateLabel = paper.testDateLabel || `Practice collection labelled ${paper.year}`;
+  }
+}

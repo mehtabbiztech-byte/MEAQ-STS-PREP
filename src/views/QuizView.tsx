@@ -25,6 +25,9 @@ import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ, QuizAttempt } from '../types';
 import { getRankTierBadge } from '../lib/certificateService';
+import { StsExamSimulator } from '../components/StsExamSimulator';
+import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
+import { buildExactPatternQuestions, SimulatorLaunch } from '../data/examSimulatorData';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -35,11 +38,17 @@ export const QuizView: React.FC = () => {
     isBookmarked,
     userProfile,
     setTab,
-    openCertificateModal
+    openCertificateModal,
+    pendingSimulatorLaunch,
+    setPendingSimulatorLaunch
   } = useApp();
+
+  // Mode: Exact Pattern & OMR vs STS 40-20-40 Simulator vs Custom Quiz
+  const [simulatorMode, setSimulatorMode] = useState<'exact-pattern' | 'sts' | 'standard'>('exact-pattern');
 
   // Quiz Configuration State
   const [quizState, setQuizState] = useState<'config' | 'in-progress' | 'results'>('config');
+  const [quizTitle, setQuizTitle] = useState<string>('Full Competitive Mock');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [negativeMarking, setNegativeMarking] = useState<boolean>(true);
@@ -56,7 +65,31 @@ export const QuizView: React.FC = () => {
   // Results State
   const [completedAttempt, setCompletedAttempt] = useState<QuizAttempt | null>(null);
 
-  // Start Quiz Handler
+  // Launch from Exact Pattern Simulator
+  const handleLaunchFromSimulator = (launch: SimulatorLaunch) => {
+    const questions = buildExactPatternQuestions(MCQS_DATA, launch);
+    setActiveQuestions(questions);
+    setCurrentIndex(0);
+    setUserAnswers({});
+    setFlaggedQuestions({});
+    const duration = launch.timeMinutes || launch.durationMinutes || 100;
+    setNegativeMarking(launch.negativeMarking);
+    setTimeMinutes(duration);
+    setSecondsRemaining(duration * 60);
+    setQuizTitle(launch.title || `${launch.simulatorId.toUpperCase()} ${launch.category} Simulator`);
+    setQuizStartTime(Date.now());
+    setQuizState('in-progress');
+  };
+
+  // Consume any pending simulator launch from context
+  useEffect(() => {
+    if (pendingSimulatorLaunch) {
+      handleLaunchFromSimulator(pendingSimulatorLaunch);
+      setPendingSimulatorLaunch(null);
+    }
+  }, [pendingSimulatorLaunch, setPendingSimulatorLaunch]);
+
+  // Start Quiz Handler (Standard Custom Mode)
   const startQuiz = () => {
     let pool = [...MCQS_DATA];
     if (selectedCategory !== 'all') {
@@ -74,6 +107,7 @@ export const QuizView: React.FC = () => {
     setFlaggedQuestions({});
     const totalSecs = timeMinutes * 60;
     setSecondsRemaining(totalSecs);
+    setQuizTitle(selectedCategory === 'all' ? 'Full Competitive Mock' : `${selectedCategory.toUpperCase()} Subject Mock`);
     setQuizStartTime(Date.now());
     setQuizState('in-progress');
   };
@@ -124,7 +158,7 @@ export const QuizView: React.FC = () => {
     const attempt: QuizAttempt = {
       id: `attempt-${Date.now()}`,
       date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-      title: `${selectedCategory === 'all' ? 'Full Competitive Mock' : selectedCategory.toUpperCase()} Quiz`,
+      title: `${quizTitle} (${activeQuestions.length} MCQs)`,
       totalQuestions: activeQuestions.length,
       score: finalScore,
       timeSpentSeconds: timeSpent,
@@ -168,148 +202,192 @@ export const QuizView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      
-      {/* 1. CONFIGURATION VIEW */}
-      {quizState === 'config' && (
-        <div className="space-y-8 animate-in fade-in duration-200">
-          
-          <div className="text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3">
-              <Trophy className="w-3.5 h-3.5 text-amber-500" />
-              <span>Real Exam Simulator</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-display">
-              Timed Online Competitive Quiz
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
-              Practice under exact examination conditions with timer countdown, negative marking penalty, and instant mistake notebook generation.
-            </p>
-          </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-sm space-y-6">
-            
-            {/* Choose Subject */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                1. Select Subject Discipline
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <button
-                  onClick={() => setSelectedCategory('all')}
-                  className={`p-3 rounded-xl border text-xs font-bold transition cursor-pointer text-left ${
-                    selectedCategory === 'all'
-                      ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-700 dark:text-slate-300'
-                  }`}
-                >
-                  Mixed Grand Mock (All Subjects)
-                </button>
-                {POPULAR_CATEGORIES.slice(0, 7).map((cat) => (
+      {/* Top Mode Segmented Switcher */}
+      {quizState === 'config' && (
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">
+            <button
+              onClick={() => setSimulatorMode('exact-pattern')}
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+                simulatorMode === 'exact-pattern'
+                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-300'
+              }`}
+            >
+              <Trophy className="w-4 h-4 text-amber-300" />
+              <span>⚡ STS & FPSC Exact Pattern + OMR</span>
+            </button>
+
+            <button
+              onClick={() => setSimulatorMode('sts')}
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+                simulatorMode === 'sts'
+                  ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>STS Screening Paper (40–20–40)</span>
+            </button>
+
+            <button
+              onClick={() => setSimulatorMode('standard')}
+              className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer ${
+                simulatorMode === 'standard'
+                  ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <Clock className="w-4 h-4" />
+              <span>Custom Subject Quiz</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {quizState === 'config' ? (
+        simulatorMode === 'exact-pattern' ? (
+          <ExactPatternSimulators onLaunch={handleLaunchFromSimulator} />
+        ) : simulatorMode === 'sts' ? (
+          <StsExamSimulator />
+        ) : (
+          <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-200">
+            <div className="text-center max-w-2xl mx-auto">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3">
+                <Trophy className="w-3.5 h-3.5 text-amber-500" />
+                <span>Real Exam Simulator</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-display">
+                Timed Online Competitive Quiz
+              </h1>
+              <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
+                Practice under exact examination conditions with timer countdown, negative marking penalty, and instant mistake notebook generation.
+              </p>
+            </div>
+
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-sm space-y-6">
+              {/* Choose Subject */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                  1. Select Subject Discipline
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.slug)}
+                    onClick={() => setSelectedCategory('all')}
                     className={`p-3 rounded-xl border text-xs font-bold transition cursor-pointer text-left ${
-                      selectedCategory === cat.slug
+                      selectedCategory === 'all'
                         ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500'
                         : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-700 dark:text-slate-300'
                     }`}
                   >
-                    {cat.name}
+                    Mixed Grand Mock (All Subjects)
                   </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Questions & Duration */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
-              
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  2. Number of Questions
-                </label>
-                <div className="flex gap-2">
-                  {[5, 10, 15, 20].map((num) => (
+                  {POPULAR_CATEGORIES.slice(0, 7).map((cat) => (
                     <button
-                      key={num}
-                      onClick={() => setQuestionCount(num)}
-                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
-                        questionCount === num
-                          ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
-                          : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.slug)}
+                      className={`p-3 rounded-xl border text-xs font-bold transition cursor-pointer text-left ${
+                        selectedCategory === cat.slug
+                          ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 ring-2 ring-emerald-500'
+                          : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 text-slate-700 dark:text-slate-300'
                       }`}
                     >
-                      {num} MCQs
+                      {cat.name}
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-                  3. Time Limit
-                </label>
-                <div className="flex gap-2">
-                  {[5, 10, 15, 20].map((mins) => (
-                    <button
-                      key={mins}
-                      onClick={() => setTimeMinutes(mins)}
-                      className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
-                        timeMinutes === mins
-                          ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
-                          : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      {mins} Mins
-                    </button>
-                  ))}
+              {/* Questions & Duration */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                    2. Number of Questions
+                  </label>
+                  <div className="flex gap-2">
+                    {[5, 10, 15, 20].map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => setQuestionCount(num)}
+                        className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
+                          questionCount === num
+                            ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
+                            : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {num} MCQs
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                    3. Time Limit
+                  </label>
+                  <div className="flex gap-2">
+                    {[5, 10, 15, 20].map((mins) => (
+                      <button
+                        key={mins}
+                        onClick={() => setTimeMinutes(mins)}
+                        className={`flex-1 py-2.5 rounded-xl border text-xs font-bold transition cursor-pointer ${
+                          timeMinutes === mins
+                            ? 'border-emerald-600 bg-emerald-600 text-white shadow-2xs'
+                            : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {mins} Mins
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-            </div>
-
-            {/* Negative Marking Toggle */}
-            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <div>
-                <div className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <span>PPSC / Commission Negative Marking (-0.25)</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Standard</span>
+              {/* Negative Marking Toggle */}
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <div className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span>PPSC / Commission Negative Marking (-0.25)</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Standard</span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Deduct 0.25 marks for every incorrect answer (identical to PPSC, SPSC, and PMS exams).
+                  </p>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Deduct 0.25 marks for every incorrect answer (identical to PPSC, SPSC, and PMS exams).
-                </p>
-              </div>
 
-              <button
-                type="button"
-                onClick={() => setNegativeMarking((prev) => !prev)}
-                className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  negativeMarking ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
-                }`}
-              >
-                <span
-                  className={`block w-4 h-4 rounded-full bg-white shadow-xs transform transition-transform ${
-                    negativeMarking ? 'translate-x-7' : 'translate-x-1'
+                <button
+                  type="button"
+                  onClick={() => setNegativeMarking((prev) => !prev)}
+                  className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
+                    negativeMarking ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'
                   }`}
-                />
-              </button>
-            </div>
+                >
+                  <span
+                    className={`block w-4 h-4 rounded-full bg-white shadow-xs transform transition-transform ${
+                      negativeMarking ? 'translate-x-7' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
 
-            {/* Launch Button */}
-            <div className="pt-4">
-              <button
-                id="start-quiz-btn"
-                onClick={startQuiz}
-                className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-base shadow-lg shadow-emerald-900/30 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
-              >
-                <span>Start Timed Mock Exam Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              {/* Launch Button */}
+              <div className="pt-4">
+                <button
+                  id="start-quiz-btn"
+                  onClick={startQuiz}
+                  className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-base shadow-lg shadow-emerald-900/30 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span>Start Timed Mock Exam Now</span>
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-
           </div>
-        </div>
-      )}
+        )
+      ) : (
+        <div className="max-w-5xl mx-auto space-y-8">
 
       {/* 2. IN-PROGRESS QUIZ VIEW */}
       {quizState === 'in-progress' && activeQuestions.length > 0 && (
@@ -319,7 +397,7 @@ export const QuizView: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
             <div>
               <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-                Competitive Mock Test
+                {quizTitle}
               </div>
               <div className="font-extrabold text-base text-slate-900 dark:text-white">
                 Question {currentIndex + 1} of {activeQuestions.length}
@@ -550,7 +628,7 @@ export const QuizView: React.FC = () => {
                 </button>
               </div>
 
-              {/* Official Certificate & National Ranking Award Card */}
+              {/* Transparent practice-completion record */}
               {completedAttempt && (
                 <div className="mt-8 bg-slate-900/90 border border-amber-400/60 rounded-3xl p-6 text-left backdrop-blur-md relative overflow-hidden shadow-xl">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -571,12 +649,12 @@ export const QuizView: React.FC = () => {
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-emerald-200 mt-1 font-medium">
                           <span>Candidate: <strong className="text-white">{completedAttempt.certificate?.candidateName || userProfile.name}</strong></span>
                           <span>•</span>
-                          <span>National Rank: <strong className="text-amber-300">#{completedAttempt.certificate?.rankPosition || 18}</strong></span>
+                          <span>Practice level: <strong className="text-amber-300">{completedAttempt.certificate?.rankTier || 'Participation'}</strong></span>
                           <span>•</span>
-                          <span>Percentile: <strong className="text-emerald-300">{completedAttempt.certificate?.percentile ? completedAttempt.certificate.percentile.toFixed(1) : '92.4'}%</strong></span>
+                          <span>Score percentage: <strong className="text-emerald-300">{completedAttempt.certificate?.percentage || 0}%</strong></span>
                         </div>
                         <p className="text-[11px] text-slate-400 font-mono mt-1">
-                          Verification Code: {completedAttempt.certificate?.verificationCode || 'MATB-CERT-2026'}
+                          Verification Code: {completedAttempt.certificate?.verificationCode || 'MEQSA-PRACTICE-2026'}
                         </p>
                       </div>
                     </div>
@@ -696,6 +774,9 @@ export const QuizView: React.FC = () => {
           </div>
 
         </div>
+      )}
+
+      </div>
       )}
 
     </div>

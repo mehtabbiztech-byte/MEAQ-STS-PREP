@@ -4,6 +4,7 @@ import { useApp } from '../context/AppContext';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { PastPaper } from '../types';
 import { practiceMinutes, scorePaper } from '../lib/paperResults';
+import { useCmsContent } from '../context/CmsContentContext';
 
 const panel = 'rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 sm:p-7';
 const button = 'px-4 py-2 rounded-xl bg-emerald-700 text-white font-semibold hover:bg-emerald-800 disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500';
@@ -81,16 +82,18 @@ function PaperSession({ paper, onExit, onRetake }: { paper: PastPaper; onExit: (
 }
 
 export const PastPapersView: React.FC = () => {
+  const { papers: cmsPapers } = useCmsContent();
   const { selectedPastPaperId, setSelectedPastPaperId } = useApp();
   const [active, setActive] = useState<PastPaper | null>(null);
   const [session, setSession] = useState(0);
   const [search, setSearch] = useState('');
   const [exam, setExam] = useState('All');
-  const papers = PAST_PAPERS_DATA.filter(p => (exam === 'All' || p.exam === exam) && `${p.title} ${p.postName} ${p.year}`.toLowerCase().includes(search.toLowerCase()));
+  const allPapers: PastPaper[] = [...cmsPapers.map(p => ({ id: p.id, title: p.title, exam: p.exam, conductedBy: p.conductedBy, year: p.year, postName: p.postName, bps: p.bps, totalQuestions: p.questions.length, mcqs: p.questions.map((q, i) => ({ ...q, id: `${p.id}-${i + 1}` })), recordType: 'Official Past Paper' as const, testDateLabel: String(p.year), sourceUrl: p.sourceUrls[0], sourceNote: 'Published through the MEQSA editorial CMS.' })), ...PAST_PAPERS_DATA];
+  const papers = allPapers.filter(p => (exam === 'All' || p.exam === exam) && `${p.title} ${p.postName} ${p.year}`.toLowerCase().includes(search.toLowerCase()));
   return <main className="max-w-7xl mx-auto px-4 py-8 text-slate-900 dark:text-slate-100">{active ? <div key={`${active.id}-${session}`}><PaperSession paper={active} onExit={() => setActive(null)} onRetake={() => setSession(s => s+1)} /></div> : <div className="space-y-6">
     <header className="rounded-3xl bg-emerald-950 text-white p-8"><FileText className="mb-4 text-emerald-300"/><p className="text-emerald-300 text-sm font-semibold">PRACTICE • REVIEW • IMPROVE</p><h1 className="text-3xl font-bold mt-2">Past papers, real progress</h1><p className="mt-3 max-w-2xl text-emerald-100">Build confidence with timed practice, clear explanations and a personal mistake bank.</p></header>
     <p className="text-sm text-slate-500">Current sets use exam-tagged questions from our bank, not verified complete official papers. Counts and suggested practice times below reflect only the available questions.</p>
-    <div className="flex flex-wrap gap-4"><label className="flex-1 min-w-52">Search papers<input value={search} onChange={e => setSearch(e.target.value)} placeholder="Exam, post or year" className="block border rounded-xl p-3 mt-1 w-full bg-transparent" /></label><label>Exam<select className="block border rounded-xl p-3 mt-1 bg-white dark:bg-slate-900" value={exam} onChange={e => setExam(e.target.value)}>{['All', ...new Set(PAST_PAPERS_DATA.map(p => p.exam))].map(e => <option key={e}>{e}</option>)}</select></label></div>
-    <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">{papers.map(p => <article key={p.id} className={`${panel} flex flex-col ${selectedPastPaperId === p.id ? 'ring-2 ring-emerald-500' : ''}`}><p className="text-emerald-600 font-bold">{p.exam} · {p.year}</p><h2 className="text-lg font-bold my-3">{p.title.replace(/Official |Solved /g, '')}</h2><p className="text-sm text-slate-500 mb-5">Practice selection · {p.mcqs.length} questions · {practiceMinutes(p.mcqs.length)} minutes</p><button className={`${button} mt-auto`} disabled={!p.mcqs.length} onClick={() => { setSelectedPastPaperId(p.id); setActive(p); }}>{p.mcqs.length ? 'Start paper' : 'Questions coming soon'}</button></article>)}</div>{papers.length === 0 && <p className={panel}>No matching papers. Try another exam or search.</p>}
+    <div className="flex flex-wrap gap-4"><label className="flex-1 min-w-[140px] sm:min-w-52">Search papers<input value={search} onChange={e => setSearch(e.target.value)} placeholder="Exam, post or year" className="block border rounded-xl p-3 mt-1 w-full bg-transparent" /></label><label>Exam<select className="block border rounded-xl p-3 mt-1 bg-white dark:bg-slate-900" value={exam} onChange={e => setExam(e.target.value)}>{['All', ...new Set(allPapers.map(p => p.exam))].map(e => <option key={e}>{e}</option>)}</select></label></div>
+    <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">{papers.map(p => <article key={p.id} className={`${panel} flex flex-col ${selectedPastPaperId === p.id ? 'ring-2 ring-emerald-500' : ''}`}><p className="text-emerald-600 font-bold">{p.exam} · {p.year}</p><h2 className="text-lg font-bold my-3">{p.title}</h2>{p.recordType && <span className="self-start rounded-full bg-emerald-50 dark:bg-emerald-950 px-3 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300">{p.recordType}</span>}<p className="text-sm text-slate-600 dark:text-slate-400 mt-3">Reference date: {p.testDateLabel || p.solvedDate || p.year}</p><p className="text-sm text-slate-500 my-3">{p.mcqs.length ? `Practice selection · ${p.mcqs.length} questions · ${practiceMinutes(p.mcqs.length)} minutes` : p.sourceNote}</p>{p.mcqs.length ? <button className={`${button} mt-auto`} onClick={() => { setSelectedPastPaperId(p.id); setActive(p); }}>Start paper</button> : p.sourceUrl ? <a className={`${button} mt-auto text-center`} href={p.sourceUrl} target="_blank" rel="noreferrer">Open official reference</a> : <button className={`${button} mt-auto`} disabled>Questions unavailable</button>}</article>)}</div>{papers.length === 0 && <p className={panel}>No matching papers. Try another exam or search.</p>}
   </div>}</main>;
 };

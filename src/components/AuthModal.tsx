@@ -341,8 +341,10 @@ export const AuthModal: React.FC = () => {
                       className="w-full pl-9 pr-8 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
                     >
                       <option value="kids">👧 Kids (Class 1–5)</option>
-                      <option value="school">🎒 School (Class 6–10 / Matric)</option>
-                      <option value="college">📚 College (Inter / FSc / Entry Tests)</option>
+                      <option value="middle">🎒 Middle School (Class 6–8)</option>
+                      <option value="matric">🏫 Matriculation (Class 9–10)</option>
+                      <option value="college">📚 Intermediate (1st & 2nd Year)</option>
+                      <option value="entry-test">🎯 Entry Test Prep (MDCAT, ECAT, NET)</option>
                       <option value="university">🎓 University & Scholarships</option>
                       <option value="jobs">💼 Job Seeker (STS, NTS, Govt)</option>
                       <option value="competitive">🏆 Competitive (CSS, PMS, SPSC)</option>
@@ -562,7 +564,7 @@ export const AuthModal: React.FC = () => {
                       id="signin-email-input"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="aspirant@gmail.com"
+                      placeholder="Enter your email address"
                       required
                       className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
                     />
@@ -654,8 +656,10 @@ export const AuthModal: React.FC = () => {
                         className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden cursor-pointer"
                       >
                         <option value="kids">👧 Kids (Class 1–5)</option>
-                        <option value="school">🎒 School (Class 6–10 / Matric)</option>
-                        <option value="college">📚 College (Inter / Entry Test)</option>
+                        <option value="middle">🎒 Middle School (Class 6–8)</option>
+                        <option value="matric">🏫 Matriculation (Class 9–10)</option>
+                        <option value="college">📚 Intermediate (1st & 2nd Year)</option>
+                        <option value="entry-test">🎯 Entry Test Prep (MDCAT, ECAT, NET)</option>
                         <option value="university">🎓 University & Scholarships</option>
                         <option value="jobs">💼 Job Seeker (STS, NTS, Govt)</option>
                         <option value="competitive">🏆 CSS & Provincial PMS</option>
@@ -725,7 +729,7 @@ export const AuthModal: React.FC = () => {
                       id="signup-email-input"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="aspirant@gmail.com"
+                      placeholder="Enter your email address"
                       required
                       className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
                     />
@@ -793,7 +797,7 @@ export const AuthModal: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="aspirant@gmail.com"
+                      placeholder="Enter your email address"
                       required
                       className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
                     />

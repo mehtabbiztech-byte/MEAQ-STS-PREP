@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   Calendar, 
@@ -20,17 +20,22 @@ import {
   Check
 } from 'lucide-react';
 import { CURRENT_AFFAIRS_DATA } from '../data/currentAffairsData';
-import { PAKISTAN_CURRENT_AFFAIRS_MCQS } from '../data/pakistanCurrentAffairsMcqs';
+import { CURRENT_AFFAIRS_SOURCED, PAKISTAN_CURRENT_AFFAIRS_MCQS, WORLD_CURRENT_AFFAIRS_MCQS } from '../data/currentAffairs2000';
 import { MCQ } from '../types';
+import { useCmsContent } from '../context/CmsContentContext';
 
 export const CurrentAffairsView: React.FC = () => {
+  const { mcqs: cmsMcqs } = useCmsContent();
+  const allCurrentMcqs = useMemo(() => [...cmsMcqs.filter(item => item.category === 'current-affairs'), ...CURRENT_AFFAIRS_SOURCED], [cmsMcqs]);
   const { setTab, setSelectedCategorySlug, toggleBookmark, isBookmarked, addMistake } = useApp();
   
   const [activeTab, setActiveTab] = useState<'mcqs' | 'timeline'>('mcqs');
   const [scopeFilter, setScopeFilter] = useState<'All' | 'Pakistan' | 'International'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [subtopicFilter, setSubtopicFilter] = useState<string>('All');
-  const [sourceFilter, setSourceFilter] = useState<'All' | 'Sourced'>('All');
+  const [mcqScope, setMcqScope] = useState<'All' | 'Pakistan' | 'World'>('All');
+  const [page, setPage] = useState(1);
+  const pageSize = 24;
   
   // Interactive answers state for MCQs { [mcqId]: selectedOptionIndex }
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
@@ -39,11 +44,11 @@ export const CurrentAffairsView: React.FC = () => {
   // Subtopics list for filter pills
   const subtopics = useMemo(() => {
     const set = new Set<string>();
-    PAKISTAN_CURRENT_AFFAIRS_MCQS.forEach((m) => {
+    allCurrentMcqs.forEach((m) => {
       if (m.subtopic) set.add(m.subtopic);
     });
     return ['All', ...Array.from(set)];
-  }, []);
+  }, [allCurrentMcqs]);
 
   // Filtered MCQs
   const filteredMcqs = useMemo(() => {
@@ -107,10 +112,10 @@ export const CurrentAffairsView: React.FC = () => {
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-800/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold mb-3 shadow-xs">
               <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>Latest 2024 - 2026 Pakistan & International Current Affairs Bank</span>
+              <span>Pakistan & World Current Affairs — source checked 13 September 2026</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-extrabold font-display tracking-tight text-white">
-              Pakistan Current Affairs <span className="text-emerald-400">MCQs Bank</span>
+              Pakistan & World Current Affairs <span className="text-emerald-400">MCQs Bank</span>
             </h1>
             <p className="text-emerald-100/90 text-xs sm:text-sm mt-2.5 leading-relaxed max-w-2xl">
               Practice dated Pakistan and international events. New questions include a primary source and a verification date. Older questions remain available but need source review.
@@ -170,7 +175,7 @@ export const CurrentAffairsView: React.FC = () => {
             }`}
           >
             <Layers className="w-4 h-4" />
-            <span>MCQs Practice Bank ({PAKISTAN_CURRENT_AFFAIRS_MCQS.length})</span>
+            <span>MCQs Practice Bank ({allCurrentMcqs.length.toLocaleString()})</span>
           </button>
           <button
             onClick={() => setActiveTab('timeline')}
@@ -226,6 +231,7 @@ export const CurrentAffairsView: React.FC = () => {
                 {topic}
               </button>
             ))}
+            </div>
           </div>
         ) : (
           <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
@@ -252,7 +258,7 @@ export const CurrentAffairsView: React.FC = () => {
         </span>
       </div>
 
-      {/* TAB 1: MCQS PRACTICE BANK (100+ MCQS) */}
+      {/* TAB 1: MCQS PRACTICE BANK */}
       {activeTab === 'mcqs' && (
         <div className="space-y-4">
           {filteredMcqs.length === 0 ? (
@@ -270,7 +276,7 @@ export const CurrentAffairsView: React.FC = () => {
               </button>
             </div>
           ) : (
-            filteredMcqs.map((mcq, idx) => {
+            visibleMcqs.map((mcq, idx) => {
               const selectedOpt = selectedAnswers[mcq.id];
               const isAnswered = selectedOpt !== undefined;
               const isCorrect = isAnswered && selectedOpt === mcq.correctIndex;
@@ -286,7 +292,7 @@ export const CurrentAffairsView: React.FC = () => {
                   <div className="flex items-center justify-between gap-3 text-xs mb-3">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="px-2.5 py-0.5 rounded-md font-extrabold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[11px]">
-                        Q{idx + 1}
+                        Q{(page - 1) * pageSize + idx + 1}
                       </span>
                       {mcq.subtopic && (
                         <span className="px-2.5 py-0.5 rounded-md font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px]">
@@ -418,6 +424,7 @@ export const CurrentAffairsView: React.FC = () => {
               );
             })
           )}
+          {filteredMcqs.length > pageSize && <div className="flex items-center justify-center gap-3 pt-4"><button disabled={page === 1} onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-4 py-2 rounded-xl border disabled:opacity-40">Previous</button><span className="text-sm font-bold">Page {page} of {totalPages}</span><button disabled={page === totalPages} onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="px-4 py-2 rounded-xl bg-emerald-600 text-white disabled:opacity-40">Next</button></div>}
         </div>
       )}
 

@@ -1,8 +1,18 @@
-export type ThemeStyle = 'emerald' | 'sapphire' | 'aurora' | 'sunset';
+export type ThemeStyle = 
+  | 'rose' 
+  | 'lavender' 
+  | 'galaxy' 
+  | 'cyber' 
+  | 'emerald' 
+  | 'sapphire' 
+  | 'sunset' 
+  | 'ocean'
+  | 'pastel-network'
+  | 'pastel-ribbons';
 
-export type UserPersona = 'kids' | 'school' | 'college' | 'university' | 'jobs' | 'competitive';
+export type UserPersona = 'kids' | 'middle' | 'matric' | 'school' | 'college' | 'intermediate' | 'entry-test' | 'university' | 'jobs' | 'competitive';
 
-export type ExamCategory = 'school' | 'college' | 'university' | 'jobs' | 'competitive' | 'general';
+export type ExamCategory = 'middle' | 'matric' | 'school' | 'college' | 'intermediate' | 'entry-test' | 'university' | 'jobs' | 'competitive' | 'general';
 
 export type NavigationTab = 
   | 'home' 
@@ -14,9 +24,60 @@ export type NavigationTab =
   | 'jobs' 
   | 'study-notes' 
   | 'rankings' 
+  | 'learning-lab'
   | 'about'
   | 'bookmarks'
   | 'mistakes';
+
+export type ContentStatus = 'Draft' | 'Reviewed' | 'Published';
+
+export interface CmsBase {
+  id: string;
+  status: ContentStatus;
+  sourceUrls: string[];
+  syllabusReferences: string[];
+  publishAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
+export interface CmsMcq extends CmsBase {
+  kind: 'mcq';
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+  category: string;
+  subtopic?: string;
+  examTags: string[];
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  normalizedQuestion: string;
+}
+
+export interface CmsPastPaper extends CmsBase {
+  kind: 'past-paper';
+  title: string;
+  exam: string;
+  conductedBy: string;
+  year: number;
+  postName: string;
+  bps: string;
+  durationMinutes: number;
+  questions: Omit<CmsMcq, keyof CmsBase | 'kind'>[];
+}
+
+export interface CmsLesson extends CmsBase {
+  kind: 'lesson';
+  subject: string;
+  chapter: string;
+  topic: string;
+  title: string;
+  explanation: string;
+  importantPoints: string[];
+  examples: string[];
+}
 
 export interface MCQ {
   id: string;
@@ -31,8 +92,10 @@ export interface MCQ {
   difficulty: 'Easy' | 'Medium' | 'Hard';
   viewsCount?: number;
   submittedBy?: string;
+  sourceId?: string;
   sourceUrl?: string;
-  sourceCheckedOn?: string;
+  verificationStatus?: 'generated-practice' | 'source-aligned' | 'editor-reviewed' | 'official-paper';
+  verificationMethod?: string;
 }
 
 export interface Category {
@@ -86,6 +149,10 @@ export interface PastPaper {
   totalQuestions: number;
   solvedDate?: string;
   mcqs: MCQ[];
+  recordType?: 'Official Past Paper' | 'Official Sample Paper' | 'Official Answer Key / Date Record' | 'Reconstructed Practice Paper';
+  testDateLabel?: string;
+  sourceUrl?: string;
+  sourceNote?: string;
 }
 
 export interface JobAlert {
@@ -99,11 +166,19 @@ export interface JobAlert {
   postsCount: number;
   vacancies?: number;
   lastDate: string;
+  publishedDate?: string;
   eligibility: string;
   qualification?: string;
+  experience?: string;
+  ageLimit?: string;
+  applicationMethod?: string;
   examCategory?: string;
   advertisementNo: string;
-  status: 'Active' | 'Closing Soon' | 'Announced';
+  sourceUrl?: string;
+  applyUrl?: string;
+  sourceLabel?: string;
+  verifiedAt?: string;
+  status: 'Active' | 'Closing Soon' | 'Announced' | 'Walk-in';
 }
 
 export interface StudyNote {
