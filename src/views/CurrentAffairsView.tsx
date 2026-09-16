@@ -52,8 +52,8 @@ export const CurrentAffairsView: React.FC = () => {
 
   // Filtered MCQs
   const filteredMcqs = useMemo(() => {
-    return allCurrentMcqs.filter((mcq) => {
-      if (mcqScope !== 'All' && !mcq.subtopic?.startsWith(`${mcqScope}:`)) return false;
+    return PAKISTAN_CURRENT_AFFAIRS_MCQS.filter((mcq) => {
+      if (sourceFilter === 'Sourced' && !mcq.sourceUrl) return false;
       if (subtopicFilter !== 'All' && mcq.subtopic !== subtopicFilter) {
         return false;
       }
@@ -69,11 +69,7 @@ export const CurrentAffairsView: React.FC = () => {
       }
       return true;
     });
-  }, [allCurrentMcqs, subtopicFilter, searchQuery, mcqScope]);
-
-  useEffect(() => setPage(1), [subtopicFilter, searchQuery, mcqScope]);
-  const totalPages = Math.max(1, Math.ceil(filteredMcqs.length / pageSize));
-  const visibleMcqs = filteredMcqs.slice((page - 1) * pageSize, page * pageSize);
+  }, [subtopicFilter, searchQuery, sourceFilter]);
 
   // Filtered Timeline Items
   const filteredTimeline = useMemo(() => {
@@ -122,22 +118,22 @@ export const CurrentAffairsView: React.FC = () => {
               Pakistan & World Current Affairs <span className="text-emerald-400">MCQs Bank</span>
             </h1>
             <p className="text-emerald-100/90 text-xs sm:text-sm mt-2.5 leading-relaxed max-w-2xl">
-              A growing library of distinct questions based on facts checked against official Pakistani and international sources. Every published count reflects a real question—never a rewritten duplicate.
+              Practice dated Pakistan and international events. New questions include a primary source and a verification date. Older questions remain available but need source review.
             </p>
 
             {/* Quick stats chips */}
             <div className="flex flex-wrap items-center gap-2 mt-4 text-xs font-semibold">
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                {CURRENT_AFFAIRS_SOURCED.length.toLocaleString()} MCQs
+                {PAKISTAN_CURRENT_AFFAIRS_MCQS.length} questions in bank
               </span>
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Trophy className="w-3.5 h-3.5 text-emerald-400" />
-                STS • SPSC • FPSC • NTS • PTS
+                STS • CSS • SPSC preparation
               </span>
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-teal-400" />
-                {PAKISTAN_CURRENT_AFFAIRS_MCQS.length.toLocaleString()} Pakistan + {WORLD_CURRENT_AFFAIRS_MCQS.length.toLocaleString()} World
+                New sources checked 12 Sep 2026
               </span>
             </div>
           </div>
@@ -205,18 +201,19 @@ export const CurrentAffairsView: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={activeTab === 'mcqs' ? `Search ${allCurrentMcqs.length.toLocaleString()} sourced MCQs...` : 'Search events, summits, appointments...'}
+            placeholder={activeTab === 'mcqs' ? 'Search questions, options, tags...' : 'Search events, summits, appointments...'}
             className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
         {/* Filters according to active tab */}
         {activeTab === 'mcqs' ? (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
-            <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-              {(['All', 'Pakistan', 'World'] as const).map(scope => <button key={scope} onClick={() => setMcqScope(scope)} className={`px-3 py-1.5 rounded-lg text-xs font-bold ${mcqScope === scope ? 'bg-emerald-600 text-white' : 'text-slate-600 dark:text-slate-300'}`}>{scope}</button>)}
-            </div>
-            <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+            <label className="text-xs text-slate-600 dark:text-slate-300 whitespace-nowrap">Sources
+              <select value={sourceFilter} onChange={e => setSourceFilter(e.target.value as 'All' | 'Sourced')} className="ml-2 p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800">
+                <option value="All">All questions</option><option value="Sourced">Source-linked only</option>
+              </select>
+            </label>
             <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1 shrink-0">
               <Filter className="w-3.5 h-3.5 text-emerald-500" />
               Subtopic:
@@ -307,6 +304,9 @@ export const CurrentAffairsView: React.FC = () => {
                           {mcq.year}
                         </span>
                       )}
+                      <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${mcq.sourceUrl ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800'}`}>
+                        {mcq.sourceUrl ? 'Source-linked' : 'Source review pending'}
+                      </span>
                       {mcq.examTags?.map((tag) => (
                         <span key={tag} className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                           {tag}
@@ -401,6 +401,7 @@ export const CurrentAffairsView: React.FC = () => {
                         <strong className="text-slate-800 dark:text-slate-200">Detailed Explanation: </strong>
                         {mcq.explanation}
                       </p>
+                      {mcq.sourceUrl && <a href={mcq.sourceUrl} target="_blank" rel="noreferrer" className="inline-block text-xs font-semibold text-emerald-700 dark:text-emerald-400 underline pt-2">Original source ↗ · Checked {mcq.sourceCheckedOn}</a>}
                     </div>
                   )}
 
