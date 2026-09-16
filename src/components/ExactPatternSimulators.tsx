@@ -8,6 +8,7 @@ import {
   SimulatorId,
   SimulatorLaunch,
   StsTier,
+  TEACHING_LICENSE_BLUEPRINT,
 } from '../data/examSimulatorData';
 
 interface Props {
@@ -16,7 +17,14 @@ interface Props {
   defaultTab?: 'patterns' | 'laws' | 'omr';
 }
 
-const STS_TIERS: StsTier[] = ['Graduation (BPS 11–15)', 'Intermediate (BPS 05–10)', 'Matric (BPS 05)', 'PST', 'JEST'];
+const STS_TIERS: StsTier[] = [
+  'Graduation (BPS 11–15)',
+  'Intermediate (BPS 05–10)',
+  'Matric (BPS 05)',
+  'STS IBA Teaching License Test',
+  'PST',
+  'JEST',
+];
 const FPSC_TRACKS: FpscTrack[] = ['General Recruitment', 'FIA Professional', 'Customs & Revenue', 'Administrative'];
 const KEY_COLORS = ['Green', 'Pink', 'Blue', 'Yellow'] as const;
 const ANSWERS = ['A', 'B', 'C', 'D'];
@@ -34,7 +42,8 @@ export const ExactPatternSimulators: React.FC<Props> = ({
   const [keyColor, setKeyColor] = useState<(typeof KEY_COLORS)[number]>('Green');
   const [checked, setChecked] = useState(false);
 
-  const blueprint = SIMULATOR_BLUEPRINTS[simulator];
+  const isTeachingLicense = simulator === 'sts' && stsTier === 'STS IBA Teaching License Test';
+  const blueprint = isTeachingLicense ? TEACHING_LICENSE_BLUEPRINT : SIMULATOR_BLUEPRINTS[simulator];
   const selectedCategory = simulator === 'sts' ? stsTier : fpscTrack;
   const keyOffset = KEY_COLORS.indexOf(keyColor);
   const omrScore = useMemo(
@@ -45,9 +54,12 @@ export const ExactPatternSimulators: React.FC<Props> = ({
   const launch = () => {
     onLaunch({
       simulatorId: simulator,
-      title: `${blueprint.title} — ${selectedCategory}`,
+      title: isTeachingLicense
+        ? 'STS IBA Teaching License Test (STEDA) — 100 MCQs Simulation'
+        : `${blueprint.title} — ${selectedCategory}`,
       category: selectedCategory,
-      durationMinutes: 100,
+      durationMinutes: blueprint.duration,
+      timeMinutes: blueprint.duration,
       questionCount: 100,
       negativeMarking: false,
     });
@@ -94,13 +106,30 @@ export const ExactPatternSimulators: React.FC<Props> = ({
                   <button
                     key={item}
                     onClick={() => simulator === 'sts' ? setStsTier(item as StsTier) : setFpscTrack(item as FpscTrack)}
-                    className={`rounded-xl border px-3 py-2 text-left text-xs font-bold ${selectedCategory === item ? 'border-fuchsia-300 bg-fuchsia-400/15 text-fuchsia-100' : 'border-white/10 text-indigo-100/80 hover:bg-white/5'}`}
+                    className={`rounded-xl border px-3 py-2 text-left text-xs font-bold transition flex items-center justify-between ${selectedCategory === item ? 'border-fuchsia-300 bg-fuchsia-400/15 text-fuchsia-100' : 'border-white/10 text-indigo-100/80 hover:bg-white/5'}`}
                   >
-                    {item}
+                    <span>{item}</span>
+                    {item === 'STS IBA Teaching License Test' && (
+                      <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-emerald-500/30 text-emerald-300 border border-emerald-400/40">
+                        NEW
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
             </div>
+
+            {isTeachingLicense && (
+              <div className="rounded-xl border border-emerald-400/40 bg-emerald-400/15 p-3 text-xs text-emerald-100 space-y-1">
+                <div className="font-extrabold text-emerald-200 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Sindh Teaching License (STEDA & STS IBA):</span>
+                </div>
+                <div className="leading-relaxed text-indigo-100/90">
+                  Exact 50–50 blueprint: 50% Content Knowledge (Class 1–8 DCAR) + 50% Pedagogical Content Knowledge (HEC B.Ed curriculum). Passing mark is 60%.
+                </div>
+              </div>
+            )}
 
             {(stsTier === 'PST' || stsTier === 'JEST') && simulator === 'sts' && (
               <div className="rounded-xl border border-amber-300/30 bg-amber-300/10 p-3 text-xs text-amber-100">
@@ -129,8 +158,8 @@ export const ExactPatternSimulators: React.FC<Props> = ({
               ))}
             </div>
             <div className="mt-4 rounded-xl bg-amber-300/10 p-3 text-xs text-amber-100">{blueprint.note}</div>
-            <button onClick={launch} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-cyan-400 to-fuchsia-500 px-5 py-3 font-extrabold text-slate-950 transition hover:brightness-110">
-              <Play className="h-4 w-4 fill-current" /> Launch 100-Minute Simulator
+            <button onClick={launch} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-cyan-400 to-fuchsia-500 px-5 py-3 font-extrabold text-slate-950 transition hover:brightness-110 cursor-pointer">
+              <Play className="h-4 w-4 fill-current" /> Launch {blueprint.duration}-Minute Simulator
             </button>
             <div className="mt-3 flex flex-wrap gap-3">
               {OFFICIAL_PATTERN_SOURCES.map((source) => (

@@ -265,11 +265,28 @@ export const Navbar: React.FC = () => {
     updatePersona,
     setSelectedCategorySlug,
     selectedExamId,
-    setSelectedExamId
+    setSelectedExamId,
+    setSelectedPastPaperId,
+    launchSimulator,
+    pendingSimulatorLaunch
   } = useApp();
 
   const palette = getNavPalette(themeStyle);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [highlightsOpen, setHighlightsOpen] = useState(false);
+
+  const openTeachingLicense = () => {
+    launchSimulator({
+      simulatorId: 'sts',
+      title: 'STS IBA Teaching License Test (STEDA)',
+      category: 'STS IBA Teaching License Test',
+      durationMinutes: 120,
+      questionCount: 100,
+      negativeMarking: false,
+    });
+    setMobileMenuOpen(false);
+    setHighlightsOpen(false);
+  };
 
   const navItems: NavItemConfig[] = [
     { 
@@ -399,6 +416,17 @@ export const Navbar: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
+              {/* Highlight Ticker Link */}
+              <button
+                onClick={openTeachingLicense}
+                className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500/25 via-rose-500/25 to-purple-500/25 border border-amber-400/40 text-amber-200 hover:text-white hover:border-amber-300 transition text-[11px] font-extrabold cursor-pointer"
+                title="Launch STS Teaching License Test Simulator"
+              >
+                <Flame className="w-3 h-3 text-amber-400 fill-amber-400 animate-pulse" />
+                <span>Highlights: STS Teaching License Test (STEDA)</span>
+                <span className="px-1 py-0.2 rounded bg-rose-500 text-[9px] text-white font-black">HOT</span>
+              </button>
+
               <div className="flex items-center gap-1.5 text-amber-200">
                 <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                 <span>Streak: <strong className="text-white">{userProfile.streakDays}d</strong></span>
@@ -455,6 +483,159 @@ export const Navbar: React.FC = () => {
 
             {/* Right Action Icons (Optimized for zero overflow on mobile screens) */}
             <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+              
+              {/* Highlights Menu Popover Button on the Right Side */}
+              <div className="relative">
+                <button
+                  id="nav-highlights-btn"
+                  onClick={() => setHighlightsOpen((prev) => !prev)}
+                  className="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-amber-300 dark:border-amber-600/80 bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 dark:from-amber-950/80 dark:via-orange-950/50 dark:to-amber-950/80 px-2 sm:px-3 py-1.5 sm:py-2 text-xs font-black text-amber-900 dark:text-amber-200 hover:scale-105 transition-all shadow-xs cursor-pointer"
+                  title="Hot Highlights & Exam Alerts"
+                  aria-expanded={highlightsOpen}
+                >
+                  <Flame className="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse" />
+                  <span className="hidden md:inline">Highlights</span>
+                  <span className="px-1.5 py-0.2 rounded-full bg-rose-500 text-[9px] text-white font-extrabold tracking-wide uppercase">Hot</span>
+                </button>
+
+                {/* Highlights Dropdown Popover */}
+                {highlightsOpen && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-40" 
+                      onClick={() => setHighlightsOpen(false)} 
+                    />
+                    <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border-2 border-amber-400 dark:border-amber-500/50 shadow-2xl shadow-slate-950/50 z-50 p-4 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 text-left">
+                      <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-500">
+                            <Flame className="w-4 h-4 fill-amber-500" />
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-900 dark:text-white font-display">Hot Highlights & Updates</h4>
+                            <p className="text-[10px] text-slate-500">STS, STEDA, FPSC & SPSC 2026</p>
+                          </div>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400 text-[10px] font-extrabold uppercase">
+                          Live Alerts
+                        </span>
+                      </div>
+
+                      <div className="mt-3 space-y-2.5 max-h-[70vh] overflow-y-auto pr-1">
+                        {/* 1. Teaching License Test */}
+                        <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/10 via-rose-500/10 to-purple-500/10 border border-amber-300 dark:border-amber-600/40">
+                          <div className="flex items-center justify-between gap-1 mb-1">
+                            <span className="px-1.5 py-0.5 rounded-md bg-rose-500 text-white text-[9px] font-black uppercase">
+                              🔥 Spotlight
+                            </span>
+                            <span className="text-[10px] text-amber-700 dark:text-amber-300 font-bold">BPS-16/17</span>
+                          </div>
+                          <h5 className="text-xs font-bold text-slate-900 dark:text-white">
+                            STS IBA Teaching License Test (STEDA)
+                          </h5>
+                          <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5 leading-relaxed">
+                            Official 50–50 STEDA Pattern: 50 Content (DCAR) + 50 Pedagogy (B.Ed).
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            <button
+                              onClick={() => {
+                                setHighlightsOpen(false);
+                                openTeachingLicense();
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold transition shadow-xs cursor-pointer"
+                            >
+                              ⚡ Start 100-Mark Mock
+                            </button>
+                            <button
+                              onClick={() => {
+                                setHighlightsOpen(false);
+                                setSelectedPastPaperId('sts-teaching-license-paper-1');
+                                setTab('past-papers');
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className="px-2 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-[10px] font-bold hover:bg-slate-50 transition cursor-pointer"
+                            >
+                              Solved Paper 1
+                            </button>
+                            <button
+                              onClick={() => {
+                                setHighlightsOpen(false);
+                                setSelectedPastPaperId('sts-teaching-license-paper-2');
+                                setTab('past-papers');
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className="px-2 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-[10px] font-bold hover:bg-slate-50 transition cursor-pointer"
+                            >
+                              Solved Paper 2
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* 2. STS BPS 5 to 15 */}
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">STS BPS 5–15 Screening</span>
+                            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">40-20-40 Blueprint</span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            Graduation, Intermediate & Matric categories with answer keys & typing mock.
+                          </p>
+                          <button
+                            onClick={() => {
+                              setHighlightsOpen(false);
+                              openExamHub('sts');
+                            }}
+                            className="mt-2 w-full py-1 text-center rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition cursor-pointer"
+                          >
+                            Open STS IBA Room
+                          </button>
+                        </div>
+
+                        {/* 3. FPSC General Recruitment */}
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">FPSC One-Paper 2026</span>
+                            <span className="text-[10px] text-violet-600 dark:text-violet-400 font-bold">FIA · Customs · SST</span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            20 English + 80 Professional ability tests with negative marking.
+                          </p>
+                          <button
+                            onClick={() => {
+                              setHighlightsOpen(false);
+                              openExamHub('fpsc');
+                            }}
+                            className="mt-2 w-full py-1 text-center rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-[10px] font-bold transition cursor-pointer"
+                          >
+                            Open FPSC Room
+                          </button>
+                        </div>
+
+                        {/* 4. Current Affairs 2026 */}
+                        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Current Affairs 2026</span>
+                            <span className="text-[10px] text-sky-600 dark:text-sky-400 font-bold">Updated Daily</span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            Constitutional amendments, Pakistan economy, SCO & international events.
+                          </p>
+                          <button
+                            onClick={() => {
+                              setHighlightsOpen(false);
+                              setTab('current-affairs');
+                            }}
+                            className="mt-2 w-full py-1 text-center rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-[10px] font-bold transition cursor-pointer"
+                          >
+                            View 2026 Digest
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
               <button onClick={openKids} aria-label="Open Kids learning, art and games" className="shrink-0 inline-flex items-center gap-1 rounded-full border border-sky-200 bg-sky-100 px-2 sm:px-3 py-2 text-xs font-extrabold text-sky-900 hover:bg-sky-200"><span aria-hidden="true">🫧</span><span className="hidden sm:inline">Kids</span></button>
               
               {/* Search Icon Trigger on mobile/tablet */}
@@ -567,29 +748,46 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-2.5 overflow-x-auto no-scrollbar scroll-smooth py-0.5 w-full max-w-full touch-pan-x justify-start">
               {/* Main exam rooms stay first and visible; each tab opens its complete linked hub. */}
               {[
-                { id: 'sts' as const, label: 'STS IBA', tone: 'from-emerald-600 to-teal-600', dot: 'bg-emerald-500' },
-                { id: 'spsc-cce' as const, label: 'SPSC', tone: 'from-sky-600 to-cyan-600', dot: 'bg-sky-500' },
-                { id: 'fpsc' as const, label: 'FPSC', tone: 'from-violet-600 to-indigo-600', dot: 'bg-violet-500' },
+                { id: 'sts' as const, label: 'STS IBA', tone: 'from-emerald-600 to-teal-600', dot: 'bg-emerald-500', isHot: false },
+                { id: 'teaching-license' as const, label: 'Teaching License', tone: 'from-amber-600 via-rose-600 to-purple-600', dot: 'bg-amber-400', isHot: true, badgeText: 'HOT' },
+                { id: 'spsc-cce' as const, label: 'SPSC', tone: 'from-sky-600 to-cyan-600', dot: 'bg-sky-500', isHot: false },
+                { id: 'fpsc' as const, label: 'FPSC', tone: 'from-violet-600 to-indigo-600', dot: 'bg-violet-500', isHot: false },
               ].map((exam) => {
-                const isSelected = tab === 'exams' && selectedExamId === exam.id;
+                const isSelected = exam.id === 'teaching-license'
+                  ? (tab === 'quiz' && pendingSimulatorLaunch?.category === 'STS IBA Teaching License Test')
+                  : (tab === 'exams' && selectedExamId === exam.id);
                 return (
                   <button
                     key={exam.id}
                     id={`main-exam-tab-${exam.id}`}
-                    onClick={() => openExamHub(exam.id)}
+                    onClick={() => {
+                      if (exam.id === 'teaching-license') {
+                        openTeachingLicense();
+                      } else {
+                        openExamHub(exam.id as 'sts' | 'spsc-cce' | 'fpsc');
+                      }
+                    }}
                     aria-label={`Open ${exam.label} complete preparation room`}
                     aria-current={isSelected ? 'page' : undefined}
                     className={`group relative inline-flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm font-extrabold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
                       isSelected
                         ? `border-transparent bg-gradient-to-r ${exam.tone} text-white ring-2 ring-white/70`
+                        : exam.isHot
+                        ? 'border-amber-300 dark:border-amber-600/60 bg-gradient-to-r from-amber-50 via-rose-50 to-purple-50 dark:from-amber-950/40 dark:via-rose-950/30 dark:to-purple-950/30 text-amber-950 dark:text-amber-200 hover:border-amber-400'
                         : 'border-slate-200 bg-white text-slate-900 hover:border-emerald-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100'
                     }`}
                   >
-                    <span className={`h-2 w-2 rounded-full ${isSelected ? 'bg-white' : exam.dot}`} />
+                    <span className={`h-2 w-2 rounded-full ${isSelected ? 'bg-white' : exam.dot} ${exam.isHot ? 'animate-pulse' : ''}`} />
                     {exam.label}
-                    <span className={`hidden xl:inline rounded-full px-1.5 py-0.5 text-[9px] font-black tracking-wider ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300'}`}>
-                      MAIN
-                    </span>
+                    {exam.badgeText ? (
+                      <span className="rounded-full px-1.5 py-0.2 text-[9px] font-black tracking-wider bg-rose-500 text-white">
+                        {exam.badgeText}
+                      </span>
+                    ) : (
+                      <span className={`hidden xl:inline rounded-full px-1.5 py-0.5 text-[9px] font-black tracking-wider ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-300'}`}>
+                        MAIN
+                      </span>
+                    )}
                     <ChevronRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                   </button>
                 );

@@ -89,6 +89,20 @@ export const PastPapersView: React.FC = () => {
   const [search, setSearch] = useState('');
   const [exam, setExam] = useState('All');
   const allPapers: PastPaper[] = [...cmsPapers.map(p => ({ id: p.id, title: p.title, exam: p.exam, conductedBy: p.conductedBy, year: p.year, postName: p.postName, bps: p.bps, totalQuestions: p.questions.length, mcqs: p.questions.map((q, i) => ({ ...q, id: `${p.id}-${i + 1}` })), recordType: 'Official Past Paper' as const, testDateLabel: String(p.year), sourceUrl: p.sourceUrls[0], sourceNote: 'Published through the MEQSA editorial CMS.' })), ...PAST_PAPERS_DATA];
+
+  useEffect(() => {
+    if (selectedPastPaperId) {
+      const match = allPapers.find(p => p.id === selectedPastPaperId);
+      if (match) {
+        if (match.mcqs && match.mcqs.length > 0) {
+          setActive(match);
+        } else {
+          setSearch(match.title.split('—')[0].trim());
+        }
+      }
+    }
+  }, [selectedPastPaperId]);
+
   const papers = allPapers.filter(p => (exam === 'All' || p.exam === exam) && `${p.title} ${p.postName} ${p.year}`.toLowerCase().includes(search.toLowerCase()));
   return <main className="max-w-7xl mx-auto px-4 py-8 text-slate-900 dark:text-slate-100">{active ? <div key={`${active.id}-${session}`}><PaperSession paper={active} onExit={() => setActive(null)} onRetake={() => setSession(s => s+1)} /></div> : <div className="space-y-6">
     <header className="rounded-3xl bg-emerald-950 text-white p-8"><FileText className="mb-4 text-emerald-300"/><p className="text-emerald-300 text-sm font-semibold">PRACTICE • REVIEW • IMPROVE</p><h1 className="text-3xl font-bold mt-2">Past papers, real progress</h1><p className="mt-3 max-w-2xl text-emerald-100">Build confidence with timed practice, clear explanations and a personal mistake bank.</p></header>

@@ -1,10 +1,14 @@
 import { MCQ } from '../types';
-import { CURRENT_AFFAIRS_SOURCED } from './currentAffairs2000';
+import { CURRENT_AFFAIRS_2000 } from './currentAffairs2000';
 import { STS_IBA_MCQS } from './stsIba5000';
+import { TEACHING_LICENSE_PAPER_1_MCQS } from './teachingLicensePaper1';
+import { TEACHING_LICENSE_PAPER_2_MCQS } from './teachingLicensePaper2';
 
 export const MCQS_DATA: MCQ[] = [
   ...STS_IBA_MCQS,
-  ...CURRENT_AFFAIRS_SOURCED,
+  ...TEACHING_LICENSE_PAPER_1_MCQS,
+  ...TEACHING_LICENSE_PAPER_2_MCQS,
+  ...CURRENT_AFFAIRS_2000,
   // Pakistan Studies
   {
     id: 'ps-01',
@@ -46,7 +50,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2024,
     difficulty: 'Easy',
     viewsCount: 22100,
-    submittedBy: 'MEQSA Academic Team',
+    submittedBy: 'MATB Academic Team',
   },
   {
     id: 'ps-04',
@@ -132,7 +136,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 28400,
-    submittedBy: 'MEQSA Current Affairs Team',
+    submittedBy: 'MATB Current Affairs Team',
   },
   {
     id: 'ca-04',
@@ -218,7 +222,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 18700,
-    submittedBy: 'MEQSA Team',
+    submittedBy: 'MATB Prep Team',
   },
 
   // General Knowledge
@@ -350,7 +354,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 19600,
-    submittedBy: 'MEQSA English Faculty',
+    submittedBy: 'MATB English Faculty',
   },
 
   // Computer

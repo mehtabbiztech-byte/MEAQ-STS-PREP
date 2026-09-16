@@ -16,6 +16,7 @@
     "validate:current-affairs": "esbuild scripts/validate-current-affairs-bank.ts --bundle --platform=node --format=esm --outfile=/tmp/meqsa-current-affairs-validation.mjs && node /tmp/meqsa-current-affairs-validation.mjs"
   },
   "dependencies": {
+    "@google/genai": "^2.22.0",
     "@tailwindcss/vite": "^4.1.14",
     "@types/canvas-confetti": "^1.9.0",
     "@vitejs/plugin-react": "^6.1.1",

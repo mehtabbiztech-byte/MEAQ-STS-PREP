@@ -1,6 +1,6 @@
 {
-  "name": "MEQSA Study Platform",
-  "description": "Pakistan's premier competitive exam portal featuring exact Sukkur IBA STS BPS 05–15 (40–20–40) Screening, FPSC One-Paper tests, FIA/Customs law modules, and Carbon-Copy OMR evaluation.",
+  "name": "MATB STS PREP",
+  "description": "Pakistan's premier competitive exam portal featuring Sukkur IBA STS BPS 05–15 Screening, SPSC CCE, FPSC tests, Carbon-Copy OMR evaluation, and Mehtab AI study mentor with instant past paper navigation.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

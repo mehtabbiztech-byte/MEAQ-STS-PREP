@@ -182,11 +182,17 @@ export const StsExamSimulator: React.FC<StsExamSimulatorProps> = ({
     let englishScore = 0;
     let mathScore = 0;
     let gkScore = 0;
+    let contentScore = 0;
+    let pedagogyScore = 0;
 
     paper.allQuestions.forEach((q, idx) => {
       const isCorrect = userAnswers[idx] === q.correctIndex;
       if (isCorrect) {
         totalScore += 1;
+        if (selectedCategory === 'teaching_license') {
+          if (idx < 50) contentScore += 1;
+          else pedagogyScore += 1;
+        }
         if (q.part === 'english') englishScore += 1;
         else if (q.part === 'mathematics') mathScore += 1;
         else gkScore += 1;
@@ -201,11 +207,13 @@ export const StsExamSimulator: React.FC<StsExamSimulatorProps> = ({
       englishScore,
       mathScore,
       gkScore,
+      contentScore,
+      pedagogyScore,
       isQualified,
       isQuotaEligible,
       percentage: (totalScore / paper.allQuestions.length) * 100,
     };
-  }, [paper, userAnswers]);
+  }, [paper, userAnswers, selectedCategory]);
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
@@ -259,7 +267,7 @@ export const StsExamSimulator: React.FC<StsExamSimulatorProps> = ({
               <Layers className="w-3.5 h-3.5" />
               <span>Select STS Recruitment & Teaching Track:</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
               {(Object.keys(STS_CATEGORIES) as StsCategory[]).map((catKey) => {
                 const info = STS_CATEGORIES[catKey];
                 const isSelected = selectedCategory === catKey;
@@ -323,17 +331,123 @@ export const StsExamSimulator: React.FC<StsExamSimulatorProps> = ({
                   className="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-base transition shadow-xl shadow-emerald-900/30 flex items-center justify-center gap-3 cursor-pointer group"
                 >
                   <Sparkles className="w-5 h-5 text-amber-300 group-hover:rotate-12 transition-transform" />
-                  <span>Start 100-Mark Mock Simulator</span>
+                  <span>Start {paper.totalMarks}-Mark Mock Simulator</span>
                   <ArrowRight className="w-5 h-5" />
                 </button>
                 <div className="text-[11px] text-center text-slate-500 dark:text-slate-400">
-                  Strict 100-minute timer · 100 MCQs · Full Explanations
+                  Strict {paper.durationMinutes}-minute timer · {paper.totalQuestions} MCQs · Full Explanations
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Strict 40-20-40 Blueprint Cards */}
+          {/* Blueprint Cards */}
+          {selectedCategory === 'teaching_license' ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">
+                    The Official 50–50 STEDA Teaching License Blueprint
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm">
+                    Sukkur IBA Testing Services (STS) pattern under STEDA licensing standards.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Part I: Content Knowledge (50%) */}
+                <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-bl-full pointer-events-none" />
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+                      <BookOpen className="w-5 h-5" />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 font-extrabold text-xs">
+                      50 MCQs · 50%
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                      Part I: Content Knowledge (Class 1–8 DCAR)
+                    </h4>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">
+                      Curriculum content mandated by the Directorate of Curriculum, Assessment and Research (DCAR).
+                    </p>
+                  </div>
+
+                  <div className="space-y-2.5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">English (Grammar, Reading & Vocabulary)</span>
+                      <span className="font-bold text-blue-600 dark:text-blue-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Mathematics (Arithmetic, Algebra & Geometry)</span>
+                      <span className="font-bold text-blue-600 dark:text-blue-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">General Science (Physics, Chemistry & Biology)</span>
+                      <span className="font-bold text-blue-600 dark:text-blue-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Social Studies & Pakistan Studies</span>
+                      <span className="font-bold text-blue-600 dark:text-blue-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Mother Tongue (Sindhi / Urdu Grammar & Prose)</span>
+                      <span className="font-bold text-blue-600 dark:text-blue-400">10 MCQs</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Part II: Pedagogical Content Knowledge (50%) */}
+                <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/10 rounded-bl-full pointer-events-none" />
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+                      <GraduationCap className="w-5 h-5" />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 font-extrabold text-xs">
+                      50 MCQs · 50%
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                      Part II: Pedagogical Content Knowledge (HEC B.Ed)
+                    </h4>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">
+                      Professional competencies based on National Professional Standards for Teachers (NPST).
+                    </p>
+                  </div>
+
+                  <div className="space-y-2.5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Teaching Methods & Strategies</span>
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Child Development & Educational Psychology</span>
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Classroom Management & Inclusive Environment</span>
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">Assessment, Testing & Evaluation</span>
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400">10 MCQs</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">School, Community & Teacher Ethics</span>
+                      <span className="font-bold text-indigo-600 dark:text-indigo-400">10 MCQs</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
@@ -485,24 +599,31 @@ export const StsExamSimulator: React.FC<StsExamSimulatorProps> = ({
 
             </div>
           </div>
+          )}
 
-          {/* Dedicated Teaching Tracks Feature Card (PST & JEST) */}
+          {/* Dedicated Teaching Tracks Feature Card (Teaching License, PST & JEST) */}
           <div className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/20 rounded-3xl border border-violet-200 dark:border-violet-900/50 p-6 sm:p-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-200 dark:bg-violet-900/60 text-violet-800 dark:text-violet-300 text-xs font-bold uppercase tracking-wide">
                   <GraduationCap className="w-3.5 h-3.5" />
-                  <span>Teaching Cadre Modules Included</span>
+                  <span>Teaching Cadre & Licensing Included</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white font-display">
-                  PST (Primary) & JEST (Junior Elementary) Specialized Syllabi
+                  Sindh Teaching License (STEDA), PST & JEST Specialized Syllabi
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl leading-relaxed">
                   Sindh School Education Department teaching recruitments through STS include mandatory <span className="font-bold text-violet-700 dark:text-violet-300">Mother Tongue (Sindhi / Urdu literature & grammar)</span> and <span className="font-bold text-violet-700 dark:text-violet-300">Pedagogy & Child Psychology</span> (Piagetian development, Bloom’s taxonomy, and classroom management).
                 </p>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => { setSelectedCategory('teaching_license'); handleStartExam(); }}
+                  className="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition cursor-pointer shadow-md"
+                >
+                  Start Teaching License Mock (BPS-16)
+                </button>
                 <button
                   onClick={() => { setSelectedCategory('pst'); handleStartExam(); }}
                   className="px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs transition cursor-pointer"
@@ -856,45 +977,73 @@ export const StsExamSimulator: React.FC<StsExamSimulatorProps> = ({
             </div>
 
             {/* Sectional Breakdown Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto pt-4 border-t border-slate-200 dark:border-slate-800">
-              
-              <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
-                <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                  Part I: English
+            {selectedCategory === 'teaching_license' ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto pt-4 border-t border-slate-200 dark:border-slate-800">
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
+                  <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                    Part I: Content Knowledge (DCAR)
+                  </div>
+                  <div className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">
+                    {resultsData.contentScore} / 50
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-1">
+                    {((resultsData.contentScore / 50) * 100).toFixed(0)}% accuracy
+                  </div>
                 </div>
-                <div className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">
-                  {resultsData.englishScore} / 40
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1">
-                  {((resultsData.englishScore / 40) * 100).toFixed(0)}% accuracy
+
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
+                  <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                    Part II: Pedagogical Content Knowledge (B.Ed)
+                  </div>
+                  <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">
+                    {resultsData.pedagogyScore} / 50
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-1">
+                    {((resultsData.pedagogyScore / 50) * 100).toFixed(0)}% accuracy
+                  </div>
                 </div>
               </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto pt-4 border-t border-slate-200 dark:border-slate-800">
+                
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
+                  <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                    Part I: English
+                  </div>
+                  <div className="text-2xl font-black text-blue-600 dark:text-blue-400 mt-1">
+                    {resultsData.englishScore} / 40
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-1">
+                    {((resultsData.englishScore / 40) * 100).toFixed(0)}% accuracy
+                  </div>
+                </div>
 
-              <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
-                <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                  Part II: Mathematics
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
+                  <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                    Part II: Mathematics
+                  </div>
+                  <div className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">
+                    {resultsData.mathScore} / 20
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-1">
+                    {((resultsData.mathScore / 20) * 100).toFixed(0)}% accuracy
+                  </div>
                 </div>
-                <div className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">
-                  {resultsData.mathScore} / 20
+
+                <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
+                  <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                    Part III: General Knowledge
+                  </div>
+                  <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
+                    {resultsData.gkScore} / 40
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-1">
+                    {((resultsData.gkScore / 40) * 100).toFixed(0)}% accuracy
+                  </div>
                 </div>
-                <div className="text-[11px] text-slate-500 mt-1">
-                  {((resultsData.mathScore / 20) * 100).toFixed(0)}% accuracy
-                </div>
+
               </div>
-
-              <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-center">
-                <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
-                  Part III: General Knowledge
-                </div>
-                <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
-                  {resultsData.gkScore} / 40
-                </div>
-                <div className="text-[11px] text-slate-500 mt-1">
-                  {((resultsData.gkScore / 40) * 100).toFixed(0)}% accuracy
-                </div>
-              </div>
-
-            </div>
+            )}
 
             {/* Retake & Navigation Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">

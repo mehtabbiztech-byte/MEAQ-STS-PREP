@@ -32,7 +32,8 @@ import {
   Network, 
   Sprout,
   Bookmark,
-  Share2
+  Share2,
+  ChevronRight
 } from 'lucide-react';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { EXAMS_DATA } from '../data/examsData';
@@ -115,94 +116,325 @@ export const HomeView: React.FC = () => {
         <div className="absolute -bottom-28 -left-20 w-[34rem] h-[34rem] bg-violet-500/25 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/90 to-transparent" />
 
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-cyan-200/30 text-cyan-100 text-xs font-semibold mb-6 shadow-lg shadow-cyan-950/20">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Pakistan’s Most Comprehensive Competitive Exam Portal</span>
-          </div>
+        <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-start">
+          
+          {/* Left Column: Hero Headline, Subtitle, Buttons, & Search */}
+          <div className="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-cyan-200/30 text-cyan-100 text-xs font-semibold mb-6 shadow-lg shadow-cyan-950/20">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Pakistan’s Most Comprehensive Competitive Exam Portal</span>
+            </div>
 
-          {/* Hero Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-display">
-            Prepare for Pakistan's <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-violet-200 to-fuchsia-300 drop-shadow-sm">
-              Competitive & Government Exams
-            </span>
-          </h1>
+            {/* Hero Headline */}
+            <h1 className="text-3xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-tight font-display">
+              Prepare for Pakistan's <br className="hidden sm:inline" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-violet-200 to-fuchsia-300 drop-shadow-sm">
+                Competitive & Government Exams
+              </span>
+            </h1>
 
-          {/* Subtitle */}
-          <p className="mt-5 text-base sm:text-xl text-blue-50/90 max-w-2xl mx-auto font-normal leading-relaxed">
-            “Practice thousands of MCQs, solve past papers, take timed quizzes, and track your preparation.”
-          </p>
+            {/* Subtitle */}
+            <p className="mt-5 text-base sm:text-lg xl:text-xl text-blue-50/90 max-w-2xl font-normal leading-relaxed">
+              “Practice thousands of MCQs, solve past papers, take timed quizzes, and track your preparation.”
+            </p>
 
-          {/* Buttons: Start Practicing, Take a Quiz */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <button
-              id="hero-start-practicing-btn"
-              onClick={() => {
-                setTab('mcqs');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-bold text-base shadow-xl shadow-cyan-950/40 hover:shadow-cyan-400/20 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 border border-white/20"
-            >
-              <span>Start Practicing</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
+            {/* Buttons: Start Practicing, Take a Quiz */}
+            <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+              <button
+                id="hero-start-practicing-btn"
+                onClick={() => {
+                  setTab('mcqs');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-7 sm:px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-cyan-950/40 hover:shadow-cyan-400/20 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 border border-white/20"
+              >
+                <span>Start Practicing</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
 
-            <button
-              id="hero-take-quiz-btn"
-              onClick={() => {
-                setTab('quiz');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="px-8 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 backdrop-blur-xl text-white font-semibold text-base border border-white/20 hover:border-cyan-200/50 shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
-            >
-              <Trophy className="w-5 h-5 text-amber-400" />
-              <span>⚡ STS & FPSC Simulator (100 Marks)</span>
-            </button>
-          </div>
+              <button
+                id="hero-take-quiz-btn"
+                onClick={() => {
+                  setTab('quiz');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-7 sm:px-8 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 backdrop-blur-xl text-white font-semibold text-sm sm:text-base border border-white/20 hover:border-cyan-200/50 shadow-lg transition transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2"
+              >
+                <Trophy className="w-5 h-5 text-amber-400" />
+                <span>⚡ STS & FPSC Simulator</span>
+              </button>
+            </div>
 
-          {/* Prominent Global Search Bar */}
-          <div className="mt-10 max-w-2xl mx-auto">
-            <form onSubmit={handleHeroSearchSubmit} className="relative group">
-              <div className="relative flex items-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-950/30 border-2 border-white/40 group-focus-within:border-emerald-300 transition-all overflow-hidden p-1.5">
-                <Search className="w-6 h-6 text-emerald-600 dark:text-emerald-400 ml-3.5 shrink-0" />
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  onClick={() => setSearchOpen(true)}
-                  placeholder="Search MCQs, subjects, exams, topics..."
-                  className="w-full px-3 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm sm:text-base bg-transparent focus:outline-hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 hover:from-emerald-400 hover:to-teal-400 text-white font-semibold text-sm transition shrink-0 cursor-pointer hidden sm:block shadow-md shadow-emerald-950/20"
-                >
-                  Search
-                </button>
+            {/* Prominent Global Search Bar */}
+            <div className="mt-10 w-full max-w-2xl">
+              <form onSubmit={handleHeroSearchSubmit} className="relative group">
+                <div className="relative flex items-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-950/30 border-2 border-white/40 group-focus-within:border-emerald-300 transition-all overflow-hidden p-1.5">
+                  <Search className="w-6 h-6 text-emerald-600 dark:text-emerald-400 ml-3.5 shrink-0" />
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onClick={() => setSearchOpen(true)}
+                    placeholder="Search MCQs, subjects, exams, topics..."
+                    className="w-full px-3 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm sm:text-base bg-transparent focus:outline-hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setSearchOpen(true)}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 hover:from-emerald-400 hover:to-teal-400 text-white font-semibold text-sm transition shrink-0 cursor-pointer hidden sm:block shadow-md shadow-emerald-950/20"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+
+              {/* Quick Keyword Pills */}
+              <div className="mt-3 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs text-slate-400">
+                <span className="font-semibold text-slate-300">Popular:</span>
+                {[
+                  { 
+                    label: '🔥 Teaching License', 
+                    action: () => {
+                      launchSimulator({
+                        simulatorId: 'sts',
+                        title: 'STS IBA Teaching License Test (STEDA)',
+                        category: 'STS IBA Teaching License Test',
+                        durationMinutes: 120,
+                        questionCount: 100,
+                        negativeMarking: false,
+                      });
+                    } 
+                  },
+                  { label: 'STS BPS 5-15', action: () => { setSelectedExamId('sts'); setTab('exams'); } },
+                  { label: 'CSS MPT 2025', action: () => { setSelectedExamId('css'); setTab('exams'); } },
+                  { label: 'Current Affairs 2026', action: () => setTab('current-affairs') },
+                  { label: 'Pakistan Studies', action: () => { setSelectedCategorySlug('pakistan-studies'); setTab('mcqs'); } },
+                ].map((p, idx) => (
+                  <button
+                    key={idx}
+                    onClick={p.action}
+                    className="px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-emerald-900/60 border border-slate-700/60 hover:border-emerald-500/40 text-slate-300 hover:text-white transition cursor-pointer"
+                  >
+                    {p.label}
+                  </button>
+                ))}
               </div>
-            </form>
+            </div>
 
-            {/* Quick Keyword Pills */}
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400">
-              <span className="font-semibold text-slate-300">Popular:</span>
-              {[
-                { label: 'CSS MPT 2025', action: () => { setSelectedExamId('css'); setTab('exams'); } },
-                { label: 'STS BPS 5-15', action: () => { setSelectedExamId('sts'); setTab('exams'); } },
-                { label: 'Pakistan Studies', action: () => { setSelectedCategorySlug('pakistan-studies'); setTab('mcqs'); } },
-                { label: 'Current Affairs 2026', action: () => setTab('current-affairs') },
-                { label: 'PPSC Tehsildar', action: () => { setSelectedExamId('ppsc'); setTab('exams'); } },
-              ].map((p, idx) => (
-                <button
-                  key={idx}
-                  onClick={p.action}
-                  className="px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-emerald-900/60 border border-slate-700/60 hover:border-emerald-500/40 text-slate-300 hover:text-white transition cursor-pointer"
-                >
-                  {p.label}
-                </button>
-              ))}
+          </div>
+
+          {/* Right Column: Highlights (Teaching License Test, Hot Updates & Simulator Launches) */}
+          <div className="lg:col-span-5 w-full mt-4 lg:mt-0">
+            <div className="relative rounded-3xl bg-slate-900/90 backdrop-blur-2xl border-2 border-amber-400/40 dark:border-amber-500/40 p-4 sm:p-6 shadow-2xl shadow-cyan-950/70 overflow-hidden text-left">
+              
+              {/* Decorative Ambient Glow in Card */}
+              <div className="absolute -top-16 -right-16 w-44 h-44 bg-amber-500/20 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-16 -left-16 w-44 h-44 bg-rose-500/20 rounded-full blur-2xl pointer-events-none" />
+
+              {/* Card Header */}
+              <div className="flex items-center justify-between gap-3 pb-3.5 border-b border-white/10 relative z-10">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/30 to-rose-500/30 border border-amber-400/50 flex items-center justify-center text-amber-400 shadow-xs">
+                    <Flame className="w-4.5 h-4.5 fill-amber-400 animate-pulse" />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-extrabold text-white font-display flex items-center gap-1.5">
+                      Highlights
+                      <span className="text-[11px] font-bold text-amber-300">Hot Updates</span>
+                    </h2>
+                    <p className="text-[10px] text-slate-400">Verified official test dates & blueprints</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 text-[10px] font-black uppercase tracking-wider">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping inline-block" />
+                  Live 2026
+                </div>
+              </div>
+
+              {/* Highlights Items */}
+              <div className="mt-4 space-y-3 relative z-10">
+                
+                {/* 1. TOP SPOTLIGHT: STS IBA Teaching License Test (STEDA) */}
+                <div className="rounded-2xl p-4 bg-gradient-to-br from-amber-500/20 via-rose-500/15 to-purple-950/40 border border-amber-400/50 shadow-md relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 px-2.5 py-0.5 bg-gradient-to-l from-rose-600 to-amber-600 text-white text-[9px] font-black tracking-wider uppercase rounded-bl-xl shadow-xs">
+                    🔥 SPOTLIGHT
+                  </div>
+
+                  <div className="flex items-center gap-1.5 flex-wrap mb-1.5">
+                    <span className="px-2 py-0.5 rounded-md bg-amber-400/25 border border-amber-300/40 text-amber-200 text-[10px] font-extrabold">
+                      STEDA BPS-16/17
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md bg-violet-400/25 border border-violet-300/40 text-violet-200 text-[10px] font-bold">
+                      100 MCQs CBT
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md bg-emerald-400/25 border border-emerald-300/40 text-emerald-200 text-[10px] font-bold">
+                      Pass: 60%
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm sm:text-base font-extrabold text-white group-hover:text-amber-300 transition-colors">
+                    STS IBA Teaching License Examination
+                  </h3>
+                  
+                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                    Official <strong className="text-amber-300">50–50 STEDA Syllabus</strong>: 50% Content Knowledge (Class 1–8 DCAR) & 50% Pedagogical Content Knowledge (HEC B.Ed).
+                  </p>
+
+                  {/* Actions for Teaching License */}
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      onClick={() => {
+                        launchSimulator({
+                          simulatorId: 'sts',
+                          title: 'STS IBA Teaching License Test (STEDA)',
+                          category: 'STS IBA Teaching License Test',
+                          durationMinutes: 120,
+                          questionCount: 100,
+                          negativeMarking: false,
+                        });
+                      }}
+                      className="flex-1 min-w-[130px] px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white font-extrabold text-xs shadow-md shadow-amber-950/40 transition transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <Trophy className="w-3.5 h-3.5" />
+                      <span>Start 100-Mark Mock</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedPastPaperId('sts-teaching-license-paper-1');
+                        setTab('past-papers');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="px-2.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition cursor-pointer flex items-center gap-1"
+                      title="Solved Past Paper 1 (100 Questions)"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-amber-300" />
+                      <span>Paper 1</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedPastPaperId('sts-teaching-license-paper-2');
+                        setTab('past-papers');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="px-2.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition cursor-pointer flex items-center gap-1"
+                      title="Solved Past Paper 2 (100 Questions)"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-rose-300" />
+                      <span>Paper 2</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. STS BPS 5 to 15 Screening Results & Next Phase */}
+                <div className="rounded-xl p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-emerald-400/40 transition">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                      <span className="text-xs font-bold text-white">STS BPS 5–15 Screening</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-400/30">
+                      40-20-40 Pattern
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 mt-1">
+                    Graduation, Intermediate & Matric categories. Solved keys, typing tests & district quotas.
+                  </p>
+                  <div className="mt-2 flex items-center gap-3">
+                    <button
+                      onClick={() => {
+                        launchSimulator({
+                          simulatorId: 'sts',
+                          title: 'STS BPS 05–15 Screening Simulator',
+                          category: 'Graduation (BPS 11–15)',
+                          durationMinutes: 100,
+                          questionCount: 100,
+                          negativeMarking: false,
+                        });
+                      }}
+                      className="text-[11px] font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 transition cursor-pointer"
+                    >
+                      <span>Take 40-20-40 CBT Mock</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </button>
+                    <span className="text-slate-600">•</span>
+                    <button
+                      onClick={() => { setSelectedExamId('sts'); setTab('exams'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="text-[11px] text-slate-400 hover:text-white transition cursor-pointer"
+                    >
+                      View STS Hub
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. FPSC General Recruitment 2026 */}
+                <div className="rounded-xl p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-violet-400/40 transition">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-violet-400 shrink-0" />
+                      <span className="text-xs font-bold text-white">FPSC One-Paper 2026</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-violet-300 bg-violet-500/20 px-1.5 py-0.5 rounded border border-violet-400/30">
+                      FIA · Customs · SST
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 mt-1">
+                    20 English + 80 Professional ability tests with official 0.25 negative marking.
+                  </p>
+                  <div className="mt-2 flex items-center gap-3">
+                    <button
+                      onClick={() => {
+                        launchSimulator({
+                          simulatorId: 'fpsc',
+                          title: 'FPSC One-Paper General Recruitment Simulator',
+                          category: 'General Recruitment',
+                          durationMinutes: 100,
+                          questionCount: 100,
+                          negativeMarking: true,
+                        });
+                      }}
+                      className="text-[11px] font-bold text-violet-400 hover:text-violet-300 flex items-center gap-1 transition cursor-pointer"
+                    >
+                      <span>Take FPSC 100-Mark Mock</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </button>
+                    <span className="text-slate-600">•</span>
+                    <button
+                      onClick={() => { setSelectedExamId('fpsc'); setTab('exams'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="text-[11px] text-slate-400 hover:text-white transition cursor-pointer"
+                    >
+                      View Syllabus
+                    </button>
+                  </div>
+                </div>
+
+                {/* 4. Current Affairs 2026 Digest */}
+                <div className="rounded-xl p-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-sky-400/40 transition">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-sky-400 shrink-0" />
+                      <span className="text-xs font-bold text-white">Current Affairs 2026</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-sky-300 bg-sky-500/20 px-1.5 py-0.5 rounded border border-sky-400/30">
+                      Monthly Roundups
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 mt-1">
+                    Constitutional amendments, Pakistan economy, international summits & sports.
+                  </p>
+                  <div className="mt-2">
+                    <button
+                      onClick={() => { setTab('current-affairs'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="text-[11px] font-bold text-sky-400 hover:text-sky-300 flex items-center gap-1 transition cursor-pointer"
+                    >
+                      <span>Explore 2026 Daily Capsules</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
           </div>
 

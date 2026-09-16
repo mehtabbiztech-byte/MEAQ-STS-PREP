@@ -1,6 +1,7 @@
 import { MCQ } from '../types';
+import { TEACHING_LICENSE_PAPER_1_MCQS } from './teachingLicensePaper1';
 
-export type StsCategory = 'graduation' | 'intermediate' | 'matric' | 'pst' | 'jest';
+export type StsCategory = 'graduation' | 'intermediate' | 'matric' | 'pst' | 'jest' | 'teaching_license';
 
 export interface StsCategoryInfo {
   id: StsCategory;
@@ -17,6 +18,19 @@ export interface StsCategoryInfo {
 }
 
 export const STS_CATEGORIES: Record<StsCategory, StsCategoryInfo> = {
+  teaching_license: {
+    id: 'teaching_license',
+    name: 'STS IBA Teaching License Test',
+    bps: 'BPS 16 to 17',
+    eligibility: 'B.Ed (Hons) 4-Year / B.Ed 1.5–2.5 Year / ADE / M.Ed with min 2.5 CGPA or 2nd Division',
+    badge: 'STEDA Licensing',
+    description: 'Official Sindh Teaching License screening administered by Sukkur IBA Testing Services (STS) under STEDA. 50% Content Knowledge & 50% Pedagogical Content Knowledge.',
+    durationMinutes: 120,
+    totalMarks: 100,
+    passingThreshold: 60,
+    quotaThreshold: 60,
+    color: 'indigo',
+  },
   graduation: {
     id: 'graduation',
     name: 'Graduation Category',
@@ -1304,6 +1318,58 @@ export interface StsGeneratedPaper {
 
 export function generateStsExamPaper(category: StsCategory): StsGeneratedPaper {
   const catInfo = STS_CATEGORIES[category] || STS_CATEGORIES.graduation;
+
+  if (category === 'teaching_license') {
+    const teachingQuestions: StsQuestionItem[] = TEACHING_LICENSE_PAPER_1_MCQS.map((mcq, idx) => {
+      let part: 'english' | 'mathematics' | 'general' = 'general';
+      if (idx < 10) part = 'english';
+      else if (idx < 20) part = 'mathematics';
+      else part = 'general';
+
+      return {
+        id: mcq.id,
+        part,
+        subSection: mcq.subtopic || (idx < 50 ? 'Part I: Content Knowledge' : 'Part II: Pedagogical Content Knowledge'),
+        question: mcq.question,
+        options: mcq.options,
+        correctIndex: mcq.correctIndex,
+        explanation: mcq.explanation,
+        difficulty: mcq.difficulty || 'Medium',
+      };
+    });
+
+    const contentQs = teachingQuestions.slice(0, 50);
+    const pedagogyQs = teachingQuestions.slice(50, 100);
+
+    const sections = [
+      {
+        title: 'Part I: Content Knowledge (Class 1–8 DCAR Curriculum)',
+        weightage: '50% (50 MCQs / 50 Marks)',
+        questionsCount: contentQs.length,
+        description: 'English (10), Mathematics (10), General Science (10), Social Studies & Pakistan (10), and Mother Tongue Sindhi/Urdu (10).',
+        questions: contentQs,
+      },
+      {
+        title: 'Part II: Pedagogical Content Knowledge (HEC B.Ed Curriculum)',
+        weightage: '50% (50 MCQs / 50 Marks)',
+        questionsCount: pedagogyQs.length,
+        description: 'Methods of Teaching (10), Child Development & Psychology (10), Classroom Management (10), Assessment & Testing (10), and School, Community & Teacher (10).',
+        questions: pedagogyQs,
+      },
+    ];
+
+    return {
+      category,
+      categoryInfo: catInfo,
+      paperTitle: 'Sukkur IBA STS Teaching License Test (STEDA) Simulator',
+      totalQuestions: teachingQuestions.length,
+      totalMarks: 100,
+      durationMinutes: 120,
+      sections,
+      allQuestions: teachingQuestions,
+      readingPassages: [],
+    };
+  }
 
   // 1. Part I: English (Exact 40 Questions)
   // - 10 Reading Comprehension (Passage 1: 5 Qs, Passage 2: 5 Qs)

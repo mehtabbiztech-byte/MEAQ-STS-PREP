@@ -6,9 +6,11 @@ import {
   PST_SINDHI_MCQS, 
   PST_URDU_MCQS 
 } from './stsPatternData';
+import { TEACHING_LICENSE_PAPER_1_MCQS } from './teachingLicensePaper1';
+import { TEACHING_LICENSE_PAPER_2_MCQS } from './teachingLicensePaper2';
 
 export type SimulatorId = 'sts' | 'fpsc';
-export type StsTier = 'Graduation (BPS 11–15)' | 'Intermediate (BPS 05–10)' | 'Matric (BPS 05)' | 'PST' | 'JEST';
+export type StsTier = 'Graduation (BPS 11–15)' | 'Intermediate (BPS 05–10)' | 'Matric (BPS 05)' | 'PST' | 'JEST' | 'STS IBA Teaching License Test';
 export type FpscTrack = 'General Recruitment' | 'FIA Professional' | 'Customs & Revenue' | 'Administrative';
 
 export interface SimulatorLaunch {
@@ -20,6 +22,18 @@ export interface SimulatorLaunch {
   questionCount?: number;
   negativeMarking: boolean;
 }
+
+export const TEACHING_LICENSE_BLUEPRINT = {
+  title: 'STS IBA Teaching License Test (STEDA)',
+  duration: 120,
+  questions: 100,
+  passingScore: 60,
+  note: 'Official STEDA 50–50 syllabus: 50% Content Knowledge (Class 1–8 DCAR) & 50% Pedagogical Content Knowledge (HEC B.Ed). Passing criteria: 60% minimum (60 Marks).',
+  sections: [
+    { name: 'Part I: Content Knowledge', marks: 50, detail: 'English (10) · Mathematics (10) · General Science (10) · Social Studies & Sindh (10) · Sindhi/Urdu Mother Tongue (10)' },
+    { name: 'Part II: Pedagogical Content Knowledge', marks: 50, detail: 'Teaching Methods (10) · Child Psychology (10) · Classroom Management (10) · Assessment & Testing (10) · School & Community (10)' },
+  ],
+};
 
 export const SIMULATOR_BLUEPRINTS = {
   sts: {
@@ -299,7 +313,20 @@ export const buildExactPatternQuestions = (pool: MCQ[], launch: SimulatorLaunch)
   let result: MCQ[] = [];
 
   if (launch.simulatorId === 'sts') {
-    if (launch.category === 'PST' || launch.category === 'JEST') {
+    if (launch.category === 'STS IBA Teaching License Test') {
+      // 50% Content Knowledge (Class 1-8 DCAR) + 50% Pedagogical Content Knowledge (HEC B.Ed)
+      const p1Content = TEACHING_LICENSE_PAPER_1_MCQS.slice(0, 50);
+      const p1Pedagogy = TEACHING_LICENSE_PAPER_1_MCQS.slice(50, 100);
+      const p2Content = TEACHING_LICENSE_PAPER_2_MCQS.slice(0, 50);
+      const p2Pedagogy = TEACHING_LICENSE_PAPER_2_MCQS.slice(50, 100);
+
+      result = [
+        ...p1Content.slice(0, 25),
+        ...p2Content.slice(0, 25),
+        ...p1Pedagogy.slice(0, 25),
+        ...p2Pedagogy.slice(0, 25),
+      ];
+    } else if (launch.category === 'PST' || launch.category === 'JEST') {
       result = [
         ...uniqueTake(basePool, used, 25, english),
         ...uniqueTake(basePool, used, 20, math),
