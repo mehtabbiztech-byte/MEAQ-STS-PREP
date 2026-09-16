@@ -114,6 +114,7 @@ function createBank(scope: 'Pakistan' | 'World', facts: Fact[]): MCQ[] {
 export const PAKISTAN_CURRENT_AFFAIRS_MCQS = createBank('Pakistan', pakistanFacts);
 export const WORLD_CURRENT_AFFAIRS_MCQS = createBank('World', worldFacts);
 export const CURRENT_AFFAIRS_SOURCED = [...PAKISTAN_CURRENT_AFFAIRS_MCQS, ...WORLD_CURRENT_AFFAIRS_MCQS];
+export const CURRENT_AFFAIRS_2000 = CURRENT_AFFAIRS_SOURCED;
 
 export function validateCurrentAffairsBank() {
   const errors: string[] = [];

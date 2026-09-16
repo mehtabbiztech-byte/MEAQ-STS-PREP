@@ -33,6 +33,7 @@ export const CurrentAffairsView: React.FC = () => {
   const [scopeFilter, setScopeFilter] = useState<'All' | 'Pakistan' | 'International'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [subtopicFilter, setSubtopicFilter] = useState<string>('All');
+  const [sourceFilter, setSourceFilter] = useState<'All' | 'Sourced'>('All');
   const [mcqScope, setMcqScope] = useState<'All' | 'Pakistan' | 'World'>('All');
   const [page, setPage] = useState(1);
   const pageSize = 24;
@@ -52,8 +53,10 @@ export const CurrentAffairsView: React.FC = () => {
 
   // Filtered MCQs
   const filteredMcqs = useMemo(() => {
-    return PAKISTAN_CURRENT_AFFAIRS_MCQS.filter((mcq) => {
+    return allCurrentMcqs.filter((mcq) => {
       if (sourceFilter === 'Sourced' && !mcq.sourceUrl) return false;
+      if (mcqScope === 'Pakistan' && !mcq.subtopic?.toLowerCase().includes('pakistan')) return false;
+      if (mcqScope === 'World' && !mcq.subtopic?.toLowerCase().includes('world') && !mcq.subtopic?.toLowerCase().includes('international')) return false;
       if (subtopicFilter !== 'All' && mcq.subtopic !== subtopicFilter) {
         return false;
       }
@@ -69,7 +72,17 @@ export const CurrentAffairsView: React.FC = () => {
       }
       return true;
     });
-  }, [subtopicFilter, searchQuery, sourceFilter]);
+  }, [allCurrentMcqs, subtopicFilter, searchQuery, sourceFilter, mcqScope]);
+
+  const totalPages = Math.ceil(filteredMcqs.length / pageSize) || 1;
+  const visibleMcqs = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return filteredMcqs.slice(start, start + pageSize);
+  }, [filteredMcqs, page, pageSize]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [subtopicFilter, searchQuery, sourceFilter, mcqScope, activeTab]);
 
   // Filtered Timeline Items
   const filteredTimeline = useMemo(() => {
@@ -231,7 +244,6 @@ export const CurrentAffairsView: React.FC = () => {
                 {topic}
               </button>
             ))}
-            </div>
           </div>
         ) : (
           <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">

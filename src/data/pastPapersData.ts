@@ -6,7 +6,7 @@ import { TEACHING_LICENSE_PAPER_2_MCQS } from './teachingLicensePaper2';
 export const PAST_PAPERS_DATA: PastPaper[] = [
   {
     id: 'sts-teaching-license-paper-1',
-    title: 'STS IBA Teaching License Test — Solved Paper 1 (Official 100 Questions)',
+    title: 'STS IBA Teaching License Test — Solved Paper 1 (Practice Set 100 Questions)',
     exam: 'STS',
     conductedBy: 'Sukkur IBA Testing Services (STS) & STEDA',
     year: 2024,
@@ -15,14 +15,14 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     totalQuestions: 100,
     solvedDate: 'January 2024 (Morning Batch)',
     testDateLabel: '28 January 2024 · Morning Session',
-    recordType: 'Official Past Paper',
+    recordType: 'Reconstructed Practice Paper',
     sourceUrl: 'https://apply.sts.net.pk/',
-    sourceNote: 'Complete 100 MCQs aligned strictly to STEDA & Sukkur IBA syllabus: 50 MCQs Content Knowledge (English, Math, Science, Social Studies, Urdu/Sindhi) and 50 MCQs Pedagogical Content Knowledge (Methods, Psychology, Management, Assessment, School & Community).',
+    sourceNote: 'Reconstructed memory-based practice paper aligned strictly to STEDA & Sukkur IBA syllabus; not a certified complete official paper release.',
     mcqs: TEACHING_LICENSE_PAPER_1_MCQS,
   },
   {
     id: 'sts-teaching-license-paper-2',
-    title: 'STS IBA Teaching License Test — Solved Paper 2 (Official 100 Questions)',
+    title: 'STS IBA Teaching License Test — Solved Paper 2 (Practice Set 100 Questions)',
     exam: 'STS',
     conductedBy: 'Sukkur IBA Testing Services (STS) & STEDA',
     year: 2024,
@@ -31,9 +31,9 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     totalQuestions: 100,
     solvedDate: 'January 2024 (Evening Batch)',
     testDateLabel: '28 January 2024 · Evening Session',
-    recordType: 'Official Past Paper',
+    recordType: 'Reconstructed Practice Paper',
     sourceUrl: 'https://apply.sts.net.pk/',
-    sourceNote: 'Complete 100 MCQs paper with deep explanatory keys: 50 MCQs Content Knowledge (Class 1–8 DCAR curriculum) & 50 MCQs Pedagogical Content Knowledge (HEC B.Ed professional standards).',
+    sourceNote: 'Reconstructed memory-based practice paper aligned strictly to STEDA & Sukkur IBA syllabus; not a certified complete official paper release.',
     mcqs: TEACHING_LICENSE_PAPER_2_MCQS,
   },
   {
