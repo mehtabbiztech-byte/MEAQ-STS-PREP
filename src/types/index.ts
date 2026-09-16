@@ -94,7 +94,7 @@ export interface MCQ {
   submittedBy?: string;
   sourceId?: string;
   sourceUrl?: string;
-  verificationStatus?: 'source-aligned' | 'editor-reviewed' | 'official-paper';
+  verificationStatus?: 'generated-practice' | 'source-aligned' | 'editor-reviewed' | 'official-paper';
   verificationMethod?: string;
 }
 

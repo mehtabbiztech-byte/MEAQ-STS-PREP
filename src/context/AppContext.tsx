@@ -91,7 +91,7 @@ interface AppContextType {
 }
 
 const INITIAL_CERTIFICATE: QuizCertificate = {
-  id: 'MATB-CERT-2026-INIT01',
+  id: 'MEQSA-PRACTICE-2026-INIT01',
   quizId: 'quiz-init-1',
   candidateName: 'Aspirant',
   quizTitle: 'Pakistan Studies & Current Affairs Booster',
@@ -101,16 +101,16 @@ const INITIAL_CERTIFICATE: QuizCertificate = {
   percentage: 80,
   grade: 'A',
   rankTier: 'Silver Merit',
-  rankPosition: 48,
-  percentile: 91.5,
+  rankPosition: 0,
+  percentile: 85,
   timeSpentSeconds: 340,
   issuedDate: '11 Sep 2026',
-  verificationCode: 'MATB-CERT-2026-INIT01',
+  verificationCode: 'MEQSA-PRACTICE-2026-INIT01',
 };
 
 const DEFAULT_PROFILE: UserProfile = {
   name: 'Aspirant',
-  email: 'aspirant@prep.pk',
+  email: '',
   targetExam: 'Jobs: STS',
   province: 'Sindh',
   persona: 'jobs',
@@ -425,7 +425,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       score: validation.sanitizedScore,
     };
 
-    // 2. Generate official ranked certificate
+    // 2. Generate a transparent practice-completion record
     const cert = attempt.certificate || generateCertificateFromAttempt(
       sanitizedAttempt,
       userProfile.name || 'Aspirant',

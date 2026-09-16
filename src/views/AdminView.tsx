@@ -3,6 +3,7 @@ import { ArrowLeft, BookOpen, CheckCircle2, FileQuestion, FileUp, LogIn, Plus, S
 import { useApp } from '../context/AppContext';
 import { CmsCollection, CmsRecord, deleteCmsRecord, importMcqs, isCmsAdmin, listCmsRecords, saveCmsRecord, statusOptions } from '../lib/cmsService';
 import { CmsLesson, CmsMcq, CmsPastPaper, ContentStatus } from '../types';
+import { parseCsv } from '../lib/csv';
 
 const blankMcq = (): Partial<CmsMcq> => ({ kind: 'mcq', status: 'Draft', question: '', options: ['', '', '', ''], correctIndex: 0, explanation: '', category: 'current-affairs', examTags: ['STS', 'SPSC', 'FPSC', 'NTS', 'PTS'], difficulty: 'Medium', sourceUrls: [], syllabusReferences: [] });
 const blankPaper = (): Partial<CmsPastPaper> => ({ kind: 'past-paper', status: 'Draft', title: '', exam: 'STS', conductedBy: '', year: new Date().getFullYear(), postName: '', bps: '', durationMinutes: 90, questions: [], sourceUrls: [], syllabusReferences: [] });
@@ -39,8 +40,8 @@ export const AdminView: React.FC = () => {
     setBusy(true);
     try {
       const text = await file.text();
-      const rows = file.name.endsWith('.json') ? JSON.parse(text) : text.trim().split(/\r?\n/).slice(1).map(line => {
-        const [question, a, b, c, d, correctIndex, explanation, category, examTags, sourceUrl] = line.split(',').map(cell => cell.trim());
+      const rows = file.name.endsWith('.json') ? JSON.parse(text) : parseCsv(text).slice(1).map(columns => {
+        const [question, a, b, c, d, correctIndex, explanation, category, examTags, sourceUrl] = columns;
         return { question, options: [a, b, c, d], correctIndex: Number(correctIndex), explanation, category, examTags: split(examTags || ''), sourceUrls: split(sourceUrl || ''), difficulty: 'Medium', status: 'Draft' };
       });
       if (kind === 'mcq') { const result = await importMcqs(rows, user.uid); setNotice(`Imported ${result.imported}; skipped ${result.duplicates} duplicates.`); }

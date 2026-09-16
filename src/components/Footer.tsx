@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
               Ready to crack your upcoming FPSC, PPSC, SPSC, or STS Test?
             </h3>
             <p className="text-slate-400 text-sm mt-1 max-w-xl">
-              Practice 5,000+ source-aligned STS IBA MCQs, analyze past papers with detailed explanations, and review your mistakes with our smart study engine.
+              Practice generated STS-style items, use clearly labelled paper records, and review your mistakes with the adaptive study engine.
             </p>
           </div>
 
@@ -80,7 +80,7 @@ export const Footer: React.FC = () => {
               </div>
               <div>
                 <span className="font-extrabold text-xl tracking-tight text-white font-display">
-                  MATB <span className="text-emerald-400">STS PREP</span>
+                  MEQSA <span className="text-emerald-400">STUDY</span>
                 </span>
                 <p className="text-xs text-emerald-400 font-medium tracking-wide">
                   “Practice Smart. Prepare Better. Crack Your Exam.”
@@ -89,7 +89,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-sm text-slate-400 leading-relaxed mb-4">
-              MATB STS PREP is an independent educational portal founded and developed by <strong className="text-white font-semibold">Mehtab Ali</strong> to empower Pakistani students and government-job aspirants with syllabus-wise MCQs, timed mock examinations, and authentic solved past papers.
+              MEQSA Study Platform is an independent educational portal founded and developed by <strong className="text-white font-semibold">Mehtab Ali</strong> for Pakistani learners and government-job aspirants. Practice sets are distinguished from official records and samples.
             </p>
 
             <div className="space-y-2 text-xs text-slate-400">
@@ -99,7 +99,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Verified explanations from official textbooks and commissions</span>
+                <span>Per-question source status shown where available</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Contact Founder: <a href="mailto:mehtabbiztech@gmail.com" className="text-emerald-400 hover:underline">mehtabbiztech@gmail.com</a></span>
+                <span>Feedback and corrections are accepted through the project’s GitHub Issues page.</span>
               </div>
             </div>
           </div>
@@ -212,7 +212,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <button onClick={() => setTab('about')} className="hover:text-emerald-400 transition">
-                  About MATB STS PREP
+                  About MEQSA Study Platform
                 </button>
               </li>
               <li>
@@ -233,11 +233,11 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
             <span>
-              Disclaimer: MATB STS PREP is an independent educational platform. All questions are compiled from public past papers, standard syllabi, and official curriculum for study and practice purposes.
+              Disclaimer: MEQSA Study Platform is an independent educational platform. All questions are compiled from public past papers, standard syllabi, and official curriculum for study and practice purposes.
             </span>
           </div>
           <div className="text-slate-400 shrink-0 text-center md:text-right">
-            © {new Date().getFullYear()} <span className="font-semibold text-white">MATB STS PREP</span> • Founded &amp; Developed by <span className="text-emerald-400 font-semibold">Mehtab Ali</span>. All Rights Reserved.
+            © {new Date().getFullYear()} <span className="font-semibold text-white">MEQSA Study Platform</span> • Founded &amp; Developed by <span className="text-emerald-400 font-semibold">Mehtab Ali</span>. All Rights Reserved.
           </div>
         </div>
       </div>

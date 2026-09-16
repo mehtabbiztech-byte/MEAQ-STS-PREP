@@ -68,7 +68,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-css-mpt-2025',
-    title: 'CSS MPT (Screening) Solved Paper 2025',
+    title: 'CSS MPT 2025 — Tagged Practice Selection',
     exam: 'CSS',
     conductedBy: 'Federal Public Service Commission (FPSC)',
     year: 2025,
@@ -96,7 +96,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-ppsc-tehsildar-2024',
-    title: 'PPSC Tehsildar & Naib Tehsildar Solved Paper',
+    title: 'PPSC Tehsildar — Tagged Practice Selection',
     exam: 'PPSC',
     conductedBy: 'Punjab Public Service Commission (PPSC)',
     year: 2024,
@@ -108,7 +108,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-spsc-cce-screen-2024',
-    title: 'SPSC Combined Competitive Exam (CCE) Screening Paper',
+    title: 'SPSC CCE — Tagged Practice Selection',
     exam: 'SPSC / CCE',
     conductedBy: 'Sindh Public Service Commission (SPSC)',
     year: 2024,
@@ -120,7 +120,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-fpsc-inspector-customs-2024',
-    title: 'FPSC Inspector Customs & Intelligence Officer Solved Paper',
+    title: 'FPSC Inspector Customs — Tagged Practice Selection',
     exam: 'FPSC',
     conductedBy: 'Federal Public Service Commission (FPSC)',
     year: 2024,
@@ -132,7 +132,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-fia-sub-inspector-2024',
-    title: 'FIA Sub-Inspector (Investigation) Official Solved Test',
+    title: 'FIA Sub-Inspector — Tagged Practice Selection',
     exam: 'FIA',
     conductedBy: 'Federal Investigation Agency / FPSC',
     year: 2024,
@@ -144,7 +144,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-nts-gat-general-2024',
-    title: 'NTS GAT General Solved Model Paper 2024-IV',
+    title: 'NTS GAT General — Tagged Practice Selection',
     exam: 'NTS',
     conductedBy: 'National Testing Service (NTS)',
     year: 2024,
@@ -156,7 +156,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
   },
   {
     id: 'pp-police-asi-2024',
-    title: 'Punjab & Sindh Police ASI Written Solved Paper',
+    title: 'Police ASI — Tagged Practice Selection',
     exam: 'Police',
     conductedBy: 'Police Recruitment Board',
     year: 2024,
@@ -167,3 +167,11 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     mcqs: MCQS_DATA.filter((m) => m.examTags?.includes('Police')),
   },
 ];
+
+for (const paper of PAST_PAPERS_DATA) {
+  if (paper.mcqs.length && !paper.recordType) {
+    paper.recordType = 'Reconstructed Practice Paper';
+    paper.sourceNote = 'This set is assembled from exam-tagged MEQSA practice questions. It is not a complete official paper or official answer key.';
+    paper.testDateLabel = paper.testDateLabel || `Practice collection labelled ${paper.year}`;
+  }
+}

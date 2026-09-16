@@ -36,8 +36,6 @@ import {
 } from 'lucide-react';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { EXAMS_DATA } from '../data/examsData';
-import { MCQS_DATA } from '../data/mcqsData';
-import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { PersonalizedDashboard } from '../components/PersonalizedDashboard';
 
 // Map string icon names to Lucide components
@@ -80,7 +78,19 @@ export const HomeView: React.FC = () => {
   const [showAllCategories, setShowAllCategories] = useState(false);
 
   // Daily Question interactive state
-  const dailyMcq = MCQS_DATA[0]; // 18th Constitutional amendment
+  const dailyMcq = {
+    id: 'daily-constitution',
+    question: 'In which year was Pakistan’s current Constitution adopted?',
+    options: ['1956', '1962', '1973', '1985'],
+    correctIndex: 2,
+    explanation: 'Pakistan’s current Constitution was adopted in 1973.',
+    examTags: ['Pakistan Studies', 'General Knowledge'],
+  };
+  const featuredPaperRecords = [
+    { id: 'sts-jest-official-sample', exam: 'STS', year: 2021, title: 'JEST — Official STS Sample Paper', postName: 'JEST', bps: 'BPS-14', totalQuestions: 100 },
+    { id: 'sts-graduation-bps-5-15-2025-record', exam: 'STS', year: 2025, title: 'Graduation Category — Official Date Record', postName: 'Screening test record', bps: 'BPS-05–15', totalQuestions: 0 },
+    { id: 'pp-css-mpt-2025', exam: 'CSS', year: 2025, title: 'CSS MPT — Tagged Practice Selection', postName: 'CSS MPT practice', bps: 'BS-17', totalQuestions: 100 },
+  ];
   const [dailySelected, setDailySelected] = useState<number | null>(null);
   const [dailyShowExplanation, setDailyShowExplanation] = useState(false);
 
@@ -204,10 +214,10 @@ export const HomeView: React.FC = () => {
             
             <div className="p-4 rounded-xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-lg">
               <div className="font-extrabold text-2xl sm:text-3xl text-emerald-400 font-display">
-                5,000+
+                5,000
               </div>
               <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">
-                STS Source-Aligned MCQs
+                Generated STS Practice Items
               </div>
             </div>
 
@@ -503,7 +513,7 @@ export const HomeView: React.FC = () => {
                     {iconMap[cat.iconName] || <BookOpen className="w-5 h-5 text-emerald-600" />}
                   </div>
                   <span className="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
-                    {MCQS_DATA.filter(item => item.category === cat.slug).length.toLocaleString()} MCQs
+                    {cat.totalMcqs.toLocaleString()} items
                   </span>
                 </div>
 
@@ -624,7 +634,7 @@ export const HomeView: React.FC = () => {
                 Latest Solved Competitive Past Papers
               </h3>
               <p className="text-slate-400 text-sm mt-1">
-                Learn the exact testing pattern with authentic questions asked in recent examinations.
+                Use clearly labelled official records, official samples and reconstructed practice selections.
               </p>
             </div>
 
@@ -640,7 +650,7 @@ export const HomeView: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {PAST_PAPERS_DATA.slice(0, 3).map((paper) => (
+            {featuredPaperRecords.map((paper) => (
               <div
                 key={paper.id}
                 onClick={() => {

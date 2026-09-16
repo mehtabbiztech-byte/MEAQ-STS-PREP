@@ -111,20 +111,15 @@ function createBank(scope: 'Pakistan' | 'World', facts: Fact[]): MCQ[] {
   });
 }
 
-/**
- * Compatibility aliases retained for existing imports.
- * These arrays now contain distinct source-aligned questions only. Their
- * lengths must never be padded with paraphrased duplicates.
- */
-export const PAKISTAN_CURRENT_AFFAIRS_1000 = createBank('Pakistan', pakistanFacts);
-export const WORLD_CURRENT_AFFAIRS_1000 = createBank('World', worldFacts);
-export const CURRENT_AFFAIRS_2000 = [...PAKISTAN_CURRENT_AFFAIRS_1000, ...WORLD_CURRENT_AFFAIRS_1000];
+export const PAKISTAN_CURRENT_AFFAIRS_MCQS = createBank('Pakistan', pakistanFacts);
+export const WORLD_CURRENT_AFFAIRS_MCQS = createBank('World', worldFacts);
+export const CURRENT_AFFAIRS_SOURCED = [...PAKISTAN_CURRENT_AFFAIRS_MCQS, ...WORLD_CURRENT_AFFAIRS_MCQS];
 
 export function validateCurrentAffairsBank() {
   const errors: string[] = [];
   const ids = new Set<string>();
   const questions = new Set<string>();
-  for (const item of CURRENT_AFFAIRS_2000) {
+  for (const item of CURRENT_AFFAIRS_SOURCED) {
     if (ids.has(item.id)) errors.push(`Duplicate id: ${item.id}`);
     if (questions.has(item.question)) errors.push(`Duplicate question: ${item.id}`);
     ids.add(item.id); questions.add(item.question);
@@ -133,5 +128,5 @@ export function validateCurrentAffairsBank() {
     if (!item.sourceId || !item.sourceUrl || item.verificationStatus !== 'source-aligned') errors.push(`Missing provenance: ${item.id}`);
     for (const exam of ['STS', 'SPSC', 'FPSC', 'NTS', 'PTS']) if (!item.examTags?.includes(exam)) errors.push(`Missing ${exam} tag: ${item.id}`);
   }
-  return { total: CURRENT_AFFAIRS_2000.length, pakistan: PAKISTAN_CURRENT_AFFAIRS_1000.length, world: WORLD_CURRENT_AFFAIRS_1000.length, sources: CURRENT_AFFAIRS_SOURCES.length, errors };
+  return { total: CURRENT_AFFAIRS_SOURCED.length, pakistan: PAKISTAN_CURRENT_AFFAIRS_MCQS.length, world: WORLD_CURRENT_AFFAIRS_MCQS.length, sources: CURRENT_AFFAIRS_SOURCES.length, errors };
 }

@@ -13,6 +13,16 @@ export default defineConfig(() => {
     },
     build: {
       outDir: 'dist',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/firebase') || id.includes('node_modules/@firebase')) return 'firebase';
+            if (id.includes('node_modules/react') || id.includes('node_modules/scheduler')) return 'react';
+            if (id.includes('node_modules/lucide-react')) return 'icons';
+            return undefined;
+          },
+        },
+      },
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

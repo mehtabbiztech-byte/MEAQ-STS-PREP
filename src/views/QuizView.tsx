@@ -628,7 +628,7 @@ export const QuizView: React.FC = () => {
                 </button>
               </div>
 
-              {/* Official Certificate & National Ranking Award Card */}
+              {/* Transparent practice-completion record */}
               {completedAttempt && (
                 <div className="mt-8 bg-slate-900/90 border border-amber-400/60 rounded-3xl p-6 text-left backdrop-blur-md relative overflow-hidden shadow-xl">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -649,12 +649,12 @@ export const QuizView: React.FC = () => {
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-emerald-200 mt-1 font-medium">
                           <span>Candidate: <strong className="text-white">{completedAttempt.certificate?.candidateName || userProfile.name}</strong></span>
                           <span>•</span>
-                          <span>National Rank: <strong className="text-amber-300">#{completedAttempt.certificate?.rankPosition || 18}</strong></span>
+                          <span>Practice level: <strong className="text-amber-300">{completedAttempt.certificate?.rankTier || 'Participation'}</strong></span>
                           <span>•</span>
-                          <span>Percentile: <strong className="text-emerald-300">{completedAttempt.certificate?.percentile ? completedAttempt.certificate.percentile.toFixed(1) : '92.4'}%</strong></span>
+                          <span>Score percentage: <strong className="text-emerald-300">{completedAttempt.certificate?.percentage || 0}%</strong></span>
                         </div>
                         <p className="text-[11px] text-slate-400 font-mono mt-1">
-                          Verification Code: {completedAttempt.certificate?.verificationCode || 'MATB-CERT-2026'}
+                          Verification Code: {completedAttempt.certificate?.verificationCode || 'MEQSA-PRACTICE-2026'}
                         </p>
                       </div>
                     </div>

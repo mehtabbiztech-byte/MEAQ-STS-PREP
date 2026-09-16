@@ -25,7 +25,7 @@ const meta = (sourceId: string, method: string) => ({
   examTags: ['STS', 'STS IBA'],
   sourceId,
   sourceUrl: source[sourceId].url,
-  verificationStatus: 'source-aligned' as const,
+  verificationStatus: 'generated-practice' as const,
   verificationMethod: method,
   submittedBy: 'MEQSA Source-Aligned Question Bank',
 });
@@ -117,6 +117,7 @@ export function validateStsIbaBank() {
     if(item.correctIndex<0||item.correctIndex>=item.options.length) errors.push(`Correct index: ${item.id}`);
     if(new Set(item.options).size!==item.options.length) errors.push(`Duplicate option: ${item.id}`);
     if(!item.sourceUrl||!item.verificationMethod) errors.push(`Missing provenance: ${item.id}`);
+    if(item.verificationStatus !== 'generated-practice') errors.push(`Incorrect content status: ${item.id}`);
   }
   return {count:STS_IBA_MCQS.length,errors};
 }

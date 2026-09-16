@@ -12,7 +12,6 @@ import {
   Globe,
   ExternalLink,
   GraduationCap,
-  Mail,
   Code,
   Heart
 } from 'lucide-react';
@@ -27,14 +26,14 @@ export const AboutView: React.FC = () => {
       <div className="text-center max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-4">
           <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-          <span>MATB STS PREP Vision</span>
+          <span>MEQSA Study Platform Vision</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white font-display">
           “Practice Smart. Prepare Better. <br />
           <span className="text-emerald-600 dark:text-emerald-400">Crack Your Exam.”</span>
         </h1>
         <p className="mt-4 text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
-          MATB STS PREP is an independent, state-of-the-art educational platform founded by <strong>Mehtab Ali</strong>, designed specifically to help Pakistani students and civil service aspirants conquer public examinations.
+          MEQSA Study Platform is an independent, state-of-the-art educational platform founded by <strong>Mehtab Ali</strong>, designed specifically to help Pakistani students and civil service aspirants conquer public examinations.
         </p>
       </div>
 
@@ -56,22 +55,18 @@ export const AboutView: React.FC = () => {
                 Mehtab Ali
               </h2>
               <p className="text-emerald-400 font-semibold text-xs sm:text-sm">
-                Creator of MATB STS PREP • Tech &amp; Education Lead
+                Creator of MEQSA Study Platform • Tech &amp; Education Lead
               </p>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl pt-1">
-                “I built MATB STS PREP to ensure every student—regardless of financial background or geographic location—has direct access to authentic past papers, verified MCQs, and real exam simulations for FPSC, SPSC, PPSC, and STS.”
+                “I built MEQSA Study Platform to give every learner access to clearly labelled practice material, sourced content, and exam-pattern simulators for FPSC, SPSC, PPSC, and STS.”
               </p>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0 w-full md:w-auto">
-            <a 
-              href="mailto:mehtabbiztech@gmail.com" 
-              className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-emerald-950/60 flex items-center justify-center gap-2"
-            >
-              <Mail className="w-4 h-4" />
-              <span>mehtabbiztech@gmail.com</span>
-            </a>
+            <div className="px-5 py-3 rounded-xl bg-emerald-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center">
+              Feedback via GitHub Issues
+            </div>
             <div className="px-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700/70 text-slate-300 text-xs flex items-center justify-center gap-2">
               <Code className="w-3.5 h-3.5 text-emerald-400" />
               <span>Full-Stack Platform Engineering</span>
@@ -133,16 +128,16 @@ export const AboutView: React.FC = () => {
         <div className="space-y-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
             <h4 className="font-bold text-sm text-slate-900 dark:text-white mb-1">
-              Who is the founder and developer of MATB STS PREP?
+              Who is the founder and developer of MEQSA Study Platform?
             </h4>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              MATB STS PREP was founded and built by <strong className="text-slate-900 dark:text-white">Mehtab Ali</strong>. You can reach out directly via email at <a href="mailto:mehtabbiztech@gmail.com" className="text-emerald-600 dark:text-emerald-400 underline font-semibold">mehtabbiztech@gmail.com</a> for inquiries, academic suggestions, or partnerships.
+              MEQSA Study Platform was founded and built by <strong className="text-slate-900 dark:text-white">Mehtab Ali</strong>. Use the project’s GitHub Issues page for inquiries, academic suggestions, or corrections.
             </p>
           </div>
 
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
             <h4 className="font-bold text-sm text-slate-900 dark:text-white mb-1">
-              Is MATB STS PREP free to use?
+              Is MEQSA Study Platform free to use?
             </h4>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Yes, our MCQ practice banks, subject-wise quizzes, study notes, and solved past paper archives are completely accessible for all aspirants across Pakistan.
@@ -177,10 +172,10 @@ export const AboutView: React.FC = () => {
             <span>Vercel Custom Domain Configuration</span>
           </div>
           <h3 className="text-xl font-bold font-display">
-            Host MATB STS PREP on Your Own Domain
+            Host MEQSA Study Platform on Your Own Domain
           </h3>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Attach your official production domain: <code className="text-emerald-400 font-mono font-bold">matbstsprep.app</code>. Automated SSL certificate, edge routing, and global CDN are provisioned instantly.
+            Attach your official production domain: <code className="text-emerald-400 font-mono font-bold">meaq-sts-prep.vercel.app</code>. Automated SSL certificate, edge routing, and global CDN are provisioned instantly.
           </p>
         </div>
 
@@ -195,7 +190,7 @@ export const AboutView: React.FC = () => {
 
       {/* Disclaimer */}
       <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/40 text-center text-xs text-slate-500 dark:text-slate-400">
-        <strong>Academic Disclaimer:</strong> MATB STS PREP is an independent educational preparatory resource. It is not officially affiliated with or endorsed by the Federal Public Service Commission (FPSC), Punjab Public Service Commission (PPSC), Sindh Public Service Commission (SPSC), or Sukkur IBA Testing Services (STS).
+        <strong>Academic Disclaimer:</strong> MEQSA Study Platform is an independent educational preparatory resource. It is not officially affiliated with or endorsed by the Federal Public Service Commission (FPSC), Punjab Public Service Commission (PPSC), Sindh Public Service Commission (SPSC), or Sukkur IBA Testing Services (STS).
       </div>
 
     </div>

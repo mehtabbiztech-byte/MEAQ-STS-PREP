@@ -564,7 +564,7 @@ export const AuthModal: React.FC = () => {
                       id="signin-email-input"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="aspirant@gmail.com"
+                      placeholder="Enter your email address"
                       required
                       className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
                     />
@@ -729,7 +729,7 @@ export const AuthModal: React.FC = () => {
                       id="signup-email-input"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="aspirant@gmail.com"
+                      placeholder="Enter your email address"
                       required
                       className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
                     />
@@ -797,7 +797,7 @@ export const AuthModal: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="aspirant@gmail.com"
+                      placeholder="Enter your email address"
                       required
                       className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
                     />
