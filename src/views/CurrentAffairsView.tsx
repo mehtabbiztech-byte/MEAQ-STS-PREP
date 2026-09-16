@@ -20,13 +20,13 @@ import {
   Check
 } from 'lucide-react';
 import { CURRENT_AFFAIRS_DATA } from '../data/currentAffairsData';
-import { CURRENT_AFFAIRS_2000, PAKISTAN_CURRENT_AFFAIRS_1000, WORLD_CURRENT_AFFAIRS_1000 } from '../data/currentAffairs2000';
+import { CURRENT_AFFAIRS_SOURCED, PAKISTAN_CURRENT_AFFAIRS_MCQS, WORLD_CURRENT_AFFAIRS_MCQS } from '../data/currentAffairs2000';
 import { MCQ } from '../types';
 import { useCmsContent } from '../context/CmsContentContext';
 
 export const CurrentAffairsView: React.FC = () => {
   const { mcqs: cmsMcqs } = useCmsContent();
-  const allCurrentMcqs = useMemo(() => [...cmsMcqs.filter(item => item.category === 'current-affairs'), ...CURRENT_AFFAIRS_2000], [cmsMcqs]);
+  const allCurrentMcqs = useMemo(() => [...cmsMcqs.filter(item => item.category === 'current-affairs'), ...CURRENT_AFFAIRS_SOURCED], [cmsMcqs]);
   const { setTab, setSelectedCategorySlug, toggleBookmark, isBookmarked, addMistake } = useApp();
   
   const [activeTab, setActiveTab] = useState<'mcqs' | 'timeline'>('mcqs');
@@ -129,7 +129,7 @@ export const CurrentAffairsView: React.FC = () => {
             <div className="flex flex-wrap items-center gap-2 mt-4 text-xs font-semibold">
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                {CURRENT_AFFAIRS_2000.length.toLocaleString()} MCQs
+                {CURRENT_AFFAIRS_SOURCED.length.toLocaleString()} MCQs
               </span>
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Trophy className="w-3.5 h-3.5 text-emerald-400" />
@@ -137,7 +137,7 @@ export const CurrentAffairsView: React.FC = () => {
               </span>
               <span className="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-teal-400" />
-                {PAKISTAN_CURRENT_AFFAIRS_1000.length.toLocaleString()} Pakistan + {WORLD_CURRENT_AFFAIRS_1000.length.toLocaleString()} World
+                {PAKISTAN_CURRENT_AFFAIRS_MCQS.length.toLocaleString()} Pakistan + {WORLD_CURRENT_AFFAIRS_MCQS.length.toLocaleString()} World
               </span>
             </div>
           </div>
@@ -205,7 +205,7 @@ export const CurrentAffairsView: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={activeTab === 'mcqs' ? `Search ${allCurrentMcqs.length.toLocaleString()} verified MCQs...` : 'Search events, summits, appointments...'}
+            placeholder={activeTab === 'mcqs' ? `Search ${allCurrentMcqs.length.toLocaleString()} sourced MCQs...` : 'Search events, summits, appointments...'}
             className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
           />
         </div>

@@ -23,4 +23,4 @@ if (result.errors.length) {
   process.exit(1);
 }
 
-console.log(JSON.stringify({ count: result.count, sources: STS_IBA_SOURCES.length, officialRecords: records.length, categories: counts }, null, 2));
+console.log(JSON.stringify({ count: result.count, contentType: 'generated-practice', sources: STS_IBA_SOURCES.length, officialRecords: records.length, categories: counts }, null, 2));

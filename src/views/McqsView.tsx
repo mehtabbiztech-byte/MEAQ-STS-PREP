@@ -98,7 +98,7 @@ export const McqsView: React.FC = () => {
   };
 
   const handleShare = (mcq: MCQ) => {
-    const text = `MATB STS PREP MCQ:\n${mcq.question}\nOptions:\nA) ${mcq.options[0]}\nB) ${mcq.options[1]}\nC) ${mcq.options[2]}\nD) ${mcq.options[3]}\n\nPractice more on MATB STS PREP!`;
+    const text = `MEQSA Study Platform MCQ:\n${mcq.question}\nOptions:\nA) ${mcq.options[0]}\nB) ${mcq.options[1]}\nC) ${mcq.options[2]}\nD) ${mcq.options[3]}\n\nPractice more on MEQSA Study Platform!`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
       setCopiedId(mcq.id);

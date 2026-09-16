@@ -15,7 +15,7 @@ async function startServer() {
   app.get('/api/health', (req, res) => {
     res.json({ 
       status: 'ok',
-      app: 'MATB STS PREP'
+      app: 'MEQSA Study Platform'
     });
   });
 

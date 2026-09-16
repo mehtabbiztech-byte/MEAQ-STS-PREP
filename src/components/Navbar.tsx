@@ -282,7 +282,7 @@ export const Navbar: React.FC = () => {
       id: 'mcqs', 
       label: 'MCQs', 
       icon: <BookOpen className="w-4 h-4 shrink-0" />,
-      desc: '5,000+ STS source-aligned MCQs with answers and provenance'
+      desc: 'Generated STS practice items plus curated sourced questions'
     },
     { 
       id: 'quiz', 
@@ -290,13 +290,13 @@ export const Navbar: React.FC = () => {
       badge: 'LIVE', 
       badgeType: 'live',
       icon: <Trophy className="w-4 h-4 shrink-0" />,
-      desc: 'Timed mock quizzes, negative marking & live Pakistan merit ranks'
+      desc: 'Timed practice quizzes, negative marking and personal results'
     },
     { 
       id: 'past-papers', 
       label: 'Past Papers', 
       icon: <FileText className="w-4 h-4 shrink-0" />,
-      desc: 'Official FPSC, SPSC, PPSC, STS solved & tagged past papers'
+      desc: 'Clearly labelled official records, samples and practice sets'
     },
     { 
       id: 'current-affairs', 
@@ -330,7 +330,7 @@ export const Navbar: React.FC = () => {
       id: 'rankings', 
       label: 'Rankings', 
       icon: <Award className="w-4 h-4 shrink-0" />,
-      desc: 'Pakistan-wide merit standings & top aspirant percentiles'
+      desc: 'Your saved practice attempts and personal progress'
     },
     { 
       id: 'learning-lab',
@@ -394,7 +394,7 @@ export const Navbar: React.FC = () => {
               </button>
               <span className="text-white/40 mx-1 hidden md:inline">•</span>
               <span className="text-white/80 hidden md:inline truncate">
-                5,000+ source-aligned MCQs for STS IBA preparation
+                5,000 generated STS practice items with transparent provenance
               </span>
             </div>
 
@@ -427,7 +427,7 @@ export const Navbar: React.FC = () => {
                 </div>
                 <div className="min-w-0">
                   <span className="font-extrabold text-base sm:text-xl tracking-tight text-slate-900 dark:text-white font-display block whitespace-nowrap">
-                    MATB <span className={palette.brandTextGradient}>STS PREP</span>
+                    MEQSA <span className={palette.brandTextGradient}>STUDY</span>
                   </span>
                   <p className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 tracking-wider uppercase font-semibold hidden md:block whitespace-nowrap">
                     By Mehtab Ali • Practice Smart
@@ -697,7 +697,7 @@ export const Navbar: React.FC = () => {
                   className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-left"
                 >
                   <Search className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span className="truncate">Search 5,000+ STS MCQs, exams and past papers...</span>
+                  <span className="truncate">Search practice items, exams and paper records...</span>
                 </button>
               </div>
 

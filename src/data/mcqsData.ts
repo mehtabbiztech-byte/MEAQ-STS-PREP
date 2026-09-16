@@ -1,10 +1,10 @@
 import { MCQ } from '../types';
-import { CURRENT_AFFAIRS_2000 } from './currentAffairs2000';
+import { CURRENT_AFFAIRS_SOURCED } from './currentAffairs2000';
 import { STS_IBA_MCQS } from './stsIba5000';
 
 export const MCQS_DATA: MCQ[] = [
   ...STS_IBA_MCQS,
-  ...CURRENT_AFFAIRS_2000,
+  ...CURRENT_AFFAIRS_SOURCED,
   // Pakistan Studies
   {
     id: 'ps-01',
@@ -46,7 +46,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2024,
     difficulty: 'Easy',
     viewsCount: 22100,
-    submittedBy: 'MATB Academic Team',
+    submittedBy: 'MEQSA Academic Team',
   },
   {
     id: 'ps-04',
@@ -132,7 +132,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2025,
     difficulty: 'Medium',
     viewsCount: 28400,
-    submittedBy: 'MATB Current Affairs Team',
+    submittedBy: 'MEQSA Current Affairs Team',
   },
   {
     id: 'ca-04',
@@ -218,7 +218,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 18700,
-    submittedBy: 'MATB Prep Team',
+    submittedBy: 'MEQSA Team',
   },
 
   // General Knowledge
@@ -350,7 +350,7 @@ export const MCQS_DATA: MCQ[] = [
     year: 2024,
     difficulty: 'Medium',
     viewsCount: 19600,
-    submittedBy: 'MATB English Faculty',
+    submittedBy: 'MEQSA English Faculty',
   },
 
   // Computer

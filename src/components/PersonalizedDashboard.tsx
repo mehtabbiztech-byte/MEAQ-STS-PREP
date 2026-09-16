@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { UserPersona } from '../types';
 import { 
@@ -27,13 +27,13 @@ import {
   TrendingUp,
   FileText
 } from 'lucide-react';
-import { CssSyllabusExplorer } from './CssSyllabusExplorer';
-import { KidsPlayground } from './KidsPlayground';
-import { MiddleSchoolHub } from './MiddleSchoolHub';
-import { MatricBoardHub } from './MatricBoardHub';
-import { IntermediateBoardHub } from './IntermediateBoardHub';
-import { EntryTestPrepHub } from './EntryTestPrepHub';
-import { UniversityHub } from './UniversityHub';
+const CssSyllabusExplorer = lazy(() => import('./CssSyllabusExplorer').then(module => ({ default: module.CssSyllabusExplorer })));
+const KidsPlayground = lazy(() => import('./KidsPlayground').then(module => ({ default: module.KidsPlayground })));
+const MiddleSchoolHub = lazy(() => import('./MiddleSchoolHub').then(module => ({ default: module.MiddleSchoolHub })));
+const MatricBoardHub = lazy(() => import('./MatricBoardHub').then(module => ({ default: module.MatricBoardHub })));
+const IntermediateBoardHub = lazy(() => import('./IntermediateBoardHub').then(module => ({ default: module.IntermediateBoardHub })));
+const EntryTestPrepHub = lazy(() => import('./EntryTestPrepHub').then(module => ({ default: module.EntryTestPrepHub })));
+const UniversityHub = lazy(() => import('./UniversityHub').then(module => ({ default: module.UniversityHub })));
 
 export const PersonalizedDashboard: React.FC = () => {
   const { 
@@ -57,6 +57,7 @@ export const PersonalizedDashboard: React.FC = () => {
   };
 
   return (
+    <Suspense fallback={<div className="min-h-48 grid place-items-center text-slate-500">Loading learning path…</div>}>
     <section id="kids-hub" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-28">
       
       {/* Container Card */}
@@ -435,5 +436,6 @@ export const PersonalizedDashboard: React.FC = () => {
       </div>
 
     </section>
+    </Suspense>
   );
 };
