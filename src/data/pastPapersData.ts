@@ -1,7 +1,9 @@
 import { PastPaper } from '../types';
 import { MCQS_DATA } from './mcqsData';
+import { NADRA_JUNIOR_EXECUTIVE_PAPERS } from './nadraJuniorExecutiveData';
 
 export const PAST_PAPERS_DATA: PastPaper[] = [
+  ...NADRA_JUNIOR_EXECUTIVE_PAPERS,
   {
     id: 'sts-jest-2021-official-record', title: 'JEST (BPS-14) — Official STS Record', exam: 'STS',
     conductedBy: 'SIBA Testing Services, Sukkur IBA University', year: 2021,
