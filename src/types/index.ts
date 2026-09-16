@@ -147,6 +147,7 @@ export interface PastPaper {
   postName: string;
   bps: string;
   totalQuestions: number;
+  durationMinutes?: number;
   solvedDate?: string;
   mcqs: MCQ[];
   recordType?: 'Official Past Paper' | 'Official Sample Paper' | 'Official Answer Key / Date Record' | 'Reconstructed Practice Paper';
