@@ -1,6 +1,6 @@
 {
   "name": "MATB STS PREP",
   "description": "Pakistan's premier competitive exam portal featuring Sukkur IBA STS BPS 05–15 Screening, STEDA Teaching License 10-Part Master Notes, SPSC CCE, FPSC tests, Carbon-Copy OMR evaluation, Government & ATS Resume Builder, and AI study tools.",
-  "requestFramePermissions": ["microphone"],
+  "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

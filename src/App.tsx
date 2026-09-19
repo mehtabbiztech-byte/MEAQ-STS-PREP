@@ -27,7 +27,6 @@ import { AboutView } from './views/AboutView';
 import { SavedMcqsView } from './views/SavedMcqsView';
 import { AdminView } from './views/AdminView';
 import { LearningLabView } from './views/LearningLabView';
-import { Chatbot } from './components/Chatbot';
 import { WordMeaningPopup } from './components/WordMeaningPopup';
 
 const MainContent: React.FC = () => {
@@ -84,8 +83,6 @@ const MainContent: React.FC = () => {
       {/* Click any readable word for Simple English, Urdu and Sindhi meanings */}
       <WordMeaningPopup />
 
-      {/* Mehtab AI Floating Chatbot & Exam Navigator */}
-      <Chatbot />
     </div>
   );
 };
