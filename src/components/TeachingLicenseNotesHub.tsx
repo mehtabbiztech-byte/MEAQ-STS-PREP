@@ -87,16 +87,21 @@ export const TeachingLicenseNotesHub: React.FC<TeachingLicenseNotesHubProps> = (
   const [selectedTopicId, setSelectedTopicId] = useState<string>(
     initialTopicId || TEACHING_LICENSE_PARTS[0].topics[0].id
   );
+  const [workspaceView, setWorkspaceView] = useState<'overview' | 'reader'>(() =>
+    initialPartId || initialTopicId ? 'reader' : 'overview'
+  );
 
   useEffect(() => {
     if (initialPartId) {
       setSelectedPartId(initialPartId);
+      setWorkspaceView('reader');
     }
   }, [initialPartId]);
 
   useEffect(() => {
     if (initialTopicId) {
       setSelectedTopicId(initialTopicId);
+      setWorkspaceView('reader');
     }
   }, [initialTopicId]);
 
@@ -428,6 +433,7 @@ PREPARED VIA MEHTAB STS IBA PREP
   const handleSelectTopic = (partId: string, topicId: string) => {
     setSelectedPartId(partId);
     setSelectedTopicId(topicId);
+    setWorkspaceView('reader');
     setIsSyllabusDrawerOpen(false);
     window.scrollTo({ top: 320, behavior: 'smooth' });
   };
@@ -516,7 +522,82 @@ PREPARED VIA MEHTAB STS IBA PREP
         </header>
       )}
 
+      {!isFocusMode && (
+        <nav aria-label="Teaching License workspace" className="sticky top-2 z-20 mx-auto flex w-full max-w-xl items-center gap-1 rounded-2xl border border-slate-200 bg-white/90 p-1.5 shadow-lg shadow-slate-900/5 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90">
+          <button
+            onClick={() => setWorkspaceView('overview')}
+            aria-pressed={workspaceView === 'overview'}
+            className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-extrabold transition ${workspaceView === 'overview' ? 'bg-slate-950 text-white shadow-md dark:bg-white dark:text-slate-950' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}
+          >
+            Study Dashboard
+          </button>
+          <button
+            onClick={() => setWorkspaceView('reader')}
+            aria-pressed={workspaceView === 'reader'}
+            className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-extrabold transition ${workspaceView === 'reader' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}
+          >
+            Notes Reader
+          </button>
+        </nav>
+      )}
+
       {/* 2. DUAL-PANE WORKSPACE: LEFT SYLLABUS NAVIGATOR + RIGHT NOTE CANVAS */}
+      {workspaceView === 'overview' && !isFocusMode ? (
+        <section className="space-y-6" aria-label="Teaching License study dashboard">
+          <div className="grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
+            <div className="overflow-hidden rounded-3xl border border-purple-200 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 p-6 text-white shadow-xl sm:p-8">
+              <div className="flex h-full flex-col justify-between gap-7">
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-purple-200">Continue your preparation</p>
+                  <h2 className="mt-3 max-w-2xl font-display text-3xl font-extrabold leading-tight sm:text-4xl">One syllabus. Ten focused modules. A clear route to 60+.</h2>
+                  <p className="mt-3 max-w-2xl text-sm leading-6 text-indigo-100">Resume your current topic, mark lessons as mastered, and use the 50–50 blueprint to keep content knowledge and pedagogy balanced.</p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <button onClick={() => setWorkspaceView('reader')} className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-indigo-700 shadow-lg transition hover:-translate-y-0.5">
+                    Continue: {currentTopic.title}<ArrowRight className="h-4 w-4" />
+                  </button>
+                  <button onClick={() => { setPartCategoryFilter('starred'); setWorkspaceView('reader'); }} className="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-3 text-sm font-bold text-white backdrop-blur hover:bg-white/20">
+                    <Star className="h-4 w-4 text-amber-300" /> {totalStarredCount} saved topics
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <div className="rounded-3xl border border-cyan-200 bg-cyan-50 p-5 dark:border-cyan-900 dark:bg-cyan-950/30">
+                <div className="flex items-center justify-between"><span className="text-xs font-extrabold uppercase tracking-wider text-cyan-800 dark:text-cyan-300">Part I · Content</span><span className="text-2xl font-black text-cyan-900 dark:text-cyan-100">50%</span></div>
+                <p className="mt-2 text-sm leading-6 text-cyan-900/75 dark:text-cyan-200/80">English, Mathematics, Science, Social Studies and language content.</p>
+              </div>
+              <div className="rounded-3xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-900 dark:bg-amber-950/30">
+                <div className="flex items-center justify-between"><span className="text-xs font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-300">Part II · Pedagogy</span><span className="text-2xl font-black text-amber-900 dark:text-amber-100">50%</span></div>
+                <p className="mt-2 text-sm leading-6 text-amber-900/75 dark:text-amber-200/80">Teaching methods, assessment, psychology, curriculum and classroom practice.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div><p className="text-xs font-extrabold uppercase tracking-[0.18em] text-purple-600">Complete syllabus</p><h2 className="mt-1 font-display text-2xl font-extrabold text-slate-950 dark:text-white">Choose a module to begin</h2><p className="mt-1 text-sm text-slate-500">Progress is saved automatically on this device.</p></div>
+              <div className="rounded-2xl bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-200">{totalMasteredCount}/{allTopics.length} topics mastered</div>
+            </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {TEACHING_LICENSE_PARTS.map((part) => {
+                const IconComp = ICON_MAP[part.iconName] || BookOpen;
+                const done = part.topics.filter((topic) => masteredTopics[topic.id]).length;
+                const completion = Math.round((done / part.topics.length) * 100);
+                return <button key={part.id} onClick={() => handleSelectTopic(part.id, part.topics[0].id)} className="group rounded-2xl border border-slate-200 bg-slate-50/60 p-4 text-left transition hover:-translate-y-1 hover:border-purple-300 hover:bg-white hover:shadow-xl dark:border-slate-800 dark:bg-slate-950/40 dark:hover:border-purple-700 dark:hover:bg-slate-900">
+                  <div className="flex items-start justify-between gap-3"><span className={`grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br ${part.themeColor} text-white shadow-md`}><IconComp className="h-5 w-5" /></span><span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-extrabold text-slate-500 shadow-sm dark:bg-slate-800">{part.weightage}</span></div>
+                  <p className="mt-4 text-[10px] font-extrabold uppercase tracking-widest text-purple-600 dark:text-purple-400">Part {part.partNumber} · {part.partCategory}</p>
+                  <h3 className="mt-1 text-base font-extrabold text-slate-950 group-hover:text-purple-700 dark:text-white dark:group-hover:text-purple-300">{part.subjectName}</h3>
+                  <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-500">{part.description}</p>
+                  <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800"><div className="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-500" style={{ width: `${Math.max(completion, 3)}%` }} /></div>
+                  <div className="mt-2 flex items-center justify-between text-[11px] font-bold text-slate-500"><span>{part.topics.length} topics</span><span>{completion}% complete</span></div>
+                </button>;
+              })}
+            </div>
+          </div>
+        </section>
+      ) : (
       <div className="flex flex-col lg:flex-row items-start gap-6 relative">
         {/* MOBILE SYLLABUS DRAWER TRIGGER (Hidden on Large screens and in focus mode) */}
         {!isFocusMode && (
@@ -1576,6 +1657,7 @@ PREPARED VIA MEHTAB STS IBA PREP
           </div>
         </main>
       </div>
+      )}
 
       {/* 4. KEY TERM INSPECTOR MODAL */}
       {inspectTerm && (

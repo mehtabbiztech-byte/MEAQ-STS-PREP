@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { BookOpen, ChevronRight, GraduationCap, Sparkles, Award } from 'lucide-react';
 import { STUDY_CURRICULUM } from '../data/studyNotesData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { StudyLesson } from '../types';
 import { useApp } from '../context/AppContext';
 import { useCmsContent } from '../context/CmsContentContext';
-import { TeachingLicenseNotesHub } from '../components/TeachingLicenseNotesHub';
+
+const TeachingLicenseNotesHub = lazy(() =>
+  import('../components/TeachingLicenseNotesHub').then((module) => ({ default: module.TeachingLicenseNotesHub })),
+);
 
 const panel = 'rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 sm:p-7';
 const button = 'rounded-xl px-4 py-2 bg-emerald-700 text-white font-semibold hover:bg-emerald-800 disabled:opacity-40';
@@ -86,7 +89,9 @@ export const StudyNotesView: React.FC = () => {
       </div>
 
       {libraryMode === 'teaching-license' ? (
-        <TeachingLicenseNotesHub />
+        <Suspense fallback={<div className="grid min-h-80 place-items-center rounded-3xl border border-slate-200 bg-white text-sm font-semibold text-slate-500 dark:border-slate-800 dark:bg-slate-900">Loading Teaching License dashboard…</div>}>
+          <TeachingLicenseNotesHub />
+        </Suspense>
       ) : selected ? (
         <div key={selected.lesson.id}>
           <nav aria-label="Lesson location" className="flex flex-wrap items-center gap-2 text-sm text-slate-500 mb-5">

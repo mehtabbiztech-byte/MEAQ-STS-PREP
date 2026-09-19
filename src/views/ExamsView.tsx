@@ -20,7 +20,10 @@ import { CceSyllabusExplorer } from '../components/CceSyllabusExplorer';
 import { StsExamSimulator } from '../components/StsExamSimulator';
 import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
 import { PreparationRoomDashboard } from '../components/PreparationRoomDashboard';
-import { TeachingLicenseNotesHub } from '../components/TeachingLicenseNotesHub';
+
+const TeachingLicenseNotesHub = lazy(() =>
+  import('../components/TeachingLicenseNotesHub').then((module) => ({ default: module.TeachingLicenseNotesHub })),
+);
 
 const CssSyllabusExplorer = lazy(() =>
   import('../components/CssSyllabusExplorer').then((module) => ({
@@ -282,13 +285,15 @@ export const ExamsView: React.FC = () => {
 
           {/* Sub-tab: Teaching License Notes */}
           {activeTab === 'notes' && currentExam.id === 'sts-teaching-license' && (
-            <TeachingLicenseNotesHub
-              onOpenPaperSimulator={() => {
-                if (examPastPapers[0]) setSelectedPastPaperId(examPastPapers[0].id);
-                setTab('past-papers');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
+            <Suspense fallback={<div className="grid min-h-80 place-items-center rounded-3xl border border-slate-200 bg-white text-sm font-semibold text-slate-500 dark:border-slate-800 dark:bg-slate-900">Loading Teaching License dashboard…</div>}>
+              <TeachingLicenseNotesHub
+                onOpenPaperSimulator={() => {
+                  if (examPastPapers[0]) setSelectedPastPaperId(examPastPapers[0].id);
+                  setTab('past-papers');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            </Suspense>
           )}
 
           {/* Sub-tab 1: Overview */}
