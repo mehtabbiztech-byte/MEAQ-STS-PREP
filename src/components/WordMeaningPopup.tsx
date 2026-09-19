@@ -1,25 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BookOpen, LoaderCircle, Volume2, X } from 'lucide-react';
+import { BookOpen, Database, LoaderCircle, Volume2, Wifi, X } from 'lucide-react';
+import { getBuiltInMeaning, normalizeDictionaryWord, type DictionaryMeaning } from '../data/builtInDictionary';
+import { readSavedMeaning, saveMeaning } from '../lib/wordMeaningStore';
 
-type Meaning = {
-  word: string;
-  partOfSpeech: string;
-  simpleEnglish: string;
-  urdu: string;
-  sindhi: string;
-  example?: string;
-};
-
-const FALLBACK: Record<string, Omit<Meaning, 'word'>> = {
-  learn: { partOfSpeech: 'verb', simpleEnglish: 'To gain knowledge or a new skill.', urdu: 'سیکھنا', sindhi: 'سکڻ', example: 'We learn something new every day.' },
-  knowledge: { partOfSpeech: 'noun', simpleEnglish: 'Information and understanding gained through learning.', urdu: 'علم، معلومات', sindhi: 'علم، ڄاڻ', example: 'Reading increases knowledge.' },
-  important: { partOfSpeech: 'adjective', simpleEnglish: 'Having great value or meaning.', urdu: 'اہم', sindhi: 'اهم', example: 'Education is important for everyone.' },
-  answer: { partOfSpeech: 'noun', simpleEnglish: 'A response to a question.', urdu: 'جواب', sindhi: 'جواب', example: 'Choose the correct answer.' },
-  question: { partOfSpeech: 'noun', simpleEnglish: 'Something asked to get information.', urdu: 'سوال', sindhi: 'سوال', example: 'Read the question carefully.' },
-  example: { partOfSpeech: 'noun', simpleEnglish: 'Something that helps explain an idea.', urdu: 'مثال', sindhi: 'مثال', example: 'The teacher gave an example.' },
-  practice: { partOfSpeech: 'noun / verb', simpleEnglish: 'Repeated work that helps improve a skill.', urdu: 'مشق، عمل کرنا', sindhi: 'مشق، عمل ڪرڻ', example: 'Daily practice improves results.' },
-  study: { partOfSpeech: 'verb', simpleEnglish: 'To spend time learning about a subject.', urdu: 'پڑھنا، مطالعہ کرنا', sindhi: 'پڙهڻ، مطالعو ڪرڻ', example: 'I study science every evening.' },
-};
+type MeaningSource = 'built-in' | 'saved' | 'online' | 'fallback';
 
 function wordAtPoint(x: number, y: number): string | null {
   let node: Node | null = null;
@@ -59,7 +43,8 @@ function speak(word: string) {
 
 export const WordMeaningPopup: React.FC = () => {
   const [selectedWord, setSelectedWord] = useState('');
-  const [meaning, setMeaning] = useState<Meaning | null>(null);
+  const [meaning, setMeaning] = useState<DictionaryMeaning | null>(null);
+  const [source, setSource] = useState<MeaningSource>('built-in');
   const [loading, setLoading] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 20 });
   const requestId = useRef(0);
@@ -87,10 +72,11 @@ export const WordMeaningPopup: React.FC = () => {
   useEffect(() => {
     if (!selectedWord) return;
     const currentRequest = ++requestId.current;
-    const key = selectedWord.toLocaleLowerCase('en').replace(/[^\p{L}'’\-]/gu, '');
-    const local = FALLBACK[key];
+    const key = normalizeDictionaryWord(selectedWord);
+    const local = getBuiltInMeaning(selectedWord);
     if (local) {
-      setMeaning({ word: selectedWord, ...local });
+      setMeaning(local);
+      setSource('built-in');
       setLoading(false);
       return;
     }
@@ -98,7 +84,8 @@ export const WordMeaningPopup: React.FC = () => {
     const cached = sessionStorage.getItem(`meqsa-word-meaning:${key}`);
     if (cached) {
       try {
-        setMeaning(JSON.parse(cached) as Meaning);
+        setMeaning(JSON.parse(cached) as DictionaryMeaning);
+        setSource('saved');
         setLoading(false);
         return;
       } catch {
@@ -106,35 +93,48 @@ export const WordMeaningPopup: React.FC = () => {
       }
     }
 
-    setMeaning(null);
-    setLoading(true);
-    fetch('/api/word-meaning', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ word: selectedWord }),
-    })
-      .then(async response => {
+    const findMeaning = async () => {
+      setMeaning(null);
+      setLoading(true);
+
+      const saved = await readSavedMeaning(key);
+      if (currentRequest !== requestId.current) return;
+      if (saved) {
+        setMeaning({ ...saved, word: selectedWord });
+        setSource('saved');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/word-meaning', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ word: selectedWord }),
+        });
         if (!response.ok) throw new Error('Meaning service unavailable');
-        return response.json() as Promise<Meaning>;
-      })
-      .then(data => {
+        const data = await response.json() as DictionaryMeaning;
         if (currentRequest !== requestId.current) return;
         setMeaning(data);
+        setSource('online');
         sessionStorage.setItem(`meqsa-word-meaning:${key}`, JSON.stringify(data));
-      })
-      .catch(() => {
+        await saveMeaning(key, data);
+      } catch {
         if (currentRequest !== requestId.current) return;
         setMeaning({
           word: selectedWord,
           partOfSpeech: 'word',
-          simpleEnglish: 'Meaning is temporarily unavailable. Please try again.',
-          urdu: 'معنی عارضی طور پر دستیاب نہیں۔',
-          sindhi: 'معنيٰ عارضي طور موجود ناهي۔',
+          simpleEnglish: `“${selectedWord}” is not in the offline dictionary yet. Connect once to download and permanently save its full meaning.`,
+          urdu: `“${selectedWord}” ابھی آف لائن لغت میں موجود نہیں۔ ایک بار انٹرنیٹ سے معنی حاصل ہونے پر یہ مستقل محفوظ ہو جائے گا۔`,
+          sindhi: `“${selectedWord}” اڃا آف لائن لغت ۾ موجود ناهي۔ هڪ ڀيرو انٽرنيٽ سان معنيٰ ملڻ بعد اها مستقل محفوظ ٿي ويندي۔`,
         });
-      })
-      .finally(() => {
+        setSource('fallback');
+      } finally {
         if (currentRequest === requestId.current) setLoading(false);
-      });
+      }
+    };
+
+    void findMeaning();
   }, [selectedWord]);
 
   if (!selectedWord) return null;
@@ -168,6 +168,13 @@ export const WordMeaningPopup: React.FC = () => {
       ) : meaning && (
         <div className="mt-4 space-y-3 text-sm leading-6">
           <p className="inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">{meaning.partOfSpeech}</p>
+          <p className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
+            {source === 'online' ? <Wifi size={13} /> : <Database size={13} />}
+            {source === 'online' && 'Online meaning — saved for offline use'}
+            {source === 'saved' && 'Saved offline meaning'}
+            {source === 'built-in' && 'Built-in offline dictionary'}
+            {source === 'fallback' && 'Offline guidance'}
+          </p>
           <div><p className="font-bold">Simple English</p><p>{meaning.simpleEnglish}</p></div>
           <div dir="rtl" className="rounded-xl bg-slate-50 p-3 text-right dark:bg-slate-800"><p className="font-bold">اردو</p><p>{meaning.urdu}</p></div>
           <div dir="rtl" className="rounded-xl bg-emerald-50 p-3 text-right dark:bg-emerald-950"><p className="font-bold">سنڌي</p><p>{meaning.sindhi}</p></div>
