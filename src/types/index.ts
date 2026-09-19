@@ -54,6 +54,11 @@ export interface CmsMcq extends CmsBase {
   examTags: string[];
   difficulty: 'Easy' | 'Medium' | 'Hard';
   normalizedQuestion: string;
+  year?: number;
+  viewsCount?: number;
+  sourceUrl?: string;
+  verificationStatus?: 'generated-practice' | 'source-aligned' | 'editor-reviewed' | 'official-paper';
+  verificationMethod?: string;
 }
 
 export interface CmsPastPaper extends CmsBase {
@@ -148,6 +153,7 @@ export interface PastPaper {
   postName: string;
   bps: string;
   totalQuestions: number;
+  durationMinutes?: number;
   solvedDate?: string;
   mcqs: MCQ[];
   recordType?: 'Official Past Paper' | 'Official Sample Paper' | 'Official Answer Key / Date Record' | 'Reconstructed Practice Paper';

@@ -2,8 +2,10 @@ import { PastPaper } from '../types';
 import { MCQS_DATA } from './mcqsData';
 import { TEACHING_LICENSE_PAPER_1_MCQS } from './teachingLicensePaper1';
 import { TEACHING_LICENSE_PAPER_2_MCQS } from './teachingLicensePaper2';
+import { NADRA_JUNIOR_EXECUTIVE_PAPERS } from './nadraJuniorExecutiveData';
 
 export const PAST_PAPERS_DATA: PastPaper[] = [
+  ...NADRA_JUNIOR_EXECUTIVE_PAPERS,
   {
     id: 'sts-teaching-license-paper-1',
     title: 'STS IBA Teaching License Test — Solved Paper 1 (Practice Set 100 Questions)',

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Award, BarChart3, Clock, Target } from 'lucide-react';
+import { Award, BarChart3, Clock, Target, type LucideIcon } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const RankingsView: React.FC = () => {
@@ -11,6 +11,12 @@ export const RankingsView: React.FC = () => {
     const seconds = attempts.reduce((sum, item) => sum + item.timeSpentSeconds, 0);
     return { answered, seconds, accuracy: answered ? Math.round((score / answered) * 100) : 0 };
   }, [attempts]);
+  const metrics: Array<[string, string | number, LucideIcon]> = [
+    ['Attempts', attempts.length, Award],
+    ['Questions', summary.answered, Target],
+    ['Accuracy', `${summary.accuracy}%`, BarChart3],
+    ['Practice time', `${Math.round(summary.seconds / 60)} min`, Clock],
+  ];
 
   return <main className="max-w-6xl mx-auto px-4 py-10 space-y-8">
     <header className="rounded-3xl bg-slate-950 text-white p-7 sm:p-10">
@@ -19,12 +25,7 @@ export const RankingsView: React.FC = () => {
       <p className="text-slate-300 mt-3 max-w-3xl">These figures come only from your saved MEQSA practice attempts. MEQSA does not claim national ranks or percentiles without a verified candidate population.</p>
     </header>
     <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {[
-        ['Attempts', attempts.length, Award],
-        ['Questions', summary.answered, Target],
-        ['Accuracy', `${summary.accuracy}%`, BarChart3],
-        ['Practice time', `${Math.round(summary.seconds / 60)} min`, Clock],
-      ].map(([label, value, Icon]) => <article key={String(label)} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5"><Icon className="text-emerald-600"/><p className="text-sm text-slate-500 mt-4">{String(label)}</p><p className="text-3xl font-black mt-1">{String(value)}</p></article>)}
+      {metrics.map(([label, value, Icon]) => <article key={label} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5"><Icon className="text-emerald-600"/><p className="text-sm text-slate-500 mt-4">{label}</p><p className="text-3xl font-black mt-1">{String(value)}</p></article>)}
     </section>
     <section className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
       <h2 className="text-xl font-black">Recent attempts</h2>

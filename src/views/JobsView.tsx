@@ -1,15 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowRight, BadgeCheck, Building2, CalendarDays, Clock, ExternalLink, MapPin, Search } from 'lucide-react';
+import { ArrowRight, BadgeCheck, BookOpenCheck, Building2, CalendarDays, CheckCircle2, Clock, ExternalLink, FileQuestion, MapPin, Search, TimerReset } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { JOBS_DATA, JOBS_LAST_VERIFIED } from '../data/jobsData';
+import { NADRA_JUNIOR_EXECUTIVE_PAPERS, NADRA_TEST_BLUEPRINT } from '../data/nadraJuniorExecutiveData';
+import type { PastPaper } from '../types';
+import { PaperSession } from './PastPapersView';
 
-const FILTERS = ['All', 'Pakistan Railways', 'ATH', 'PARC', 'Air University', 'AWKUM', 'NUST'];
+const FILTERS = ['All', 'NADRA', 'Pakistan Railways', 'ATH', 'PARC', 'Air University', 'AWKUM', 'NUST'];
 
 export const JobsView: React.FC = () => {
   const { setTab } = useApp();
   const [agencyFilter, setAgencyFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [activePaper, setActivePaper] = useState<PastPaper | null>(null);
+  const [paperSession, setPaperSession] = useState(0);
 
   const filteredJobs = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -23,6 +28,18 @@ export const JobsView: React.FC = () => {
       return agencyMatch && searchMatch;
     });
   }, [agencyFilter, searchQuery]);
+
+  if (activePaper) return (
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div key={`${activePaper.id}-${paperSession}`}>
+        <PaperSession
+          paper={activePaper}
+          onExit={() => setActivePaper(null)}
+          onRetake={() => setPaperSession((value) => value + 1)}
+        />
+      </div>
+    </main>
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-7">
@@ -138,6 +155,67 @@ export const JobsView: React.FC = () => {
                   <p><strong>How to apply:</strong> {job.applicationMethod || 'Follow the official notice.'}</p>
                   <p><strong>Reference:</strong> {job.advertisementNo}</p>
                   <p className="flex items-center gap-1 font-bold text-emerald-700 dark:text-emerald-400"><BadgeCheck className="h-3.5 w-3.5" /> {job.sourceLabel} · checked {job.verifiedAt}</p>
+                  {job.id === 'sep26-nadra-junior-executive-sukkur' && (
+                    <div className="space-y-5 pt-4">
+                      <div className="rounded-2xl bg-slate-950 p-5 text-white">
+                        <div className="flex items-center gap-2 text-emerald-300 font-extrabold uppercase tracking-wide"><BookOpenCheck className="h-4 w-4" /> Complete test structure</div>
+                        <h3 className="mt-2 text-xl font-extrabold">NADRA Junior Executive Preparation Centre</h3>
+                        <p className="mt-2 leading-relaxed text-slate-300">Proposed MEQSA pattern: 50 MCQs, 50 marks, 50 minutes, one mark per correct answer and no negative marking in practice mode. NADRA has not stated this section weightage in the supplied advertisement, so use it as a focused preparation blueprint.</p>
+                      </div>
+
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {NADRA_TEST_BLUEPRINT.map((section) => (
+                          <div key={section.section} className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                            <div className="flex items-center justify-between gap-3">
+                              <strong className="text-slate-900 dark:text-white">{section.section}</strong>
+                              <span className="rounded-full bg-emerald-100 px-2 py-1 font-extrabold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">{section.questions} MCQs</span>
+                            </div>
+                            <p className="mt-2 leading-relaxed">{section.topics}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-950 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-100">
+                        <strong>Preparation syllabus</strong>
+                        <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+                          {[
+                            'Computer fundamentals, Windows, files and keyboard shortcuts',
+                            'MS Word, Excel formulas, cells, sorting and office productivity',
+                            'Email, internet safety, passwords, phishing and data privacy',
+                            'English grammar, vocabulary, spelling and sentence correction',
+                            'Percentages, ratios, averages, basic algebra and arithmetic',
+                            'Number/letter series, analogies, ordering and logical deduction',
+                            'CNIC concepts, data verification, confidentiality and audit trails',
+                            'Pakistan affairs, geography, institutions and everyday GK',
+                            'Typing accuracy, exact matching, date formats and error checking',
+                            'Interview readiness: documents, role awareness and public dealing',
+                          ].map((item) => <li key={item} className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />{item}</li>)}
+                        </ul>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center gap-2 text-slate-900 dark:text-white"><FileQuestion className="h-5 w-5 text-emerald-600" /><strong className="text-base">Two papers and full mock</strong></div>
+                        <div className="mt-3 grid gap-3 lg:grid-cols-3">
+                          {NADRA_JUNIOR_EXECUTIVE_PAPERS.map((paper, index) => (
+                            <article key={paper.id} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+                              <span className="font-extrabold text-emerald-700 dark:text-emerald-400">{index === 2 ? 'Full mock test' : `Practice paper ${index + 1}`}</span>
+                              <h4 className="mt-2 font-extrabold text-slate-950 dark:text-white">{paper.title}</h4>
+                              <p className="mt-2">50 questions · 50 minutes · answers, explanations, subject result and mistake review</p>
+                              <p className="mt-2 text-[11px] text-slate-500">Reconstructed MEQSA practice—not an official NADRA past paper.</p>
+                              <button onClick={() => { setPaperSession(0); setActivePaper(paper); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 font-extrabold text-white hover:bg-emerald-700">
+                                <TimerReset className="h-4 w-4" /> Start timed test
+                              </button>
+                            </article>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
+                        <strong className="text-slate-900 dark:text-white">Test-day checklist</strong>
+                        <p className="mt-2 leading-relaxed">Original CNIC/domicile, educational certificates, CV and professional documents; arrive within the 9:00 AM–1:00 PM registration window. Mobile phones, smart watches and other electronic gadgets are not allowed. Only residents of the respective advertised tehsil are eligible under the notice.</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

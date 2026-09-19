@@ -222,6 +222,11 @@ export const CurrentAffairsView: React.FC = () => {
         {/* Filters according to active tab */}
         {activeTab === 'mcqs' ? (
           <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+            <label className="text-xs text-slate-600 dark:text-slate-300 whitespace-nowrap">Scope
+              <select value={mcqScope} onChange={e => setMcqScope(e.target.value as 'All' | 'Pakistan' | 'World')} className="ml-2 p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800">
+                <option value="All">Pakistan & World</option><option value="Pakistan">Pakistan</option><option value="World">World</option>
+              </select>
+            </label>
             <label className="text-xs text-slate-600 dark:text-slate-300 whitespace-nowrap">Sources
               <select value={sourceFilter} onChange={e => setSourceFilter(e.target.value as 'All' | 'Sourced')} className="ml-2 p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800">
                 <option value="All">All questions</option><option value="Sourced">Source-linked only</option>
@@ -413,7 +418,7 @@ export const CurrentAffairsView: React.FC = () => {
                         <strong className="text-slate-800 dark:text-slate-200">Detailed Explanation: </strong>
                         {mcq.explanation}
                       </p>
-                      {mcq.sourceUrl && <a href={mcq.sourceUrl} target="_blank" rel="noreferrer" className="inline-block text-xs font-semibold text-emerald-700 dark:text-emerald-400 underline pt-2">Original source ↗ · Checked {mcq.sourceCheckedOn}</a>}
+                      {mcq.sourceUrl && <a href={mcq.sourceUrl} target="_blank" rel="noreferrer" className="inline-block text-xs font-semibold text-emerald-700 dark:text-emerald-400 underline pt-2">Original source ↗</a>}
                     </div>
                   )}
 
