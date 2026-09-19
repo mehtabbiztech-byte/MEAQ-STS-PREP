@@ -36,10 +36,35 @@ function wordAtPoint(x: number, y: number): string | null {
   return match?.[0].replace(/^['’\-]+|['’\-]+$/g, '') || null;
 }
 
-function speak(word: string) {
-  if (!('speechSynthesis' in window)) return;
+function preferredEnglishVoice(voices: SpeechSynthesisVoice[]) {
+  const englishVoices = voices.filter(voice => voice.lang.toLowerCase().startsWith('en'));
+  const preferredNames = ['natural', 'neural', 'google', 'samantha', 'aria', 'jenny', 'guy', 'serena', 'daniel'];
+  return englishVoices
+    .map(voice => ({
+      voice,
+      score: preferredNames.reduce(
+        (total, name, index) => total + (voice.name.toLowerCase().includes(name) ? preferredNames.length - index : 0),
+        voice.localService ? 1 : 0,
+      ),
+    }))
+    .sort((a, b) => b.score - a.score)[0]?.voice;
+}
+
+function speakSlowly(word: string, onEnd: () => void) {
+  if (!('speechSynthesis' in window)) {
+    onEnd();
+    return;
+  }
   window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(new SpeechSynthesisUtterance(word));
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = 'en-GB';
+  utterance.rate = 0.68;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+  utterance.voice = preferredEnglishVoice(window.speechSynthesis.getVoices()) ?? null;
+  utterance.onend = onEnd;
+  utterance.onerror = onEnd;
+  window.speechSynthesis.speak(utterance);
 }
 
 export const WordMeaningPopup: React.FC = () => {
@@ -47,6 +72,7 @@ export const WordMeaningPopup: React.FC = () => {
   const [meaning, setMeaning] = useState<DictionaryMeaning | null>(null);
   const [source, setSource] = useState<MeaningSource>('built-in');
   const [loading, setLoading] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 20 });
   const requestId = useRef(0);
 
@@ -151,6 +177,8 @@ export const WordMeaningPopup: React.FC = () => {
     void findMeaning();
   }, [selectedWord]);
 
+  useEffect(() => () => window.speechSynthesis?.cancel(), []);
+
   if (!selectedWord) return null;
 
   return (
@@ -167,8 +195,16 @@ export const WordMeaningPopup: React.FC = () => {
           <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">Word meaning</p>
           <div className="mt-1 flex items-center gap-2">
             <h2 className="text-2xl font-bold">{selectedWord}</h2>
-            <button onClick={() => speak(selectedWord)} className="rounded-full p-1.5 text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-slate-800" aria-label={`Hear ${selectedWord}`}>
-              <Volume2 size={18} />
+            <button
+              onClick={() => {
+                setSpeaking(true);
+                speakSlowly(selectedWord, () => setSpeaking(false));
+              }}
+              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-slate-800"
+              aria-label={`Hear ${selectedWord} pronounced slowly`}
+            >
+              <Volume2 size={18} className={speaking ? 'animate-pulse' : ''} />
+              {speaking ? 'Speaking…' : 'Slow pronunciation'}
             </button>
           </div>
         </div>
