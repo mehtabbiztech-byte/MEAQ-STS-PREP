@@ -2,10 +2,9 @@ import { PastPaper } from '../types';
 import { MCQS_DATA } from './mcqsData';
 import { TEACHING_LICENSE_PAPER_1_MCQS } from './teachingLicensePaper1';
 import { TEACHING_LICENSE_PAPER_2_MCQS } from './teachingLicensePaper2';
-import { NADRA_JUNIOR_EXECUTIVE_PAPERS } from './nadraJuniorExecutiveData';
+import { TEACHING_LICENSE_PAPER_3_MCQS } from './teachingLicensePaper3';
 
 export const PAST_PAPERS_DATA: PastPaper[] = [
-  ...NADRA_JUNIOR_EXECUTIVE_PAPERS,
   {
     id: 'sts-teaching-license-paper-1',
     title: 'STS IBA Teaching License Test — Solved Paper 1 (Practice Set 100 Questions)',
@@ -37,6 +36,22 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     sourceUrl: 'https://apply.sts.net.pk/',
     sourceNote: 'Reconstructed memory-based practice paper aligned strictly to STEDA & Sukkur IBA syllabus; not a certified complete official paper release.',
     mcqs: TEACHING_LICENSE_PAPER_2_MCQS,
+  },
+  {
+    id: 'sts-teaching-license-paper-3',
+    title: 'STS IBA Teaching License Test — Solved Paper 3 (Practice Set 100 Questions)',
+    exam: 'STS',
+    conductedBy: 'Sukkur IBA Testing Services (STS) & STEDA',
+    year: 2025,
+    postName: 'Elementary & Secondary Teaching License (BPS-16 / BPS-17)',
+    bps: 'BPS-16/17',
+    totalQuestions: 100,
+    solvedDate: '2024–2025 Model Examination Batch',
+    testDateLabel: 'STEDA & Sukkur IBA Standard Syllabus Model Paper',
+    recordType: 'Reconstructed Practice Paper',
+    sourceUrl: 'https://apply.sts.net.pk/',
+    sourceNote: 'Reconstructed memory-based practice paper aligned strictly to STEDA & Sukkur IBA syllabus; not a certified complete official paper release.',
+    mcqs: TEACHING_LICENSE_PAPER_3_MCQS,
   },
   {
     id: 'sts-jest-2021-official-record', title: 'JEST (BPS-14) — Official STS Record', exam: 'STS',

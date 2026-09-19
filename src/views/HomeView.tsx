@@ -323,6 +323,40 @@ export const HomeView: React.FC = () => {
                       <FileText className="w-3.5 h-3.5 text-rose-300" />
                       <span>Paper 2</span>
                     </button>
+                    <button
+                      onClick={() => {
+                        setSelectedPastPaperId('sts-teaching-license-paper-3');
+                        setTab('past-papers');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="px-2.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs transition cursor-pointer flex items-center gap-1"
+                      title="Solved Past Paper 3 (100 Questions) - Latest Model"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-emerald-300" />
+                      <span>Paper 3</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setTab('study-notes');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="px-2.5 py-2 rounded-xl bg-purple-500/30 hover:bg-purple-500/50 border border-purple-400/50 text-purple-200 font-bold text-xs transition cursor-pointer flex items-center gap-1 shadow-xs"
+                      title="10-Part Master Syllabus Notes & Child Psychology Theory"
+                    >
+                      <BookOpen className="w-3.5 h-3.5 text-purple-300" />
+                      <span>10-Part Notes</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedExamId('sts-teaching-license');
+                        setTab('exams');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className="px-2.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 font-bold text-xs transition cursor-pointer flex items-center gap-1"
+                      title="View Detailed Teaching License Syllabus & Passing Criteria"
+                    >
+                      <span>Syllabus & Rules</span>
+                    </button>
                   </div>
                 </div>
 

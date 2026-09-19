@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { BookOpen, ChevronRight, GraduationCap, Sparkles } from 'lucide-react';
+import { BookOpen, ChevronRight, GraduationCap, Sparkles, Award } from 'lucide-react';
 import { STUDY_CURRICULUM } from '../data/studyNotesData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { StudyLesson } from '../types';
 import { useApp } from '../context/AppContext';
 import { useCmsContent } from '../context/CmsContentContext';
-import { MeaningText } from '../components/MeaningText';
+import { TeachingLicenseNotesHub } from '../components/TeachingLicenseNotesHub';
 
 const panel = 'rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 sm:p-7';
 const button = 'rounded-xl px-4 py-2 bg-emerald-700 text-white font-semibold hover:bg-emerald-800 disabled:opacity-40';
@@ -19,12 +19,12 @@ function LessonReader({ lesson, onBack }: { lesson: StudyLesson; onBack: () => v
   return <article className="space-y-5">
     <button onClick={onBack} className="text-emerald-700 dark:text-emerald-400 font-semibold">← All lessons</button>
     <header className={panel}><p className="text-sm text-emerald-600">{kids ? 'Young learners' : 'Advanced study'} · {lesson.readTime}</p><h1 className="text-3xl font-bold mt-2">{lesson.title}</h1></header>
-    <section className={panel}><h2 className="text-xl font-bold">{kids ? '📖 Let’s learn' : 'Detailed notes'}</h2><p className="leading-8 mt-4"><MeaningText text={lesson.explanation} /></p><h3 className="font-bold mt-6">Important points</h3><ul className="list-disc pl-5 space-y-3 mt-3">{lesson.importantPoints.map(p => <li key={p}><MeaningText text={p} /></li>)}</ul></section>
+    <section className={panel}><h2 className="text-xl font-bold">{kids ? '📖 Let’s learn' : 'Detailed notes'}</h2><p className="leading-8 mt-4">{lesson.explanation}</p><h3 className="font-bold mt-6">Important points</h3><ul className="list-disc pl-5 space-y-3 mt-3">{lesson.importantPoints.map(p => <li key={p}>{p}</li>)}</ul></section>
     {(lesson.images ?? []).map(image => <figure key={image.src} className={panel}><img src={image.src} alt={image.alt} className="w-full max-h-80 object-contain"/><figcaption className="text-center text-sm mt-3">{image.caption}</figcaption></figure>)}
-    <section className={panel}><h2 className="text-xl font-bold">{kids ? '🖍 Examples' : 'Examples & revision prompts'}</h2><div className="space-y-3 mt-4">{lesson.examples.map((example, i) => <p key={i} className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950 leading-7"><MeaningText text={example} /></p>)}</div></section>
+    <section className={panel}><h2 className="text-xl font-bold">{kids ? '🖍 Examples' : 'Examples & revision prompts'}</h2><div className="space-y-3 mt-4">{lesson.examples.map((example, i) => <p key={i} className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950 leading-7">{example}</p>)}</div></section>
     {!!lesson.formulas?.length && <section className={panel}><h2 className="text-xl font-bold">Formulas</h2>{lesson.formulas.map(f => <p key={f} className="font-mono bg-slate-100 dark:bg-slate-800 p-4 mt-3 rounded-xl break-words">{f}</p>)}</section>}
     {lesson.tables?.map(table => <div key={table.title} className={`${panel} overflow-x-auto`}><table className="w-full text-left"><caption className="text-left text-xl font-bold mb-4">{table.title}</caption><thead><tr>{table.headers.map(h => <th scope="col" key={h} className="p-3 bg-slate-100 dark:bg-slate-800">{h}</th>)}</tr></thead><tbody>{table.rows.map((row, i) => <tr key={i}>{row.map((cell, j) => <td key={j} className="p-3 border-b border-slate-200 dark:border-slate-700">{cell}</td>)}</tr>)}</tbody></table></div>)}
-    <section className={panel}><h2 className="text-xl font-bold">{kids ? '🎮 Mini quiz' : 'MCQ practice'}</h2>{lesson.mcqs.length ? <><div className="space-y-6 mt-5">{lesson.mcqs.map(q => <fieldset key={q.id}><legend className="font-semibold mb-3"><MeaningText text={q.question} /> {!kids && <span className="text-xs text-slate-500">· {q.difficulty}</span>}</legend><div className="grid sm:grid-cols-2 gap-2">{q.options.map((o, i) => <label key={i} className={`flex gap-3 p-3 border rounded-xl ${checked && i === q.correctIndex ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950' : 'border-slate-300 dark:border-slate-700'}`}><input type="radio" disabled={checked} name={q.id} checked={answers[q.id] === i} onChange={() => setAnswers(a => ({...a, [q.id]: i}))}/><MeaningText text={o} /></label>)}</div>{checked && <p role="status" className="mt-3 leading-7">{answers[q.id] === q.correctIndex ? 'Correct! ' : <>Correct answer: <MeaningText text={q.options[q.correctIndex]} />. </>}<MeaningText text={q.explanation} /></p>}</fieldset>)}</div><div className="flex flex-wrap items-center gap-3 mt-5"><button className={button} disabled={!checked && Object.keys(answers).length !== lesson.mcqs.length} onClick={() => { if(checked) { setAnswers({}); setChecked(false); } else setChecked(true); }}>{checked ? 'Try again' : 'Check answers'}</button>{checked && <p role="status">Score: {lesson.mcqs.filter(q => answers[q.id] === q.correctIndex).length}/{lesson.mcqs.length}</p>}</div></> : <p className="mt-3 text-slate-500">MCQs for this lesson have not been added yet. Try the practice below.</p>}</section>
+    <section className={panel}><h2 className="text-xl font-bold">{kids ? '🎮 Mini quiz' : 'MCQ practice'}</h2>{lesson.mcqs.length ? <><div className="space-y-6 mt-5">{lesson.mcqs.map(q => <fieldset key={q.id}><legend className="font-semibold mb-3">{q.question} {!kids && <span className="text-xs text-slate-500">· {q.difficulty}</span>}</legend><div className="grid sm:grid-cols-2 gap-2">{q.options.map((o, i) => <label key={i} className={`flex gap-3 p-3 border rounded-xl ${checked && i === q.correctIndex ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950' : 'border-slate-300 dark:border-slate-700'}`}><input type="radio" disabled={checked} name={q.id} checked={answers[q.id] === i} onChange={() => setAnswers(a => ({...a, [q.id]: i}))}/>{o}</label>)}</div>{checked && <p role="status" className="mt-3 leading-7">{answers[q.id] === q.correctIndex ? 'Correct! ' : `Correct answer: ${q.options[q.correctIndex]}. `}{q.explanation}</p>}</fieldset>)}</div><div className="flex flex-wrap items-center gap-3 mt-5"><button className={button} disabled={!checked && Object.keys(answers).length !== lesson.mcqs.length} onClick={() => { if(checked) { setAnswers({}); setChecked(false); } else setChecked(true); }}>{checked ? 'Try again' : 'Check answers'}</button>{checked && <p role="status">Score: {lesson.mcqs.filter(q => answers[q.id] === q.correctIndex).length}/{lesson.mcqs.length}</p>}</div></> : <p className="mt-3 text-slate-500">MCQs for this lesson have not been added yet. Try the practice below.</p>}</section>
     <section className={panel}><h2 className="text-xl font-bold">Practice on your own</h2>{lesson.practice.map((p, i) => <div key={i} className="mt-5"><p>{p.prompt}</p><details className="mt-3"><summary className="cursor-pointer text-emerald-700 dark:text-emerald-400 font-semibold">Show model answer</summary><p className="mt-3 whitespace-pre-line leading-7">{p.answer}</p></details></div>)}</section>
     {!kids && <section className={panel}><h2 className="text-xl font-bold">References</h2>{lesson.references?.length ? <ul className="mt-3 space-y-2">{lesson.references.map(r => <li key={r.url}><a href={r.url} target="_blank" rel="noreferrer" className="text-emerald-700 underline">{r.title}</a></li>)}</ul> : <p className="mt-3 text-sm text-slate-500">Source references have not been attached to this lesson. Existing revision material needs editorial verification before use as an authoritative source.</p>}</section>}
     <section className={panel}><h2 className="text-xl font-bold">Related past-paper practice</h2><p className="mt-2 text-sm text-slate-500">These are related questions in the app’s practice selections; official paper provenance is not verified.</p>{related.length ? <div className="space-y-4 mt-4">{related.map(p => <div key={p.id}><h3 className="font-semibold">{p.exam} · {p.year}</h3><ul className="list-disc pl-5 my-3 text-sm space-y-2">{p.mcqs.filter(q => lesson.relatedQuestionIds.includes(q.id)).map(q => <li key={q.id}>{q.question}</li>)}</ul><button className={button} onClick={() => { setSelectedPastPaperId(p.id); setTab('past-papers'); }}>Open practice paper</button></div>)}</div> : <p className="mt-3">No related paper questions linked yet.</p>}</section>
@@ -33,6 +33,7 @@ function LessonReader({ lesson, onBack }: { lesson: StudyLesson; onBack: () => v
 
 export const StudyNotesView: React.FC = () => {
   const { lessons: cmsLessons } = useCmsContent();
+  const [libraryMode, setLibraryMode] = useState<'teaching-license' | 'general'>('teaching-license');
   const [mode, setMode] = useState<'kids' | 'advanced'>('advanced');
   const [query, setQuery] = useState('');
   const [subjectId, setSubjectId] = useState('all');
@@ -40,13 +41,185 @@ export const StudyNotesView: React.FC = () => {
   const lessons = STUDY_CURRICULUM.flatMap(subject => subject.chapters.flatMap(chapter => chapter.topics.flatMap(topic => topic.lessons.map(lesson => ({subject, chapter, topic, lesson})))));
   const selected = lessons.find(item => item.lesson.id === lessonId);
   const visible = lessons.filter(item => item.lesson.audience === mode && (subjectId === 'all' || item.subject.id === subjectId) && `${item.subject.title} ${item.chapter.title} ${item.topic.title} ${item.lesson.title} ${item.lesson.explanation}`.toLowerCase().includes(query.toLowerCase()));
-  return <main className="max-w-7xl mx-auto px-4 py-8 text-slate-900 dark:text-slate-100">{selected ? <div key={selected.lesson.id}><nav aria-label="Lesson location" className="flex flex-wrap items-center gap-2 text-sm text-slate-500 mb-5"><span>{selected.subject.title}</span><ChevronRight size={14}/><span>{selected.chapter.title}</span><ChevronRight size={14}/><span>{selected.topic.title}</span><ChevronRight size={14}/><span>{selected.lesson.title}</span></nav><LessonReader lesson={selected.lesson} onBack={() => setLessonId(null)}/></div> : <div className="space-y-6">
-    <header className="rounded-3xl p-8 bg-emerald-950 text-white"><BookOpen className="text-emerald-300 mb-4"/><p className="text-sm text-emerald-300 font-semibold">ONE LESSON AT A TIME</p><h1 className="text-3xl font-bold mt-2">Your study library</h1><p className="mt-3 text-emerald-100">Explore a subject. Understand a topic. Put it into practice.</p></header>
-    <div className="flex flex-wrap gap-3">{(['kids', 'advanced'] as const).map(m => <button key={m} aria-pressed={mode === m} onClick={() => {setMode(m); setSubjectId('all');}} className={`flex items-center gap-2 rounded-xl border px-5 py-3 font-semibold ${mode === m ? 'bg-emerald-700 text-white border-emerald-700' : 'border-slate-300 dark:border-slate-700'}`}>{m === 'kids' ? <Sparkles size={18}/> : <GraduationCap size={18}/>} {m === 'kids' ? 'Kids · Simple & visual' : 'Advanced · Exam preparation'}</button>)}</div>
-    <p className="text-sm text-slate-500">Starter lesson library — more subjects and chapters can be added as content is reviewed.</p>
-    <div className="grid sm:grid-cols-[1fr_280px] gap-4"><label>Find a lesson<input value={query} onChange={e => setQuery(e.target.value)} className="block w-full border rounded-xl p-3 mt-1 bg-transparent" placeholder="Search subject, chapter or topic"/></label><label>Subject<select value={subjectId} onChange={e => setSubjectId(e.target.value)} className="block w-full border rounded-xl p-3 mt-1 bg-white dark:bg-slate-900"><option value="all">All subjects</option>{STUDY_CURRICULUM.filter(s => lessons.some(item => item.subject.id === s.id && item.lesson.audience === mode)).map(s => <option key={s.id} value={s.id}>{s.title}</option>)}</select></label></div>
-    {!!cmsLessons.length && <section className={panel}><h2 className="text-2xl font-bold mb-5">New published lessons</h2><div className="grid md:grid-cols-2 gap-3">{cmsLessons.filter(item => `${item.subject} ${item.chapter} ${item.topic} ${item.title}`.toLowerCase().includes(query.toLowerCase())).map(item => <details key={item.id} className="rounded-xl border border-slate-200 dark:border-slate-700 p-4"><summary className="font-bold cursor-pointer">{item.subject} → {item.chapter} → {item.topic} → {item.title}</summary><p className="mt-4 leading-7 whitespace-pre-line">{item.explanation}</p>{item.importantPoints.length > 0 && <ul className="list-disc pl-5 mt-4 space-y-2">{item.importantPoints.map(point => <li key={point}>{point}</li>)}</ul>}</details>)}</div></section>}
-    <div className="space-y-6">{STUDY_CURRICULUM.filter(s => visible.some(i => i.subject.id === s.id)).map(subject => <section className={panel} key={subject.id}><h2 className="text-2xl font-bold mb-5">{subject.title}</h2>{subject.chapters.filter(c => visible.some(i => i.chapter.id === c.id)).map(chapter => <div key={chapter.id}><h3 className="font-semibold text-emerald-700 dark:text-emerald-400">{chapter.title}</h3>{chapter.topics.filter(t => visible.some(i => i.topic.id === t.id)).map(topic => <div key={topic.id} className="mt-4"><p className="text-sm text-slate-500 mb-2">{topic.title}</p><div className="grid md:grid-cols-2 gap-3">{visible.filter(i => i.topic.id === topic.id).map(({lesson}) => <button key={lesson.id} onClick={() => setLessonId(lesson.id)} className="text-left rounded-xl border border-slate-200 dark:border-slate-700 p-4 hover:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500"><span className="font-bold block">{lesson.title}</span><span className="block text-sm text-slate-500 mt-2">{lesson.readTime} · {lesson.mcqs.length} MCQs</span><span className="block mt-3 text-emerald-700 dark:text-emerald-400 font-semibold">Open lesson →</span></button>)}</div></div>)}</div>)}</section>)}</div>
-    {!visible.length && <p className={panel}>No lessons match. Try another subject or search.</p>}
-  </div>}</main>;
+
+  return (
+    <main className="max-w-7xl mx-auto px-4 py-8 text-slate-900 dark:text-slate-100 space-y-6">
+      {/* Top Section Navigation Switcher */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700/60">
+        <div className="flex items-center gap-1.5 w-full sm:w-auto">
+          <button
+            onClick={() => {
+              setLibraryMode('teaching-license');
+              setLessonId(null);
+            }}
+            className={`flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition cursor-pointer ${
+              libraryMode === 'teaching-license'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+            }`}
+          >
+            <Award className="w-4 h-4 text-amber-300" />
+            <span>STEDA Teaching License (10 Parts)</span>
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-400 text-purple-950 ml-1">
+              HOT
+            </span>
+          </button>
+
+          <button
+            onClick={() => setLibraryMode('general')}
+            className={`flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition cursor-pointer ${
+              libraryMode === 'general'
+                ? 'bg-emerald-700 text-white shadow-md'
+                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>General Subject Library</span>
+          </button>
+        </div>
+
+        <div className="hidden lg:block text-xs font-semibold text-slate-500 pr-2">
+          {libraryMode === 'teaching-license'
+            ? 'Official 50–50 Scheme · BPS-16 & 17'
+            : 'Interactive lessons for school & competitive exams'}
+        </div>
+      </div>
+
+      {libraryMode === 'teaching-license' ? (
+        <TeachingLicenseNotesHub />
+      ) : selected ? (
+        <div key={selected.lesson.id}>
+          <nav aria-label="Lesson location" className="flex flex-wrap items-center gap-2 text-sm text-slate-500 mb-5">
+            <span>{selected.subject.title}</span>
+            <ChevronRight size={14} />
+            <span>{selected.chapter.title}</span>
+            <ChevronRight size={14} />
+            <span>{selected.topic.title}</span>
+            <ChevronRight size={14} />
+            <span>{selected.lesson.title}</span>
+          </nav>
+          <LessonReader lesson={selected.lesson} onBack={() => setLessonId(null)} />
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <header className="rounded-3xl p-8 bg-emerald-950 text-white">
+            <BookOpen className="text-emerald-300 mb-4" />
+            <p className="text-sm text-emerald-300 font-semibold">ONE LESSON AT A TIME</p>
+            <h1 className="text-3xl font-bold mt-2">Your study library</h1>
+            <p className="mt-3 text-emerald-100">Explore a subject. Understand a topic. Put it into practice.</p>
+          </header>
+          <div className="flex flex-wrap gap-3">
+            {(['kids', 'advanced'] as const).map((m) => (
+              <button
+                key={m}
+                aria-pressed={mode === m}
+                onClick={() => {
+                  setMode(m);
+                  setSubjectId('all');
+                }}
+                className={`flex items-center gap-2 rounded-xl border px-5 py-3 font-semibold ${
+                  mode === m ? 'bg-emerald-700 text-white border-emerald-700' : 'border-slate-300 dark:border-slate-700'
+                }`}
+              >
+                {m === 'kids' ? <Sparkles size={18} /> : <GraduationCap size={18} />}{' '}
+                {m === 'kids' ? 'Kids · Simple & visual' : 'Advanced · Exam preparation'}
+              </button>
+            ))}
+          </div>
+          <p className="text-sm text-slate-500">Starter lesson library — more subjects and chapters can be added as content is reviewed.</p>
+          <div className="grid sm:grid-cols-[1fr_280px] gap-4">
+            <label>
+              Find a lesson
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="block w-full border rounded-xl p-3 mt-1 bg-transparent"
+                placeholder="Search subject, chapter or topic"
+              />
+            </label>
+            <label>
+              Subject
+              <select
+                value={subjectId}
+                onChange={(e) => setSubjectId(e.target.value)}
+                className="block w-full border rounded-xl p-3 mt-1 bg-white dark:bg-slate-900"
+              >
+                <option value="all">All subjects</option>
+                {STUDY_CURRICULUM.filter((s) => lessons.some((item) => item.subject.id === s.id && item.lesson.audience === mode)).map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          {!!cmsLessons.length && (
+            <section className={panel}>
+              <h2 className="text-2xl font-bold mb-5">New published lessons</h2>
+              <div className="grid md:grid-cols-2 gap-3">
+                {cmsLessons
+                  .filter((item) => `${item.subject} ${item.chapter} ${item.topic} ${item.title}`.toLowerCase().includes(query.toLowerCase()))
+                  .map((item) => (
+                    <details key={item.id} className="rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+                      <summary className="font-bold cursor-pointer">
+                        {item.subject} → {item.chapter} → {item.topic} → {item.title}
+                      </summary>
+                      <p className="mt-4 leading-7 whitespace-pre-line">{item.explanation}</p>
+                      {item.importantPoints.length > 0 && (
+                        <ul className="list-disc pl-5 mt-4 space-y-2">
+                          {item.importantPoints.map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </details>
+                  ))}
+              </div>
+            </section>
+          )}
+          <div className="space-y-6">
+            {STUDY_CURRICULUM.filter((s) => visible.some((i) => i.subject.id === s.id)).map((subject) => (
+              <section className={panel} key={subject.id}>
+                <h2 className="text-2xl font-bold mb-5">{subject.title}</h2>
+                {subject.chapters
+                  .filter((c) => visible.some((i) => i.chapter.id === c.id))
+                  .map((chapter) => (
+                    <div key={chapter.id}>
+                      <h3 className="font-semibold text-emerald-700 dark:text-emerald-400">{chapter.title}</h3>
+                      {chapter.topics
+                        .filter((t) => visible.some((i) => i.topic.id === t.id))
+                        .map((topic) => (
+                          <div key={topic.id} className="mt-4">
+                            <p className="text-sm text-slate-500 mb-2">{topic.title}</p>
+                            <div className="grid md:grid-cols-2 gap-3">
+                              {visible
+                                .filter((i) => i.topic.id === topic.id)
+                                .map(({ lesson }) => (
+                                  <button
+                                    key={lesson.id}
+                                    onClick={() => setLessonId(lesson.id)}
+                                    className="text-left rounded-xl border border-slate-200 dark:border-slate-700 p-4 hover:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500"
+                                  >
+                                    <span className="font-bold block">{lesson.title}</span>
+                                    <span className="block text-sm text-slate-500 mt-2">
+                                      {lesson.readTime} · {lesson.mcqs.length} MCQs
+                                    </span>
+                                    <span className="block mt-3 text-emerald-700 dark:text-emerald-400 font-semibold">
+                                      Open lesson →
+                                    </span>
+                                  </button>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  ))}
+              </section>
+            ))}
+          </div>
+          {!visible.length && <p className={panel}>No lessons match. Try another subject or search.</p>}
+        </div>
+      )}
+    </main>
+  );
 };

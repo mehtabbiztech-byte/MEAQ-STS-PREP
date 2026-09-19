@@ -76,6 +76,47 @@ export const STUDY_NOTES_DATA: StudyNote[] = [
       'Which organ cleanses and filters blood? (Kidneys, containing nephrons)',
     ],
   },
+  {
+    id: 'note-05',
+    title: 'STEDA Teaching License (BPS-16/17): 50–50 Blueprint & Passing Strategy',
+    subject: 'Teaching License & Pedagogy',
+    readTime: '9 min read',
+    summary: 'The comprehensive syllabus breakdown, marking scheme, and preparation strategy for the STEDA Sukkur IBA Teaching License Examination.',
+    keyPoints: [
+      'Exam Format: 100 MCQs, 100 Marks, 120 Minutes duration. No negative marking. Strict passing threshold is 60% (60/100).',
+      'Part I: Content Knowledge (50% / 50 MCQs): English (10), Mathematics (10), General Science (10), Social Studies / Pak Studies (10), Mother Tongue Urdu/Sindhi (10) based on Class 1–8 DCAR Sindh textbooks.',
+      'Part II: Pedagogical Content Knowledge (50% / 50 MCQs): Methods of Teaching (10), Child Development & Educational Psychology (10), Classroom Management (10), Classroom Assessment & Evaluation (10), School, Community & Teacher (10).',
+      'Eligibility Cadres: Elementary School Teaching License (BPS-16) requires ADE (Associate Degree in Education) or B.Ed (Hons) 4-Year. Secondary School Teaching License (BPS-17) requires B.Ed 1.5/2.5/4-Year or M.Ed with at least 2nd Division / 2.5 CGPA.',
+      'Benefits: Direct preferential recruitment in Sindh School Education & Literacy Department (SELD), fast-track promotion to BPS-17/18, and monthly Professional Teaching Allowance.',
+    ],
+    frequentlyAsked: [
+      'What is the passing cutoff for the Sindh Teaching License? (60% marks; 60 out of 100 MCQs)',
+      'Is there negative marking in the STS Teaching License Test? (No negative marking)',
+      'Which law bans physical punishment in Sindh schools? (Sindh Prohibition of Corporal Punishment Act 2016)',
+      'Which article of the 1973 Constitution guarantees free and compulsory education? (Article 25-A)',
+    ],
+  },
+  {
+    id: 'note-06',
+    title: 'Core Pedagogy Revision: Bloom’s Taxonomy, Piaget, Vygotsky & Test Item Analysis',
+    subject: 'Pedagogy & Child Psychology',
+    readTime: '10 min read',
+    summary: 'High-yield educational psychology principles, instructional design, and psychometric formulas tested in teaching license and educator exams.',
+    keyPoints: [
+      'Bloom’s Revised Taxonomy (Cognitive Domain): Remembering -> Understanding -> Applying -> Analyzing -> Evaluating -> Creating (highest cognitive level).',
+      'Piaget’s 4 Cognitive Stages: Sensorimotor (0-2y, object permanence), Preoperational (2-7y, egocentrism, symbolic play), Concrete Operational (7-11y, conservation, reversibility), Formal Operational (11+y, abstract logic & deductive reasoning).',
+      'Vygotsky’s Sociocultural Theory: Zone of Proximal Development (ZPD) is the distance between unassisted ability and assisted potential; Scaffolding is temporary support provided by a More Knowledgeable Other (MKO).',
+      'Assessment Types: Diagnostic (prior to teaching), Formative (during instruction to adapt learning), Summative (at conclusion to certify/grade), Criterion-Referenced (against benchmark e.g. 60%), Norm-Referenced (percentile rank against peers).',
+      'Jacob Kounin’s Classroom Management: "Withitness" (awareness of all classroom corners) and "Smoothness/Momentum" (seamless pacing without jerky transitions) prevent 80% of behavioral disruptions.',
+      'Item Statistics: Difficulty index p = (correct answers) / (total examinees). Discrimination index D ranges from -1.00 to +1.00 (positive values indicate high scorers answered correctly).',
+    ],
+    frequentlyAsked: [
+      'Who proposed the Theory of Multiple Intelligences? (Howard Gardner, identifying 8 distinct modalities)',
+      'In Operant Conditioning, what increases behavior by removing an aversive stimulus? (Negative Reinforcement)',
+      'What are the 5 phases of the 5E Instructional Model? (Engage, Explore, Explain, Elaborate, Evaluate)',
+      'How many National Professional Standards for Teachers (NPSTP) exist in Pakistan? (10 professional standards)',
+    ],
+  },
 ];
 
 // Preserve the original revision sheets while giving each lesson a stable place
@@ -86,6 +127,8 @@ const locations: Record<string, { chapter: string; topic: string; questionIds: s
   'note-02': { chapter: 'Physical geography', topic: 'Water and rivers', questionIds: [] },
   'note-03': { chapter: 'Grammar', topic: 'Prepositions and idioms', questionIds: [] },
   'note-04': { chapter: 'Biology', topic: 'Human body', questionIds: [] },
+  'note-05': { chapter: 'Teaching License & Policies', topic: 'STEDA Framework & Passing Strategy', questionIds: ['tlt3-ped-91', 'tlt3-ped-97', 'tlt3-ped-100'] },
+  'note-06': { chapter: 'Educational Psychology & Assessment', topic: 'Bloom, Piaget, Vygotsky & Evaluation', questionIds: ['tlt3-ped-51', 'tlt3-ped-61', 'tlt3-ped-82'] },
 };
 
 export const STUDY_CURRICULUM: StudySubject[] = [

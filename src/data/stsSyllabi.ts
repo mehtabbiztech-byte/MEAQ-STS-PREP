@@ -57,6 +57,18 @@ export const STS_SYLLABI: STSSyllabus[] = [
     { name: 'General Knowledge', percent: 15, topics: ['World around us', 'Current affairs'] },
     { name: 'IT skills', percent: 10, topics: ['MS Office', 'Web search and AI tools'] },
   ] },
+  { id: 'steda-teaching-license-2024', family: 'Teaching recruitment', name: 'Sindh Teaching License Examination (Elementary BPS-16 & Secondary BPS-17)', paperLevel: 'B.Ed (Hons) / ADE / M.Ed', published: '2024-01-15', sourceUrl: `${documents}20240115082415123.pdf`, sections: [
+    { name: 'Part I: Content Knowledge — English Language', percent: 10, topics: ['Reading comprehension', 'Grammar and parts of speech', 'Prepositions and vocabulary'] },
+    { name: 'Part I: Content Knowledge — Mathematics', percent: 10, topics: ['Basic arithmetic', 'Fractions and percentages', 'Algebra and basic geometry'] },
+    { name: 'Part I: Content Knowledge — General Science', percent: 10, topics: ['Living things and cell biology', 'Human body systems', 'Physical sciences and energy'] },
+    { name: 'Part I: Content Knowledge — Social Studies & Pakistan Studies', percent: 10, topics: ['Pakistan history (1857-1947)', 'Indus Valley civilization & Sindh heritage', '1973 Constitution'] },
+    { name: 'Part I: Content Knowledge — Mother Tongue (Urdu / Sindhi)', percent: 10, topics: ['Urdu Qawaid & literature', 'Sindhi Vyakaran, proverbs & Shah Jo Risalo'] },
+    { name: 'Part II: Pedagogy — Methods of Teaching & Foundations', percent: 10, topics: ['5E Model', 'Inquiry & problem-based learning', 'Bloom’s taxonomy', 'Socratic method'] },
+    { name: 'Part II: Pedagogy — Child Development & Psychology', percent: 10, topics: ['Piaget cognitive development', 'Vygotsky ZPD & scaffolding', 'Erikson & Kohlberg theories', 'Gardner multiple intelligences'] },
+    { name: 'Part II: Pedagogy — Classroom Management', percent: 10, topics: ['Jacob Kounin withitness & momentum', 'Assertive discipline', 'Positive behavior support', 'Arranging classroom space'] },
+    { name: 'Part II: Pedagogy — Classroom Assessment & Evaluation', percent: 10, topics: ['Formative, summative & diagnostic assessment', 'NRT vs CRT', 'Validity & reliability', 'Rubrics & item analysis'] },
+    { name: 'Part II: Pedagogy — School, Community & Professional Ethics', percent: 10, topics: ['School Management Committees (SMCs)', 'NPSTP 10 standards', 'Inclusive education & IEP', 'STEDA licensing policy'] },
+  ] },
 ];
 
 export const STS_OTHER_FAMILIES = [

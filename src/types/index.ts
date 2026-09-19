@@ -22,12 +22,15 @@ export type NavigationTab =
   | 'current-affairs' 
   | 'exams' 
   | 'jobs' 
+  | 'resume'
   | 'study-notes' 
   | 'rankings' 
   | 'learning-lab'
   | 'about'
   | 'bookmarks'
   | 'mistakes';
+
+export * from './resume';
 
 export type ContentStatus = 'Draft' | 'Reviewed' | 'Published';
 

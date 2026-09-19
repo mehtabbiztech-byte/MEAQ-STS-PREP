@@ -71,7 +71,7 @@ async function startServer() {
   // AI Chat endpoint with Gemini & intelligent navigation
   app.post('/api/chat', async (req, res) => {
     try {
-      const { messages, userContext } = req.body;
+      const { messages, userContext, mode } = req.body;
       if (!Array.isArray(messages) || messages.length === 0) {
         return res.status(400).json({ error: 'Messages array is required.' });
       }
@@ -90,9 +90,14 @@ async function startServer() {
         parts: [{ text: m.content }],
       }));
 
+      const isVoice = mode === 'voice';
+      const voiceInstruction = isVoice 
+        ? '\n[VOICE INTERACTION MODE ACTIVE]: The user is speaking with you verbally. Keep your response spoken-friendly, conversational, lively, and relatively concise (2-4 sentences or clear short points). Do NOT output markdown code fences or complex ASCII tables that sound awkward when read aloud by text-to-speech.'
+        : '';
+
       const candidateContext = userContext ? `Candidate Profile Context: Target Exam: ${userContext.targetExam || 'STS BPS-05 to 15'}, Accuracy: ${userContext.accuracy || 70}%, Province: ${userContext.province || 'Sindh'}.` : '';
 
-      const CANDIDATE_MODELS = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-3.8-flash'];
+      const CANDIDATE_MODELS = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
       let lastError: string | null = null;
 
       for (const modelName of CANDIDATE_MODELS) {
@@ -101,7 +106,7 @@ async function startServer() {
             model: modelName,
             contents: conversationHistory,
             config: {
-              systemInstruction: `${SYSTEM_PROMPT}\n${candidateContext}`,
+              systemInstruction: `${SYSTEM_PROMPT}${voiceInstruction}\n${candidateContext}`,
               temperature: 0.7,
             },
           });

@@ -25,7 +25,8 @@ import {
   BrainCircuit,
   Info,
   ChevronRight,
-  Check
+  Check,
+  FileCheck2
 } from 'lucide-react';
 import { ThemeSwitcherWidget, THEME_OPTIONS } from './AttractiveBackground';
 
@@ -336,6 +337,14 @@ export const Navbar: React.FC = () => {
       badgeType: 'alert',
       icon: <Briefcase className="w-4 h-4 shrink-0" />,
       desc: 'Latest federal & provincial competitive job advertisements'
+    },
+    { 
+      id: 'resume', 
+      label: 'Create Resume', 
+      badge: 'PRO', 
+      badgeType: 'live',
+      icon: <FileCheck2 className="w-4 h-4 shrink-0" />,
+      desc: 'Build official STS screening and ATS-ready CV for Govt & Private jobs'
     },
     { 
       id: 'study-notes', 

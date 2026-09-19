@@ -3,11 +3,13 @@ import { CURRENT_AFFAIRS_2000 } from './currentAffairs2000';
 import { STS_IBA_MCQS } from './stsIba5000';
 import { TEACHING_LICENSE_PAPER_1_MCQS } from './teachingLicensePaper1';
 import { TEACHING_LICENSE_PAPER_2_MCQS } from './teachingLicensePaper2';
+import { TEACHING_LICENSE_PAPER_3_MCQS } from './teachingLicensePaper3';
 
 export const MCQS_DATA: MCQ[] = [
   ...STS_IBA_MCQS,
   ...TEACHING_LICENSE_PAPER_1_MCQS,
   ...TEACHING_LICENSE_PAPER_2_MCQS,
+  ...TEACHING_LICENSE_PAPER_3_MCQS,
   ...CURRENT_AFFAIRS_2000,
   // Pakistan Studies
   {

@@ -36,6 +36,10 @@ export const SavedMcqsView: React.FC<SavedMcqsViewProps> = ({ initialSubTab = 'b
   const [activeSubTab, setActiveSubTab] = useState<'bookmarks' | 'mistakes'>(initialSubTab);
   const [revealed, setRevealed] = useState<Record<string, boolean>>({});
 
+  React.useEffect(() => {
+    setActiveSubTab(initialSubTab);
+  }, [initialSubTab]);
+
   // Bookmarked MCQs
   const bookmarkedMcqs = useMemo(() => {
     return MCQS_DATA.filter((m) => userProfile.bookmarks.includes(m.id));
