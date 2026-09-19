@@ -3,7 +3,7 @@ export interface Fortune500Company {
   name: string;
   ticker?: string;
   industry: 'Tech & Cloud' | 'Consulting & Strategy' | 'Banking & Finance' | 'Consumer Goods (FMCG)' | 'Telecom & Hardware';
-  atsSystem: 'Workday' | 'Greenhouse' | 'Lever' | 'Taleo' | 'Custom / In-house';
+  atsSystem: 'Workday' | 'Greenhouse' | 'Lever' | 'Taleo' | 'BrassRing' | 'Custom / In-house';
   careersUrl: string;
   searchTips: string;
   keySkills: string[];
