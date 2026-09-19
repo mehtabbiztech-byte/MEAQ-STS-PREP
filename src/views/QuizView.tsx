@@ -28,6 +28,7 @@ import { getRankTierBadge } from '../lib/certificateService';
 import { StsExamSimulator } from '../components/StsExamSimulator';
 import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
 import { buildExactPatternQuestions, SimulatorLaunch } from '../data/examSimulatorData';
+import { MeaningText } from '../components/MeaningText';
 
 export const QuizView: React.FC = () => {
   const { 
@@ -448,7 +449,7 @@ export const QuizView: React.FC = () => {
             </div>
 
             <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-relaxed mb-6">
-              {activeQuestions[currentIndex].question}
+              <MeaningText text={activeQuestions[currentIndex].question} />
             </h3>
 
             {/* Options */}
@@ -475,7 +476,7 @@ export const QuizView: React.FC = () => {
                       }`}>
                         {String.fromCharCode(65 + idx)}
                       </span>
-                      <span>{opt}</span>
+                      <MeaningText text={opt} />
                     </div>
 
                     {isSelected && (
@@ -736,7 +737,7 @@ export const QuizView: React.FC = () => {
                   </div>
 
                   <p className="font-bold text-base text-slate-900 dark:text-white mb-3">
-                    {mcq.question}
+                    <MeaningText text={mcq.question} />
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs mb-3">
@@ -751,7 +752,7 @@ export const QuizView: React.FC = () => {
                       return (
                         <div key={oIdx} className={`p-2.5 rounded-lg border flex items-center gap-2 ${style}`}>
                           <span className="font-bold">{String.fromCharCode(65 + oIdx)}.</span>
-                          <span>{opt}</span>
+                          <MeaningText text={opt} />
                           {oIdx === mcq.correctIndex && (
                             <span className="ml-auto text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Correct</span>
                           )}
@@ -766,7 +767,7 @@ export const QuizView: React.FC = () => {
                   {/* Explanation */}
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300">
                     <strong className="text-emerald-700 dark:text-emerald-400 block mb-1">Official Explanation:</strong>
-                    {mcq.explanation}
+                    <MeaningText text={mcq.explanation} />
                   </div>
                 </div>
               );

@@ -4,6 +4,7 @@ import { getBuiltInMeaning, normalizeDictionaryWord, type DictionaryMeaning } fr
 import { readSavedMeaning, saveMeaning } from '../lib/wordMeaningStore';
 
 type MeaningSource = 'built-in' | 'saved' | 'online' | 'fallback';
+type MeaningRequest = { word: string; x: number; y: number };
 
 function wordAtPoint(x: number, y: number): string | null {
   let node: Node | null = null;
@@ -50,6 +51,15 @@ export const WordMeaningPopup: React.FC = () => {
   const requestId = useRef(0);
 
   useEffect(() => {
+    const openMeaning = ({ word, x, y }: MeaningRequest) => {
+      if (!word || word.length < 2 || word.length > 45) return;
+      setSelectedWord(word);
+      setPosition({
+        x: Math.min(x, window.innerWidth - 340),
+        y: Math.min(y + 18, window.innerHeight - 390),
+      });
+    };
+
     const onClick = (event: MouseEvent) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
@@ -58,15 +68,19 @@ export const WordMeaningPopup: React.FC = () => {
       const word = wordAtPoint(event.clientX, event.clientY);
       if (!word || word.length < 2 || word.length > 45) return;
 
-      setSelectedWord(word);
-      setPosition({
-        x: Math.min(event.clientX, window.innerWidth - 340),
-        y: Math.min(event.clientY + 18, window.innerHeight - 390),
-      });
+      openMeaning({ word, x: event.clientX, y: event.clientY });
+    };
+
+    const onMeaningRequest = (event: Event) => {
+      openMeaning((event as CustomEvent<MeaningRequest>).detail);
     };
 
     document.addEventListener('click', onClick);
-    return () => document.removeEventListener('click', onClick);
+    window.addEventListener('meqsa:word-meaning', onMeaningRequest);
+    return () => {
+      document.removeEventListener('click', onClick);
+      window.removeEventListener('meqsa:word-meaning', onMeaningRequest);
+    };
   }, []);
 
   useEffect(() => {

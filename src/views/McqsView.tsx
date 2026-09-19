@@ -21,6 +21,7 @@ import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ } from '../types';
 import { useCmsContent } from '../context/CmsContentContext';
+import { MeaningText } from '../components/MeaningText';
 
 export const McqsView: React.FC = () => {
   const { mcqs: liveMcqs } = useCmsContent();
@@ -316,7 +317,7 @@ export const McqsView: React.FC = () => {
 
                 {/* Question statement */}
                 <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white leading-relaxed mb-4">
-                  {mcq.question}
+                  <MeaningText text={mcq.question} />
                 </h3>
 
                 {/* Four Options Grid */}
@@ -347,7 +348,7 @@ export const McqsView: React.FC = () => {
                           <span className="w-6 h-6 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-bold flex items-center justify-center shrink-0">
                             {String.fromCharCode(65 + idx)}
                           </span>
-                          <span className="leading-snug">{option}</span>
+                          <MeaningText text={option} className="leading-snug" />
                         </div>
 
                         {userChoice !== undefined && isCorrect && (
@@ -366,10 +367,10 @@ export const McqsView: React.FC = () => {
                   <div className="p-4 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/60 mb-4 animate-in fade-in duration-150">
                     <div className="flex items-center gap-2 font-bold text-sm text-purple-700 dark:text-pink-400 mb-1.5">
                       <CheckCircle2 className="w-4 h-4 text-purple-600 dark:text-pink-400" />
-                      <span>Correct Answer: Option {String.fromCharCode(65 + mcq.correctIndex)} — {mcq.options[mcq.correctIndex]}</span>
+                      <span>Correct Answer: Option {String.fromCharCode(65 + mcq.correctIndex)} — <MeaningText text={mcq.options[mcq.correctIndex]} /></span>
                     </div>
                     <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                      {mcq.explanation}
+                      <MeaningText text={mcq.explanation} />
                     </p>
                     {mcq.verificationStatus && <div className="mt-3 rounded-lg border border-purple-200 dark:border-purple-800 bg-white/70 dark:bg-slate-900/60 p-3 text-[11px] text-slate-600 dark:text-slate-300">
                       <strong className="uppercase tracking-wide">{mcq.verificationStatus.replace('-', ' ')}</strong>
