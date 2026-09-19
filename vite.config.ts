@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import path from 'node:path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
@@ -8,11 +8,14 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(import.meta.dirname, '.'),
       },
     },
     build: {
       outDir: 'dist',
+      // Large curriculum and offline question banks are intentional application data.
+      // Keep Vite focused on unexpectedly oversized chunks above this reviewed limit.
+      chunkSizeWarningLimit: 1250,
       rollupOptions: {
         output: {
           manualChunks(id) {

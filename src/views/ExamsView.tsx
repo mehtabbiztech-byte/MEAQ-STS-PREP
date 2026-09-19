@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { lazy, Suspense, useEffect, useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   GraduationCap, 
@@ -16,11 +16,16 @@ import { EXAMS_DATA } from '../data/examsData';
 import { MCQS_DATA } from '../data/mcqsData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { ExamCategory } from '../types';
-import { CssSyllabusExplorer } from '../components/CssSyllabusExplorer';
 import { CceSyllabusExplorer } from '../components/CceSyllabusExplorer';
 import { StsExamSimulator } from '../components/StsExamSimulator';
 import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
 import { PreparationRoomDashboard } from '../components/PreparationRoomDashboard';
+
+const CssSyllabusExplorer = lazy(() =>
+  import('../components/CssSyllabusExplorer').then((module) => ({
+    default: module.CssSyllabusExplorer,
+  })),
+);
 
 export const ExamsView: React.FC = () => {
   const { 
@@ -329,7 +334,9 @@ export const ExamsView: React.FC = () => {
           {/* Sub-tab 2: Syllabus */}
           {activeTab === 'syllabus' && (
             currentExam.id === 'css' ? (
-              <CssSyllabusExplorer />
+              <Suspense fallback={<div className="min-h-48 grid place-items-center text-slate-500">Loading CSS syllabus…</div>}>
+                <CssSyllabusExplorer />
+              </Suspense>
             ) : currentExam.id === 'spsc-cce' ? (
               <CceSyllabusExplorer />
             ) : currentExam.id === 'sts' ? (
