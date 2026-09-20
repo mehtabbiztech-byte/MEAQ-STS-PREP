@@ -1,22 +1,28 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { BookOpenCheck, CheckCircle2, ChevronDown, Clock3, FilePenLine, RotateCcw, Save, Sparkles, Target } from 'lucide-react';
+import { BookOpenCheck, CheckCircle2, ChevronDown, Clock3, FilePenLine, RotateCcw, Save, Search, Sparkles, Target } from 'lucide-react';
 import { TEACHING_LICENSE_SUBJECTIVE_QUESTIONS, type SubjectiveQuestionType } from '../data/teachingLicenseSubjectiveData';
 
 const draftKey = (id: string) => `meqsa-teaching-license-subjective:${id}`;
 
 export const TeachingLicenseSubjectivePractice: React.FC = () => {
   const [type, setType] = useState<SubjectiveQuestionType>('CRQ');
-  const questions = useMemo(() => TEACHING_LICENSE_SUBJECTIVE_QUESTIONS.filter((item) => item.type === type), [type]);
-  const [selectedId, setSelectedId] = useState(questions[0].id);
+  const [query, setQuery] = useState('');
+  const typeQuestions = useMemo(() => TEACHING_LICENSE_SUBJECTIVE_QUESTIONS.filter((item) => item.type === type), [type]);
+  const questions = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return typeQuestions;
+    return typeQuestions.filter((item) => `${item.subject} ${item.area} ${item.prompt}`.toLowerCase().includes(normalized));
+  }, [query, typeQuestions]);
+  const [selectedId, setSelectedId] = useState(typeQuestions[0].id);
   const [draft, setDraft] = useState('');
   const [showPlan, setShowPlan] = useState(false);
   const [showModel, setShowModel] = useState(false);
   const [saved, setSaved] = useState(false);
-  const selected = TEACHING_LICENSE_SUBJECTIVE_QUESTIONS.find((item) => item.id === selectedId) ?? questions[0];
+  const selected = TEACHING_LICENSE_SUBJECTIVE_QUESTIONS.find((item) => item.id === selectedId) ?? typeQuestions[0];
 
   useEffect(() => {
-    if (!questions.some((item) => item.id === selectedId)) setSelectedId(questions[0].id);
-  }, [questions, selectedId]);
+    if (!typeQuestions.some((item) => item.id === selectedId)) setSelectedId(typeQuestions[0].id);
+  }, [typeQuestions, selectedId]);
 
   useEffect(() => {
     setDraft(localStorage.getItem(draftKey(selected.id)) ?? '');
@@ -45,8 +51,8 @@ export const TeachingLicenseSubjectivePractice: React.FC = () => {
             <p className="mt-3 text-sm leading-6 text-rose-100">Build concise constructed responses and well-organized extended answers with answer plans, model responses, and transparent marking rubrics.</p>
           </div>
           <div className="grid grid-cols-2 gap-2 rounded-2xl border border-white/15 bg-slate-950/25 p-2 backdrop-blur">
-            <div className="rounded-xl bg-white/10 px-4 py-3 text-center"><p className="text-2xl font-black">4</p><p className="text-[10px] font-bold uppercase tracking-wider text-rose-200">CRQs</p></div>
-            <div className="rounded-xl bg-white/10 px-4 py-3 text-center"><p className="text-2xl font-black">4</p><p className="text-[10px] font-bold uppercase tracking-wider text-rose-200">ERQs</p></div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 text-center"><p className="text-2xl font-black">{TEACHING_LICENSE_SUBJECTIVE_QUESTIONS.filter((item) => item.type === 'CRQ').length}</p><p className="text-[10px] font-bold uppercase tracking-wider text-rose-200">CRQs</p></div>
+            <div className="rounded-xl bg-white/10 px-4 py-3 text-center"><p className="text-2xl font-black">{TEACHING_LICENSE_SUBJECTIVE_QUESTIONS.filter((item) => item.type === 'ERQ').length}</p><p className="text-[10px] font-bold uppercase tracking-wider text-rose-200">ERQs</p></div>
           </div>
         </div>
       </header>
@@ -57,11 +63,14 @@ export const TeachingLicenseSubjectivePractice: React.FC = () => {
             <div className="grid grid-cols-2 gap-1 rounded-2xl bg-slate-100 p-1 dark:bg-slate-800">
               {(['CRQ', 'ERQ'] as const).map((item) => <button key={item} onClick={() => setType(item)} className={`rounded-xl px-3 py-2.5 text-sm font-extrabold transition ${type === item ? 'bg-white text-purple-700 shadow dark:bg-slate-950 dark:text-purple-300' : 'text-slate-500'}`}>{item}</button>)}
             </div>
-            <div className="space-y-2">
+            <label className="relative block"><Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search topic or subject…" className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-9 pr-3 text-xs text-slate-900 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-100 dark:border-slate-700 dark:bg-slate-950 dark:text-white" /></label>
+            <p className="text-[11px] font-bold text-slate-500">Showing {questions.length} of {typeQuestions.length} {type}s</p>
+            <div className="max-h-[720px] space-y-2 overflow-y-auto pr-1 [scrollbar-color:rgb(168_85_247)_transparent] [scrollbar-width:thin]">
               {questions.map((item, index) => <button key={item.id} onClick={() => setSelectedId(item.id)} className={`w-full rounded-2xl border p-3 text-left transition ${selected.id === item.id ? 'border-purple-400 bg-purple-50 shadow-sm dark:border-purple-700 dark:bg-purple-950/30' : 'border-slate-200 hover:border-purple-200 dark:border-slate-800 dark:hover:border-purple-800'}`}>
                 <div className="flex items-center justify-between gap-2"><span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-600">{type} {index + 1}</span><span className="text-[10px] font-bold text-slate-500">{item.marks} marks</span></div>
                 <p className="mt-1.5 line-clamp-2 text-xs font-bold leading-5 text-slate-800 dark:text-slate-100">{item.subject}: {item.prompt}</p>
               </button>)}
+              {!questions.length && <div className="rounded-2xl border border-dashed border-slate-300 p-5 text-center text-xs text-slate-500 dark:border-slate-700">No matching questions. Try another keyword.</div>}
             </div>
           </aside>
 
