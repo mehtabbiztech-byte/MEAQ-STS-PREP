@@ -53,6 +53,7 @@ import { InteractiveTensesExplorer } from './InteractiveTensesExplorer';
 import { InteractiveVoiceExplorer } from './InteractiveVoiceExplorer';
 import { InteractiveNarrationExplorer } from './InteractiveNarrationExplorer';
 import { InteractiveMathNumberStudio } from './InteractiveMathNumberStudio';
+import { TeachingLicenseSubjectivePractice } from './TeachingLicenseSubjectivePractice';
 
 interface TeachingLicenseNotesHubProps {
   initialPartId?: string;
@@ -87,7 +88,7 @@ export const TeachingLicenseNotesHub: React.FC<TeachingLicenseNotesHubProps> = (
   const [selectedTopicId, setSelectedTopicId] = useState<string>(
     initialTopicId || TEACHING_LICENSE_PARTS[0].topics[0].id
   );
-  const [workspaceView, setWorkspaceView] = useState<'overview' | 'reader'>(() =>
+  const [workspaceView, setWorkspaceView] = useState<'overview' | 'reader' | 'subjective'>(() =>
     initialPartId || initialTopicId ? 'reader' : 'overview'
   );
 
@@ -523,7 +524,7 @@ PREPARED VIA MEHTAB STS IBA PREP
       )}
 
       {!isFocusMode && (
-        <nav aria-label="Teaching License workspace" className="sticky top-2 z-20 mx-auto flex w-full max-w-xl items-center gap-1 rounded-2xl border border-slate-200 bg-white/90 p-1.5 shadow-lg shadow-slate-900/5 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90">
+        <nav aria-label="Teaching License workspace" className="sticky top-2 z-20 mx-auto grid w-full max-w-2xl grid-cols-3 gap-1 rounded-2xl border border-slate-200 bg-white/90 p-1.5 shadow-lg shadow-slate-900/5 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90">
           <button
             onClick={() => setWorkspaceView('overview')}
             aria-pressed={workspaceView === 'overview'}
@@ -537,6 +538,13 @@ PREPARED VIA MEHTAB STS IBA PREP
             className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-extrabold transition ${workspaceView === 'reader' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}
           >
             Notes Reader
+          </button>
+          <button
+            onClick={() => setWorkspaceView('subjective')}
+            aria-pressed={workspaceView === 'subjective'}
+            className={`rounded-xl px-2 py-2.5 text-xs font-extrabold transition sm:px-4 sm:text-sm ${workspaceView === 'subjective' ? 'bg-gradient-to-r from-rose-600 to-fuchsia-700 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`}
+          >
+            CRQs &amp; ERQs
           </button>
         </nav>
       )}
@@ -597,6 +605,8 @@ PREPARED VIA MEHTAB STS IBA PREP
             </div>
           </div>
         </section>
+      ) : workspaceView === 'subjective' && !isFocusMode ? (
+        <TeachingLicenseSubjectivePractice />
       ) : (
       <div className="flex flex-col lg:flex-row items-start gap-6 relative">
         {/* MOBILE SYLLABUS DRAWER TRIGGER (Hidden on Large screens and in focus mode) */}

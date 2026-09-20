@@ -635,6 +635,7 @@ export const EXAMS_DATA: ExamInfo[] = [
       { title: 'National Professional Standards for Teachers in Pakistan (NPSTP)', type: 'Syllabus PDF', description: 'Core standards outlining the 10 professional competencies required for licensed teachers.' },
       { title: 'Teaching License Solved Past Paper 1 (100 Questions)', type: 'Guide', description: 'Complete 100 MCQs covering Part I (Content Knowledge) and Part II (Pedagogical Content Knowledge).' },
       { title: 'Teaching License Solved Past Paper 2 (100 Questions)', type: 'Guide', description: 'Comprehensive 100 MCQs timed test paper with detailed explanatory keys.' },
+      { title: 'Teaching License CRQ & ERQ Subjective Practice Lab', type: 'Guide', description: 'Constructed-response and extended-response writing practice with answer plans, model answers, autosaved drafts, and marking rubrics.' },
       { title: 'Teaching License Solved Past Paper 3 (100 Questions)', type: 'Guide', description: 'Standard 100 MCQs model test paper covering advanced pedagogical theories and school curriculum.' },
     ],
   },
