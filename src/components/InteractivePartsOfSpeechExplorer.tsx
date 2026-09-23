@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import confetti from 'canvas-confetti';
 import {
   Tag,
   BookOpen,
@@ -17,6 +18,10 @@ import {
   Layers,
   Award,
   Info,
+  ShieldCheck,
+  AlertTriangle,
+  Flame,
+  Check,
 } from 'lucide-react';
 
 export interface PartOfSpeechItem {
@@ -36,6 +41,10 @@ export interface PartOfSpeechItem {
     name: string;
     description: string;
     examples: string[];
+  }[];
+  pitfalls?: {
+    rule: string;
+    detail: string;
   }[];
   stsExamTrap: string;
   sampleSentence: {
@@ -92,6 +101,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         examples: ['Luggage (NOT luggages)', 'Advice (NOT advices)', 'Information (NOT informations)'],
       },
     ],
+    pitfalls: [
+      { rule: 'Uncountable Nouns Pluralization', detail: 'Nouns like advice, furniture, luggage, information, and scenery NEVER take a plural -s. Say "pieces of advice", not "advices".' },
+      { rule: 'Collective Noun Agreement', detail: 'Singular when the group acts in unison ("The committee has reached its decision"); plural when individuals act independently ("The committee are divided in their opinions").' },
+    ],
     stsExamTrap: 'STS Trap: Pluralization of abstract/uncountable nouns. STS often tests sentences like: "He gave me many advices" (Incorrect ❌) -> "He gave me many pieces of advice" (Correct ✅). Also watch for Gerunds (-ing words) acting as subject nouns ("Teaching is a noble profession").',
     sampleSentence: {
       sentence: 'The dedicated educator received sincere gratitude from her students.',
@@ -145,6 +158,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         examples: ['"The two sisters help each other."', '"The five teammates trust one another."'],
       },
     ],
+    pitfalls: [
+      { rule: 'Case After Prepositions', detail: 'Prepositions strictly require objective pronouns: Say "Between you and me" (NOT "between you and I").' },
+      { rule: 'The Who vs. Whom Test', detail: 'Substitute "he/him": If "he" works, use "who" (subject). If "him" works, use "whom" (object) — "Whom did you invite?" (Invited him).' },
+    ],
     stsExamTrap: 'STS Trap: Case errors after prepositions and "than". Remember: Prepositions always take OBJECT pronouns! "Between you and ME" (NOT "between you and I"). Also: "Who vs. Whom" — test by replacing with "he/him": if "him" fits, use "whom" ("Whom did you invite?").',
     sampleSentence: {
       sentence: 'Neither of the candidates believed that she herself could fail the examination.',
@@ -187,6 +204,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         description: 'Finite verbs have a tense and agree with subject. Non-finite verbs have no tense: Gerund (-ing as noun), Infinitive (to + verb), Participle (verbal adjective).',
         examples: ['Finite: "He speaks."', 'Infinitive: "to teach"', 'Gerund: "Swimming is healthy"', 'Participle: "The barking dog"'],
       },
+    ],
+    pitfalls: [
+      { rule: 'Linking Verbs Take Adjectives', detail: 'Copular/linking verbs take subject complement adjectives, not adverbs. Say "I feel bad" (emotional state), never "I feel badly" (malfunctioning sense of touch).' },
+      { rule: 'Gerund vs. Present Participle', detail: 'Gerunds act as nominal subjects/objects ("Reading enriches the mind"); Participles act as modifiers or active aspects ("The reading girl").' },
     ],
     stsExamTrap: 'STS Trap: Confusing Linking Verbs with Action Verbs! In "The soup tastes delicious", "tastes" is a linking verb, so it must take an ADJECTIVE ("delicious"), NOT an adverb ("deliciously"). Also: Gerund vs. Present Participle distinction in Sukkur IBA questions.',
     sampleSentence: {
@@ -231,6 +252,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         examples: ['Good -> Better -> Best', 'Bad -> Worse -> Worst', 'Far -> Farther (distance) / Further (additional)'],
       },
     ],
+    pitfalls: [
+      { rule: 'The Royal Order of Adjectives (DOSASCOMP)', detail: 'Adjectives must precede nouns in strict sequence: Determiner -> Opinion -> Size -> Shape -> Age -> Color -> Origin -> Material -> Purpose -> Noun.' },
+      { rule: 'Latin Comparatives Take "To"', detail: 'Latin comparatives ending in -ior (senior, junior, superior, inferior, prior) are followed by "to", NEVER "than" ("He is senior to me").' },
+    ],
     stsExamTrap: 'STS Trap: Double Comparatives/Superlatives (e.g., "more taller" ❌ -> "taller" ✅). Also: Adjectives ending in -ior (superior, inferior, senior, junior, prior) take "TO", NEVER "than"! Example: "He is senior TO me" (NOT "than me").',
     sampleSentence: {
       sentence: 'The senior pedagogical inspector commended the five most diligent instructors.',
@@ -273,6 +298,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         description: 'Quantifies the intensity or degree of an adjective, verb, or adverb.',
         examples: ['very', 'extremely', 'quite', 'too', 'almost', 'hardly', 'scarcely'],
       },
+    ],
+    pitfalls: [
+      { rule: '-ly Adjectives Mistaken as Adverbs', detail: 'Words like friendly, lovely, lively, costly, and cowardly are ADJECTIVES, not adverbs! Say "in a friendly manner", never "spoke friendly".' },
+      { rule: 'Hard vs. Hardly', detail: '"Hard" means with great energetic effort ("She works hard"); "Hardly" is a negative adverb meaning almost not at all ("She hardly works").' },
     ],
     stsExamTrap: 'STS Trap: Words ending in "-ly" that are actually ADJECTIVES (friendly, lovely, lonely, cowardly, brotherly, costly)! You cannot say "He spoke friendly" ❌; you must say "He spoke in a friendly manner" ✅. Also: "hard" (with effort) vs. "hardly" (almost not at all)!',
     sampleSentence: {
@@ -317,6 +346,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         examples: ['Abide BY', 'Accused OF', 'Congratulate ON', 'Prevent FROM', 'Different FROM (not than)', 'Superior TO'],
       },
     ],
+    pitfalls: [
+      { rule: 'Between vs. Among Distinction', detail: '"Between" is used for two distinct individual items or pairwise relations; "Among" is used for three or more entities considered collectively.' },
+      { rule: 'No Prepositions After Certain Verbs', detail: 'Do not use redundant prepositions after transitive verbs like discuss ("discuss the topic", NOT "discuss about"), enter ("entered the room", NOT "entered into"), and resemble.' },
+    ],
     stsExamTrap: 'STS Trap: "Between" is for TWO items; "Among" is for THREE or more. "Since" marks a starting timestamp ("since 2018"); "For" marks a time span ("for six years"). Also: No preposition after verbs like "discuss", "enter", "resemble", or "reach" (Do NOT say "discuss about the matter" ❌).',
     sampleSentence: {
       sentence: 'The syllabus was distributed among the educators who arrived at the auditorium in the morning.',
@@ -354,6 +387,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         description: 'Pairs of conjunctions that work together. Require parallel grammatical structures after both elements.',
         examples: ['Either... or', 'Neither... nor', 'Not only... but also', 'Both... and', 'Scarcely / Hardly... when', 'No sooner... than'],
       },
+    ],
+    pitfalls: [
+      { rule: 'FANBOYS Comma Rule', detail: 'Use a comma before a coordinating conjunction ONLY when joining two complete independent clauses each containing its own subject and verb.' },
+      { rule: 'Correlative Conjunction Matching', detail: '"No sooner" must pair with "than" (NOT "when"); "Hardly/Scarcely" must pair with "when" (NOT "than"). Both elements require parallel syntactic structures.' },
     ],
     stsExamTrap: 'STS Trap: Correlative pairs MUST match exactly! "No sooner had he entered THAN (not when) it started to rain." "Scarcely had she spoken WHEN (not than) the bell rang." Also: Parallel structure after "not only... but also".',
     sampleSentence: {
@@ -398,6 +435,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         examples: ['Hush!', 'Hark!', 'Look!', 'Behold!', 'Ahem!'],
       },
     ],
+    pitfalls: [
+      { rule: 'Indirect Speech Conversion', detail: 'Interjection exclamations (Alas, Hurrah, Bravo) are removed in indirect narration and substituted with descriptive adverbial phrases ("exclaimed with grief that...").' },
+      { rule: 'Autonomous Syntactic Status', detail: 'Interjections do not modify, govern, or link to any other word in the clause; they are isolated by an exclamation point (!) or comma.' },
+    ],
     stsExamTrap: 'STS Trap: Indirect Speech transformation of interjections! In indirect narration, the interjection is REMOVED and replaced with an adverbial phrase: "He said, \'Alas! I am ruined\'" -> "He exclaimed with sorrow that he was ruined." (Alas is NEVER retained in indirect speech).',
     sampleSentence: {
       sentence: 'Bravo! You have scored 92% in the Sukkur IBA screening test!',
@@ -440,6 +481,10 @@ export const ALL_PARTS_OF_SPEECH: PartOfSpeechItem[] = [
         description: 'Placed before a noun to denote ownership (my, your, his, her, its, our, their). Note: "its" has no apostrophe!',
         examples: ['"Our school"', '"Its branches" (NOT "it\'s branches")'],
       },
+    ],
+    pitfalls: [
+      { rule: 'Sound-First Article Rule', detail: 'Use "an" before vowel sounds (/ɒ/ in "an honest man", /aʊ/ in "an hour", /ɛm/ in "an M.A. graduate"). Use "a" before consonant sounds (/j/ in "a university", /w/ in "a one-way road").' },
+      { rule: 'Determiner vs. Demonstrative Pronoun', detail: 'Determiners precede and specify an immediate noun ("This book is mine"); Demonstrative pronouns stand independently as grammatical subjects ("This is my book").' },
     ],
     stsExamTrap: 'STS Trap: Vowel letters vs. Vowel SOUNDS! We say "AN honest officer" (silent h = vowel sound /ɒ/), but "A university" (/j/ consonant glide), "A one-rupee coin" (/w/ consonant glide), and "AN M.Sc. candidate" (letter M starts with vowel sound /ɛm/).',
     sampleSentence: {
@@ -601,6 +646,36 @@ export const InteractivePartsOfSpeechExplorer: React.FC = () => {
   // Active Tab: 'one-by-one' | 'sentence-dissector' | 'challenge' | 'matrix'
   const [activeTab, setActiveTab] = useState<'one-by-one' | 'sentence-dissector' | 'challenge' | 'matrix'>('one-by-one');
 
+  // Mastery tracking for parts of speech
+  const [masteredParts, setMasteredParts] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem('sts_mastered_pos');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const toggleMastered = (posId: string) => {
+    setMasteredParts((prev) => {
+      const nextState = !prev[posId];
+      const updated = { ...prev, [posId]: nextState };
+      try {
+        localStorage.setItem('sts_mastered_pos', JSON.stringify(updated));
+      } catch {
+        // Ignore local storage error
+      }
+      if (nextState) {
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: { y: 0.7 },
+        });
+      }
+      return updated;
+    });
+  };
+
   // One by one index
   const [currentPosIndex, setCurrentPosIndex] = useState(0);
   const currentPos = ALL_PARTS_OF_SPEECH[currentPosIndex];
@@ -617,7 +692,34 @@ export const InteractivePartsOfSpeechExplorer: React.FC = () => {
   const currentSentence = SENTENCE_SCENARIOS.find((s) => s.id === selectedSentenceId) || SENTENCE_SCENARIOS[0];
 
   const handleSelectChallenge = (qId: number, optIdx: number) => {
-    setChallengeAnswers((prev) => ({ ...prev, [qId]: optIdx }));
+    const challenge = IDENTIFICATION_CHALLENGES.find((c) => c.id === qId);
+    const isCorrect = challenge && optIdx === challenge.correctIndex;
+
+    setChallengeAnswers((prev) => {
+      const nextAnswers = { ...prev, [qId]: optIdx };
+      const answeredCount = Object.keys(nextAnswers).length;
+
+      if (isCorrect) {
+        const correctCount = IDENTIFICATION_CHALLENGES.filter(
+          (c) => nextAnswers[c.id] === c.correctIndex
+        ).length;
+
+        if (answeredCount === IDENTIFICATION_CHALLENGES.length && correctCount >= 5) {
+          confetti({
+            particleCount: 100,
+            spread: 80,
+            origin: { y: 0.6 },
+          });
+        } else {
+          confetti({
+            particleCount: 35,
+            spread: 45,
+            origin: { y: 0.7 },
+          });
+        }
+      }
+      return nextAnswers;
+    });
     setShowChallengeResults((prev) => ({ ...prev, [qId]: true }));
   };
 
@@ -737,6 +839,7 @@ export const InteractivePartsOfSpeechExplorer: React.FC = () => {
             <div className="flex flex-wrap gap-1.5">
               {ALL_PARTS_OF_SPEECH.map((pos, idx) => {
                 const isActive = idx === currentPosIndex;
+                const isMastered = !!masteredParts[pos.id];
                 return (
                   <button
                     key={pos.id}
@@ -748,13 +851,19 @@ export const InteractivePartsOfSpeechExplorer: React.FC = () => {
                     }`}
                   >
                     <span>{pos.name}</span>
+                    {isMastered && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" title="Mastered" />
+                    )}
                   </button>
                 );
               })}
             </div>
 
-            {/* Prev / Next controls */}
-            <div className="flex items-center gap-1 self-end sm:self-auto">
+            {/* Prev / Next controls and Mastered tally */}
+            <div className="flex items-center gap-2 self-end sm:self-auto">
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                Mastered: {Object.values(masteredParts).filter(Boolean).length}/{ALL_PARTS_OF_SPEECH.length}
+              </span>
               <button
                 onClick={prevPos}
                 className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 cursor-pointer"
@@ -790,6 +899,26 @@ export const InteractivePartsOfSpeechExplorer: React.FC = () => {
                   <span className="px-3 py-1 rounded-xl text-xs font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
                     {currentPos.urduSindhi}
                   </span>
+                  <button
+                    onClick={() => toggleMastered(currentPos.id)}
+                    className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border ${
+                      masteredParts[currentPos.id]
+                        ? 'bg-emerald-600 border-emerald-600 text-white shadow-xs'
+                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-700 hover:border-emerald-300'
+                    }`}
+                  >
+                    {masteredParts[currentPos.id] ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                        <span>Mastered ✓</span>
+                      </>
+                    ) : (
+                      <>
+                        <Award className="w-3.5 h-3.5 text-indigo-500" />
+                        <span>Mark Mastered</span>
+                      </>
+                    )}
+                  </button>
                 </div>
                 <h4 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white font-display">
                   {currentPos.tagline}
@@ -859,6 +988,32 @@ export const InteractivePartsOfSpeechExplorer: React.FC = () => {
                 ))}
               </div>
             </div>
+
+            {/* Essential Rules & High-Yield Pitfalls */}
+            {currentPos.pitfalls && currentPos.pitfalls.length > 0 && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-rose-500/10 border-2 border-rose-500/30 space-y-2.5">
+                <div className="flex items-center gap-2 text-rose-800 dark:text-rose-200 font-extrabold text-xs uppercase tracking-wider">
+                  <AlertTriangle className="w-4 h-4 text-rose-600" />
+                  <span>Essential Rules &amp; Common Pitfalls ({currentPos.pitfalls.length})</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                  {currentPos.pitfalls.map((pf, pIdx) => (
+                    <div
+                      key={pIdx}
+                      className="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-rose-200/80 dark:border-rose-900/50 space-y-1.5 shadow-2xs"
+                    >
+                      <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                        <span>{pf.rule}</span>
+                      </div>
+                      <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed pl-3.5">
+                        {pf.detail}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* STEDA / Sukkur IBA Exam Trap Banner */}
             <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 space-y-1.5">

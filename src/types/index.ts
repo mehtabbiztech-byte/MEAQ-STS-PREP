@@ -26,6 +26,7 @@ export type NavigationTab =
   | 'study-notes' 
   | 'rankings' 
   | 'learning-lab'
+  | 'ai-chat'
   | 'about'
   | 'bookmarks'
   | 'mistakes';

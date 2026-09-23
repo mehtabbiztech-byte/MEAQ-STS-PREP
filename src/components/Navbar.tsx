@@ -26,7 +26,8 @@ import {
   Info,
   ChevronRight,
   Check,
-  FileCheck2
+  FileCheck2,
+  Bot
 } from 'lucide-react';
 import { ThemeSwitcherWidget, THEME_OPTIONS } from './AttractiveBackground';
 
@@ -365,6 +366,14 @@ export const Navbar: React.FC = () => {
       badgeType: 'live',
       icon: <BrainCircuit className="w-4 h-4 shrink-0" />,
       desc: 'Adaptive SRS, tutor, cognitive insights, battles & study circles'
+    },
+    { 
+      id: 'ai-chat',
+      label: 'Gemini AI',
+      badge: 'GEMINI',
+      badgeType: 'live',
+      icon: <Bot className="w-4 h-4 shrink-0 text-purple-400" />,
+      desc: 'Multi-turn Gemini chatbot with custom roles, complex reasoning & fast drills'
     },
     {
       id: 'about', 

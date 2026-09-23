@@ -83,10 +83,10 @@ export const TeachingLicenseNotesHub: React.FC<TeachingLicenseNotesHubProps> = (
 
   // Selected Part and Topic State
   const [selectedPartId, setSelectedPartId] = useState<string>(
-    initialPartId || TEACHING_LICENSE_PARTS[0].id
+    initialPartId || (TEACHING_LICENSE_PARTS[0]?.id ?? '')
   );
   const [selectedTopicId, setSelectedTopicId] = useState<string>(
-    initialTopicId || TEACHING_LICENSE_PARTS[0].topics[0].id
+    initialTopicId || (TEACHING_LICENSE_PARTS[0]?.topics?.[0]?.id ?? '')
   );
   const [workspaceView, setWorkspaceView] = useState<'overview' | 'reader' | 'subjective'>(() =>
     initialPartId || initialTopicId ? 'reader' : 'overview'
@@ -438,6 +438,16 @@ PREPARED VIA MEHTAB STS IBA PREP
     setIsSyllabusDrawerOpen(false);
     window.scrollTo({ top: 320, behavior: 'smooth' });
   };
+
+  if (TEACHING_LICENSE_PARTS.length === 0) {
+    return (
+      <div id="steda-notes-hub" className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 text-center space-y-3 shadow-xs">
+        <BookOpen className="w-8 h-8 mx-auto text-slate-400" />
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Teaching License Notes</h2>
+        <p className="text-sm text-slate-500 max-w-md mx-auto">All subject notes have been removed.</p>
+      </div>
+    );
+  }
 
   return (
     <div id="steda-notes-hub" className="space-y-6 animate-in fade-in duration-300">

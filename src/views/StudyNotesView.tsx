@@ -1,14 +1,10 @@
-import React, { lazy, Suspense, useState } from 'react';
-import { BookOpen, ChevronRight, GraduationCap, Sparkles, Award } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpen, ChevronRight, GraduationCap, Sparkles } from 'lucide-react';
 import { STUDY_CURRICULUM } from '../data/studyNotesData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
 import { StudyLesson } from '../types';
 import { useApp } from '../context/AppContext';
 import { useCmsContent } from '../context/CmsContentContext';
-
-const TeachingLicenseNotesHub = lazy(() =>
-  import('../components/TeachingLicenseNotesHub').then((module) => ({ default: module.TeachingLicenseNotesHub })),
-);
 
 const panel = 'rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 sm:p-7';
 const button = 'rounded-xl px-4 py-2 bg-emerald-700 text-white font-semibold hover:bg-emerald-800 disabled:opacity-40';
@@ -36,7 +32,6 @@ function LessonReader({ lesson, onBack }: { lesson: StudyLesson; onBack: () => v
 
 export const StudyNotesView: React.FC = () => {
   const { lessons: cmsLessons } = useCmsContent();
-  const [libraryMode, setLibraryMode] = useState<'teaching-license' | 'general'>('teaching-license');
   const [mode, setMode] = useState<'kids' | 'advanced'>('advanced');
   const [query, setQuery] = useState('');
   const [subjectId, setSubjectId] = useState('all');
@@ -47,52 +42,7 @@ export const StudyNotesView: React.FC = () => {
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8 text-slate-900 dark:text-slate-100 space-y-6">
-      {/* Top Section Navigation Switcher */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200 dark:border-slate-700/60">
-        <div className="flex items-center gap-1.5 w-full sm:w-auto">
-          <button
-            onClick={() => {
-              setLibraryMode('teaching-license');
-              setLessonId(null);
-            }}
-            className={`flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition cursor-pointer ${
-              libraryMode === 'teaching-license'
-                ? 'bg-purple-600 text-white shadow-md'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            <Award className="w-4 h-4 text-amber-300" />
-            <span>STEDA Teaching License (10 Parts)</span>
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-400 text-purple-950 ml-1">
-              HOT
-            </span>
-          </button>
-
-          <button
-            onClick={() => setLibraryMode('general')}
-            className={`flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition cursor-pointer ${
-              libraryMode === 'general'
-                ? 'bg-emerald-700 text-white shadow-md'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
-          >
-            <BookOpen className="w-4 h-4" />
-            <span>General Subject Library</span>
-          </button>
-        </div>
-
-        <div className="hidden lg:block text-xs font-semibold text-slate-500 pr-2">
-          {libraryMode === 'teaching-license'
-            ? 'Official 50–50 Scheme · BPS-16 & 17'
-            : 'Interactive lessons for school & competitive exams'}
-        </div>
-      </div>
-
-      {libraryMode === 'teaching-license' ? (
-        <Suspense fallback={<div className="grid min-h-80 place-items-center rounded-3xl border border-slate-200 bg-white text-sm font-semibold text-slate-500 dark:border-slate-800 dark:bg-slate-900">Loading Teaching License dashboard…</div>}>
-          <TeachingLicenseNotesHub />
-        </Suspense>
-      ) : selected ? (
+      {selected ? (
         <div key={selected.lesson.id}>
           <nav aria-label="Lesson location" className="flex flex-wrap items-center gap-2 text-sm text-slate-500 mb-5">
             <span>{selected.subject.title}</span>

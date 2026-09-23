@@ -3,6 +3,7 @@ import {
   ResumeData, 
   EducationEntry, 
   ExperienceEntry, 
+  ProjectEntry,
   SkillEntry, 
   CertificationEntry, 
   ReferenceEntry, 
@@ -24,7 +25,12 @@ import {
   ChevronUp, 
   Palette,
   Sliders,
-  Check
+  Check,
+  Code2,
+  Globe,
+  Link2,
+  ShieldCheck,
+  ExternalLink
 } from 'lucide-react';
 
 interface ResumeEditorProps {
@@ -159,11 +165,61 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
     updateField('references', data.references.filter((item) => item.id !== id));
   };
 
+  // Projects helpers
+  const addProject = () => {
+    const newProj: ProjectEntry = {
+      id: `proj-${Date.now()}`,
+      title: '',
+      role: '',
+      techStack: '',
+      link: '',
+      highlights: [''],
+    };
+    updateField('projects', [...(data.projects || []), newProj]);
+  };
+
+  const updateProject = (id: string, field: keyof ProjectEntry, value: any) => {
+    const updated = (data.projects || []).map((item) =>
+      item.id === id ? { ...item, [field]: value } : item
+    );
+    updateField('projects', updated);
+  };
+
+  const removeProject = (id: string) => {
+    updateField('projects', (data.projects || []).filter((item) => item.id !== id));
+  };
+
+  const addProjectHighlight = (id: string) => {
+    const updated = (data.projects || []).map((p) =>
+      p.id === id ? { ...p, highlights: [...p.highlights, ''] } : p
+    );
+    updateField('projects', updated);
+  };
+
+  const updateProjectHighlight = (projId: string, hIdx: number, val: string) => {
+    const updated = (data.projects || []).map((p) => {
+      if (p.id !== projId) return p;
+      const h = [...p.highlights];
+      h[hIdx] = val;
+      return { ...p, highlights: h };
+    });
+    updateField('projects', updated);
+  };
+
+  const removeProjectHighlight = (projId: string, hIdx: number) => {
+    const updated = (data.projects || []).map((p) => {
+      if (p.id !== projId) return p;
+      return { ...p, highlights: p.highlights.filter((_, i) => i !== hIdx) };
+    });
+    updateField('projects', updated);
+  };
+
   const SECTIONS = [
     { id: 'personal', label: 'Personal & Contact', icon: <User size={16} /> },
     { id: 'objective', label: 'Target Job & Summary', icon: <FileText size={16} /> },
     { id: 'education', label: `Education (${data.education.length})`, icon: <BookOpen size={16} /> },
     { id: 'experience', label: `Experience (${data.experience.length})`, icon: <Briefcase size={16} /> },
+    { id: 'projects', label: `Projects & Impact (${(data.projects || []).length})`, icon: <Code2 size={16} /> },
     { id: 'skills', label: `Skills (${data.skills.length})`, icon: <CheckCircle2 size={16} /> },
     { id: 'certifications', label: `Certifications & Licenses (${data.certifications.length})`, icon: <Award size={16} /> },
     { id: 'references', label: `References (${data.references.length})`, icon: <User size={16} /> },
@@ -323,6 +379,57 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
                   placeholder="e.g. House # 42, St. 3, Near Old Bus Stand, Sukkur"
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 />
+              </div>
+
+              {/* Fortune 500 & Online Profiles */}
+              <div className="sm:col-span-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <Globe size={14} className="text-indigo-600 dark:text-indigo-400" />
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">
+                    Professional & Global Profiles (Essential for Fortune 500, Tech & Remote Roles)
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div>
+                    <label className="flex items-center gap-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                      <Link2 size={12} className="text-blue-600" />
+                      <span>LinkedIn Profile</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={data.linkedinUrl || ''}
+                      onChange={(e) => updateField('linkedinUrl', e.target.value)}
+                      placeholder="linkedin.com/in/username"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="flex items-center gap-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                      <Code2 size={12} className="text-slate-800 dark:text-slate-200" />
+                      <span>GitHub / Dev Profile</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={data.githubUrl || ''}
+                      onChange={(e) => updateField('githubUrl', e.target.value)}
+                      placeholder="github.com/username"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="flex items-center gap-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                      <Globe size={12} className="text-emerald-600" />
+                      <span>Portfolio / Website</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={data.portfolioUrl || ''}
+                      onChange={(e) => updateField('portfolioUrl', e.target.value)}
+                      placeholder="portfolio.dev"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="sm:col-span-2 pt-1">
@@ -696,6 +803,148 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
           </div>
         )}
 
+        {/* 4B. PROJECTS & IMPACT (FORTUNE 500 & TECH ROLES) */}
+        {activeSection === 'projects' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Technical & High-Impact Projects</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Critical for Fortune 500 tech, data science, consulting, and engineering portfolios.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={addProject}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition-colors"
+              >
+                <Plus size={14} />
+                <span>Add Project</span>
+              </button>
+            </div>
+
+            {(!data.projects || data.projects.length === 0) ? (
+              <div className="text-center py-8 text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl space-y-2">
+                <p className="text-xs font-medium">No projects added yet.</p>
+                <button
+                  type="button"
+                  onClick={addProject}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold border border-indigo-200 dark:border-indigo-800"
+                >
+                  <Plus size={13} />
+                  <span>Add First Project</span>
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {data.projects.map((proj) => (
+                  <div
+                    key={proj.id}
+                    className="p-4 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        {proj.title || 'Untitled Project'} {proj.role ? `• ${proj.role}` : ''}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeProject(proj.id)}
+                        className="text-rose-500 hover:text-rose-700 p-1 rounded-md hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                        title="Delete Project"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-0.5">Project Title</label>
+                        <input
+                          type="text"
+                          value={proj.title}
+                          onChange={(e) => updateProject(proj.id, 'title', e.target.value)}
+                          placeholder="e.g. Distributed Cloud Sync Engine"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-0.5">Your Role / Capacity</label>
+                        <input
+                          type="text"
+                          value={proj.role}
+                          onChange={(e) => updateProject(proj.id, 'role', e.target.value)}
+                          placeholder="e.g. Lead Architect / Full Stack Contributor"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-0.5">Technologies Used (comma separated)</label>
+                        <input
+                          type="text"
+                          value={Array.isArray(proj.techStack) ? (proj.techStack as any).join(', ') : (proj.techStack || '')}
+                          onChange={(e) => updateProject(proj.id, 'techStack', e.target.value)}
+                          placeholder="e.g. React, TypeScript, Node.js, PostgreSQL, Docker"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-0.5">Project Link / Repo</label>
+                        <input
+                          type="text"
+                          value={proj.link || ''}
+                          onChange={(e) => updateProject(proj.id, 'link', e.target.value)}
+                          placeholder="e.g. github.com/user/project or live-url.com"
+                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Highlights */}
+                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                          Accomplishment Bullets (Quantifiable Impact):
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => addProjectHighlight(proj.id)}
+                          className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+                        >
+                          + Add Bullet
+                        </button>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        {proj.highlights.map((h, hIdx) => (
+                          <div key={hIdx} className="flex items-center gap-1.5">
+                            <span className="text-slate-400 text-xs">•</span>
+                            <input
+                              type="text"
+                              value={h}
+                              onChange={(e) => updateProjectHighlight(proj.id, hIdx, e.target.value)}
+                              placeholder="e.g. Architected streaming queue handling 10k events/sec with sub-50ms latency."
+                              className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs"
+                            />
+                            {proj.highlights.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => removeProjectHighlight(proj.id, hIdx)}
+                                className="text-slate-400 hover:text-rose-500 p-1"
+                              >
+                                ×
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* 5. SKILLS & LANGUAGES */}
         {activeSection === 'skills' && (
           <div className="space-y-4">
@@ -928,13 +1177,36 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
 
             {/* Template Selector */}
             <div>
-              <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-2">
-                Choose Format / Layout:
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                  Choose Format / Layout:
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChange({
+                      ...data,
+                      template: 'fortune-500',
+                      showPhoto: false,
+                      showFatherName: false,
+                      showCnic: false,
+                      showDomicile: false,
+                      showHafizStatus: false,
+                      accentColor: 'navy',
+                    });
+                  }}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
+                >
+                  <ShieldCheck size={13} />
+                  <span>1-Click Auto-Sanitize for Fortune 500 ATS</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
                 {[
                   { id: 'sts-govt', name: 'STS & Govt Official', desc: 'Screening table format with division breakdown' },
-                  { id: 'modern-ats', name: 'Modern ATS', desc: 'Clean single/dual column for corporate ATS' },
+                  { id: 'fortune-500', name: 'Fortune 500 Standard', desc: 'Harvard/Wharton single-column ATS format for global tech & MNCs' },
+                  { id: 'modern-ats', name: 'Modern ATS', desc: 'Clean dual-column layout for corporate jobs' },
                   { id: 'executive', name: 'Executive Sidebar', desc: 'Two-tone dark sidebar with contact & skills' },
                   { id: 'minimal', name: 'Classic Minimal', desc: 'Timeless typographic serif layout' },
                 ].map((tpl) => (
@@ -944,13 +1216,13 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
                     onClick={() => updateField('template', tpl.id as ResumeTemplateId)}
                     className={`p-3 rounded-xl border text-left transition-all ${
                       data.template === tpl.id
-                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 ring-2 ring-emerald-500/30'
+                        ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/60 ring-2 ring-indigo-500/30'
                         : 'border-slate-200 dark:border-slate-800 hover:border-slate-400 bg-white dark:bg-slate-900'
                     }`}
                   >
                     <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center justify-between">
                       <span>{tpl.name}</span>
-                      {data.template === tpl.id && <Check size={14} className="text-emerald-600" />}
+                      {data.template === tpl.id && <Check size={14} className="text-indigo-600" />}
                     </div>
                     <p className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
                       {tpl.desc}

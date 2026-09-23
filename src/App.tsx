@@ -27,7 +27,10 @@ import { AboutView } from './views/AboutView';
 import { SavedMcqsView } from './views/SavedMcqsView';
 import { AdminView } from './views/AdminView';
 import { LearningLabView } from './views/LearningLabView';
+import { GeminiChatView } from './views/GeminiChatView';
+import { ResumeView } from './views/ResumeView';
 import { WordMeaningPopup } from './components/WordMeaningPopup';
+import { GeminiFloatingWidget } from './components/GeminiFloatingWidget';
 
 const MainContent: React.FC = () => {
   const { 
@@ -56,9 +59,11 @@ const MainContent: React.FC = () => {
         {tab === 'current-affairs' && <CurrentAffairsView />}
         {tab === 'exams' && <ExamsView />}
         {tab === 'jobs' && <JobsView />}
+        {tab === 'resume' && <ResumeView />}
         {tab === 'study-notes' && <StudyNotesView />}
         {tab === 'rankings' && <RankingsView />}
         {tab === 'learning-lab' && <LearningLabView />}
+        {tab === 'ai-chat' && <GeminiChatView />}
         {tab === 'about' && <AboutView />}
         {tab === 'bookmarks' && <SavedMcqsView initialSubTab="bookmarks" />}
         {tab === 'mistakes' && <SavedMcqsView initialSubTab="mistakes" />}
@@ -79,6 +84,9 @@ const MainContent: React.FC = () => {
           onUpdateCandidateName={updateCertificateCandidateName}
         />
       )}
+
+      {/* Floating Gemini AI Chatbot accessible across all pages */}
+      <GeminiFloatingWidget />
 
       {/* Click any readable word for Simple English, Urdu and Sindhi meanings */}
       <WordMeaningPopup />

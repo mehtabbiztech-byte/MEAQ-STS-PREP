@@ -21,10 +21,6 @@ import { StsExamSimulator } from '../components/StsExamSimulator';
 import { ExactPatternSimulators } from '../components/ExactPatternSimulators';
 import { PreparationRoomDashboard } from '../components/PreparationRoomDashboard';
 
-const TeachingLicenseNotesHub = lazy(() =>
-  import('../components/TeachingLicenseNotesHub').then((module) => ({ default: module.TeachingLicenseNotesHub })),
-);
-
 const CssSyllabusExplorer = lazy(() =>
   import('../components/CssSyllabusExplorer').then((module) => ({
     default: module.CssSyllabusExplorer,
@@ -229,13 +225,6 @@ export const ExamsView: React.FC = () => {
                         icon: Trophy 
                       }]
                     : []),
-                  ...(currentExam.id === 'sts-teaching-license'
-                    ? [{ 
-                        id: 'notes', 
-                        label: '📖 10-Part Syllabus Notes & Theory', 
-                        icon: BookOpen 
-                      }]
-                    : []),
                   { id: 'syllabus', label: 'Official Syllabus & Weightage', icon: FileText },
                   { id: 'mcqs', label: `Targeted MCQs (${examMcqs.length})`, icon: CheckCircle2 },
                   { id: 'papers', label: `Past Papers (${examPastPapers.length})`, icon: GraduationCap },
@@ -283,46 +272,9 @@ export const ExamsView: React.FC = () => {
             />
           )}
 
-          {/* Sub-tab: Teaching License Notes */}
-          {activeTab === 'notes' && currentExam.id === 'sts-teaching-license' && (
-            <Suspense fallback={<div className="grid min-h-80 place-items-center rounded-3xl border border-slate-200 bg-white text-sm font-semibold text-slate-500 dark:border-slate-800 dark:bg-slate-900">Loading Teaching License dashboard…</div>}>
-              <TeachingLicenseNotesHub
-                onOpenPaperSimulator={() => {
-                  if (examPastPapers[0]) setSelectedPastPaperId(examPastPapers[0].id);
-                  setTab('past-papers');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
-            </Suspense>
-          )}
-
           {/* Sub-tab 1: Overview */}
           {activeTab === 'overview' && (
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xs animate-in fade-in duration-150">
-              {currentExam.id === 'sts-teaching-license' && (
-                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-purple-950 via-indigo-950 to-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-purple-500/30 shadow-md">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-amber-400 text-xs font-black uppercase tracking-wider">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Comprehensive 10-Part Master Syllabus Notes</span>
-                    </div>
-                    <h4 className="text-base sm:text-lg font-bold">
-                      Detailed Theory, High-Yield Rules &amp; Child Psychology
-                    </h4>
-                    <p className="text-xs text-slate-300 max-w-xl">
-                      Explore all 10 modules covering 50% Content Knowledge (Science, Math, Social Studies, English, Urdu/Sindhi) and 50% Pedagogy (Foundations, Child Development, Assessment, Curriculum, Classroom Management) with interactive quizzes and audio reader.
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setActiveTab('notes')}
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition shrink-0 cursor-pointer"
-                  >
-                    <BookOpen className="w-4 h-4" />
-                    <span>Open Master Notes (10 Parts)</span>
-                  </button>
-                </div>
-              )}
-
               <div>
                 <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
                   About This Examination

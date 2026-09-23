@@ -115,7 +115,7 @@ export const AITutoringCrafting: React.FC = () => {
     }, 450);
   };
 
-  const handleSendMessage = (customText?: string) => {
+  const handleSendMessage = async (customText?: string) => {
     const query = customText || inputQuery.trim();
     if (!query) return;
 
@@ -126,54 +126,89 @@ export const AITutoringCrafting: React.FC = () => {
       lang: dialogueLang,
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    const updated = [...messages, userMsg];
+    setMessages(updated);
     if (!customText) setInputQuery('');
 
-    // Socratic tutor response generation based on language
-    setTimeout(() => {
-      let reply = '';
-      if (dialogueLang === 'Urdu') {
-        if (query.includes('غلط') || query.includes('option') || query.includes('B')) {
-          reply =
-            'بہت اچھا سوال! آپشن B پر غور کریں: کیا یہ مکمل حقیقت بیان کر رہا ہے یا صرف آدھی؟ اکثر امتحانات میں امیدوار جلد بازی میں پہلے پرکشش لفظ کو دیکھ کر نشان لگا دیتے ہیں۔ دوبارہ سوال کے بنیادی لفظ کو دیکھیں۔';
-        } else if (query.includes('اصول') || query.includes('rule')) {
-          reply =
-            'اس کا سنہری اصول یاد رکھیں: جب قیمت میں R فیصد اضافہ ہو تو خرچ برابر رکھنے کے لیے کمی کا فارمولا [R / (100 + R)] × 100% ہوتا ہے۔ اسے خود حل کرنے کی کوشش کریں!';
-        } else {
-          reply =
-            'آئیے اسے مرحلہ وار سمجھیں۔ سب سے پہلے یہ دیکھیں کہ سوال میں کونسی چیز معلوم ہے اور کس چیز کے بارے میں پوچھا گیا ہے۔';
-        }
-      } else if (dialogueLang === 'Sindhi') {
-        if (query.includes('غلط') || query.includes('option')) {
-          reply =
-            'بهترين سوال! آپشن تي غور ڪريو: ڇا هي شرط سوال جي سڀني تقاضائن کي پورو ڪري ٿو؟ اڪثر امتحاني ادارا هڪ جهڙا لفظ ڏئي پرکيندا آهن۔ هڪ ڀيرو ٻيهر سوال جو مکيه اصول پڙهو۔';
-        } else {
-          reply =
-            'اچو ته هن سوال کي سمجهون۔ پهرين ڏسو ته بنيادي فارمولو ڇا آهي۔ جيڪڏهن توهان انگريزي پريپوزيشن پڙهو پيا ته ياد رکو ته "Proficient" سان گڏ هميشه "in" لڳندو آهي۔';
-        }
-      } else {
-        if (query.toLowerCase().includes('option b') || query.toLowerCase().includes('distractor')) {
-          reply =
-            'Notice Option B carefully: It sounds intuitively correct to conversational speakers, but formal exam boards test structural rules. Does the preposition depend on the verb or the following noun? Check the preceding adjective!';
-        } else if (query.toLowerCase().includes('mnemonic') || query.toLowerCase().includes('trick')) {
-          reply =
-            'Here is a top scorer mnemonic for this exact pattern: remember "Proficient IN, Good AT, Capable OF". Repeat this 3 times to lock it in your memory.';
-        } else {
-          reply =
-            'Step 1: Identify the underlying concept (Arithmetic, Grammar, or Chronology). Step 2: Eliminate the two obviously extreme choices. Which two remaining options are the real competitors?';
+    try {
+      const historyPayload = updated.map((m) => ({
+        role: m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text,
+      }));
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: historyPayload,
+          taskType: 'complex',
+          roleId: 'complex-solver',
+          systemInstruction: `You are the Socratic Exam Mentor for MATB STS PREP. Guide the student's thinking with analytical questions, examiner trap warnings, and step-by-step logic in ${dialogueLang}. Keep your answer under 120 words.`,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.reply) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `tutor-${Date.now()}`,
+              sender: 'tutor',
+              text: data.reply,
+              lang: dialogueLang,
+            },
+          ]);
+          return;
         }
       }
+    } catch {
+      // Fallback to local heuristic guidance below
+    }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: `tutor-${Date.now()}`,
-          sender: 'tutor',
-          text: reply,
-          lang: dialogueLang,
-        },
-      ]);
-    }, 400);
+    // Heuristic fallback if network fails
+    let reply = '';
+    if (dialogueLang === 'Urdu') {
+      if (query.includes('غلط') || query.includes('option') || query.includes('B')) {
+        reply =
+          'بہت اچھا سوال! آپشن B پر غور کریں: کیا یہ مکمل حقیقت بیان کر رہا ہے یا صرف آدھی؟ اکثر امتحانات میں امیدوار جلد بازی میں پہلے پرکشش لفظ کو دیکھ کر نشان لگا دیتے ہیں۔ دوبارہ سوال کے بنیادی لفظ کو دیکھیں۔';
+      } else if (query.includes('اصول') || query.includes('rule')) {
+        reply =
+          'اس کا سنہری اصول یاد رکھیں: جب قیمت میں R فیصد اضافہ ہو تو خرچ برابر رکھنے کے لیے کمی کا فارمولا [R / (100 + R)] × 100% ہوتا ہے۔ اسے خود حل کرنے کی کوشش کریں!';
+      } else {
+        reply =
+          'آئیے اسے مرحلہ وار سمجھیں۔ سب سے پہلے یہ دیکھیں کہ سوال میں کونسی چیز معلوم ہے اور کس چیز کے بارے میں پوچھا گیا ہے۔';
+      }
+    } else if (dialogueLang === 'Sindhi') {
+      if (query.includes('غلط') || query.includes('option')) {
+        reply =
+          'بهترين سوال! آپشن تي غور ڪريو: ڇا هي شرط سوال جي سڀني تقاضائن کي پورو ڪري ٿو؟ اڪثر امتحاني ادارا هڪ جهڙا لفظ ڏئي پرکيندا آهن۔ هڪ ڀيرو ٻيهر سوال جو مکيه اصول پڙهو۔';
+      } else {
+        reply =
+          'اچو ته هن سوال کي سمجهون۔ پهرين ڏسو ته بنيادي فارمولو ڇا آهي۔ جيڪڏهن توهان انگريزي پريپوزيشن پڙهو پيا ته ياد رکو ته "Proficient" سان گڏ هميشه "in" لڳندو آهي۔';
+      }
+    } else {
+      if (query.toLowerCase().includes('option b') || query.toLowerCase().includes('distractor')) {
+        reply =
+          'Notice Option B carefully: It sounds intuitively correct to conversational speakers, but formal exam boards test structural rules. Does the preposition depend on the verb or the following noun? Check the preceding adjective!';
+      } else if (query.toLowerCase().includes('mnemonic') || query.toLowerCase().includes('trick')) {
+        reply =
+          'Here is a top scorer mnemonic for this exact pattern: remember "Proficient IN, Good AT, Capable OF". Repeat this 3 times to lock it in your memory.';
+      } else {
+        reply =
+          'Step 1: Identify the underlying concept (Arithmetic, Grammar, or Chronology). Step 2: Eliminate the two obviously extreme choices. Which two remaining options are the real competitors?';
+      }
+    }
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `tutor-${Date.now()}`,
+        sender: 'tutor',
+        text: reply,
+        lang: dialogueLang,
+      },
+    ]);
   };
 
   return (

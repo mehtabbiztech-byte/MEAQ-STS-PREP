@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ResumeData } from '../types/resume';
-import { SAMPLE_STS_CANDIDATE_RESUME, SAMPLE_CORPORATE_RESUME } from '../data/resumeSampleData';
+import { 
+  SAMPLE_STS_CANDIDATE_RESUME, 
+  SAMPLE_CORPORATE_RESUME,
+  SAMPLE_FORTUNE_500_RESUME 
+} from '../data/resumeSampleData';
 import { ResumeEditor } from '../components/resume/ResumeEditor';
 import { ResumePreview } from '../components/resume/ResumePreview';
+import { Fortune500HubModal } from '../components/resume/Fortune500HubModal';
 import { 
   Printer, 
   Download, 
@@ -17,7 +22,9 @@ import {
   FileCheck2,
   Share2,
   UploadCloud,
-  HelpCircle
+  HelpCircle,
+  Building2,
+  ShieldCheck
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -42,6 +49,7 @@ export const ResumeView: React.FC = () => {
   const [activeMobileView, setActiveMobileView] = useState<'editor' | 'preview'>('editor');
   const [copiedText, setCopiedText] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving'>('saved');
+  const [showF500Modal, setShowF500Modal] = useState(false);
 
   // Auto-save to localStorage on every keystroke
   useEffect(() => {
@@ -184,6 +192,13 @@ export const ResumeView: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-2">
             <button
+              onClick={() => setShowF500Modal(true)}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-black shadow-lg border border-indigo-400/40 transition-transform active:scale-95"
+            >
+              <Building2 size={15} />
+              <span>Fortune 500 Portal & Apply</span>
+            </button>
+            <button
               onClick={handlePrint}
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-slate-950 text-xs font-extrabold hover:bg-slate-100 shadow-lg transition-transform active:scale-95"
             >
@@ -228,6 +243,14 @@ export const ResumeView: React.FC = () => {
           >
             <Briefcase size={13} />
             <span>Load Corporate ATS Sample</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setResumeData(SAMPLE_FORTUNE_500_RESUME)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-300 dark:border-indigo-700 text-indigo-800 dark:text-indigo-300 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors"
+          >
+            <Building2 size={13} />
+            <span>Load Fortune 500 ATS Sample</span>
           </button>
           <button
             type="button"
@@ -335,6 +358,14 @@ export const ResumeView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Fortune 500 Portal & Application Hub Modal */}
+      <Fortune500HubModal
+        isOpen={showF500Modal}
+        onClose={() => setShowF500Modal(false)}
+        resumeData={resumeData}
+        onUpdateResumeData={setResumeData}
+      />
     </div>
   );
 };
