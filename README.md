@@ -57,3 +57,19 @@ The code does not make a GitHub repository or Vercel deployment private. Reposit
 Mehtab Ali — Founder and Academic Lead
 
 For project questions, open a GitHub issue in this repository.
+
+## Teaching License writing practice
+
+Open Teaching License → CRQ & ERQ Writing Practice. Existing question plans,
+model answers and practice rubrics now accompany a timed writing session.
+Answers and absolute deadlines are saved on the current device; leaving the
+page does not pause the timer. Submission or expiry locks the response. A new
+attempt clears that question’s saved response after confirmation.
+
+After submission, learners can explicitly request criterion-by-criterion AI
+feedback and revision steps. Feedback is practice guidance, not official marking
+or a predicted exam score. The server requires `GEMINI_API_KEY` (the same key used
+by the existing AI services). The endpoint is available in both the Express
+server and Vercel at `/api/subjective-feedback`. Without the key, model answers
+and rubrics remain available for self-review. Answers are sent to the AI provider
+only when feedback is requested; AI feedback itself is not persisted.

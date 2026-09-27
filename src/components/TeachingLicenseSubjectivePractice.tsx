@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { BookOpenCheck, CheckCircle2, ChevronDown, Clock3, FilePenLine, RotateCcw, Save, Search, Sparkles, Target } from 'lucide-react';
+import { BookOpenCheck, CheckCircle2, ChevronDown, Clock3, Search, Sparkles, Target } from 'lucide-react';
+import { SubjectiveAnswerEditor } from './SubjectiveAnswerEditor';
 import { TEACHING_LICENSE_SUBJECTIVE_QUESTIONS, type SubjectiveQuestionType } from '../data/teachingLicenseSubjectiveData';
 
-const draftKey = (id: string) => `meqsa-teaching-license-subjective:${id}`;
 
 export const TeachingLicenseSubjectivePractice: React.FC = () => {
   const [type, setType] = useState<SubjectiveQuestionType>('CRQ');
@@ -14,31 +14,17 @@ export const TeachingLicenseSubjectivePractice: React.FC = () => {
     return typeQuestions.filter((item) => `${item.subject} ${item.area} ${item.prompt}`.toLowerCase().includes(normalized));
   }, [query, typeQuestions]);
   const [selectedId, setSelectedId] = useState(typeQuestions[0].id);
-  const [draft, setDraft] = useState('');
+  const [timed, setTimed] = useState(false);
   const [showPlan, setShowPlan] = useState(false);
   const [showModel, setShowModel] = useState(false);
-  const [saved, setSaved] = useState(false);
   const selected = TEACHING_LICENSE_SUBJECTIVE_QUESTIONS.find((item) => item.id === selectedId) ?? typeQuestions[0];
 
   useEffect(() => {
     if (!typeQuestions.some((item) => item.id === selectedId)) setSelectedId(typeQuestions[0].id);
   }, [typeQuestions, selectedId]);
 
-  useEffect(() => {
-    setDraft(localStorage.getItem(draftKey(selected.id)) ?? '');
-    setShowPlan(false);
-    setShowModel(false);
-    setSaved(false);
-  }, [selected.id]);
+  useEffect(() => { setShowPlan(false); setShowModel(false); }, [selected.id]);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      if (draft.trim()) localStorage.setItem(draftKey(selected.id), draft);
-    }, 500);
-    return () => window.clearTimeout(timer);
-  }, [draft, selected.id]);
-
-  const wordCount = draft.trim() ? draft.trim().split(/\s+/).length : 0;
   const rubricTotal = selected.rubric.reduce((sum, item) => sum + item.marks, 0);
 
   return (
@@ -85,22 +71,15 @@ export const TeachingLicenseSubjectivePractice: React.FC = () => {
             <div><p className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Question</p><h3 className="mt-2 text-lg font-extrabold leading-8 text-slate-950 dark:text-white">{selected.prompt}</h3></div>
             <div className="flex flex-wrap gap-2">{selected.commandWords.map((word) => <span key={word} className="rounded-lg border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-bold text-rose-700 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-300">{word}</span>)}</div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900">
-              <label htmlFor="subjective-answer" className="flex items-center justify-between gap-3 text-xs font-extrabold uppercase tracking-wider text-slate-500"><span className="inline-flex items-center gap-2"><FilePenLine className="h-4 w-4 text-purple-600" />Your answer</span><span>{wordCount} words · Target {selected.wordRange}</span></label>
-              <textarea id="subjective-answer" value={draft} onChange={(event) => { setDraft(event.target.value); setSaved(false); }} rows={type === 'ERQ' ? 14 : 8} placeholder="Plan briefly, then write a focused answer here…" className="mt-3 w-full resize-y rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-7 text-slate-900 outline-none transition focus:border-purple-400 focus:ring-2 focus:ring-purple-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:ring-purple-900" />
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                <p className="text-xs text-slate-500">Drafts are autosaved on this device.</p>
-                <div className="flex gap-2"><button onClick={() => { setDraft(''); localStorage.removeItem(draftKey(selected.id)); }} className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 dark:border-slate-700 dark:text-slate-300"><RotateCcw className="h-3.5 w-3.5" />Clear</button><button onClick={() => { localStorage.setItem(draftKey(selected.id), draft); setSaved(true); }} className="inline-flex items-center gap-1.5 rounded-xl bg-purple-600 px-3 py-2 text-xs font-bold text-white"><Save className="h-3.5 w-3.5" />{saved ? 'Saved' : 'Save draft'}</button></div>
-              </div>
-            </div>
+            <SubjectiveAnswerEditor key={selected.id} question={selected} onTimedChange={(active) => { setTimed(active); if (active) { setShowPlan(false); setShowModel(false); } }} />
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <button onClick={() => setShowPlan((value) => !value)} className="flex items-center justify-between rounded-2xl border border-blue-200 bg-blue-50 p-4 text-left text-sm font-extrabold text-blue-800 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-200"><span className="inline-flex items-center gap-2"><Target className="h-4 w-4" />Answer plan</span><ChevronDown className={`h-4 w-4 transition ${showPlan ? 'rotate-180' : ''}`} /></button>
-              <button onClick={() => setShowModel((value) => !value)} className="flex items-center justify-between rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-left text-sm font-extrabold text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-200"><span className="inline-flex items-center gap-2"><BookOpenCheck className="h-4 w-4" />Model answer &amp; rubric</span><ChevronDown className={`h-4 w-4 transition ${showModel ? 'rotate-180' : ''}`} /></button>
+              <button disabled={timed} title={timed ? 'Available after submission' : undefined} onClick={() => setShowPlan((value) => !value)} className="flex items-center justify-between rounded-2xl border border-blue-200 bg-blue-50 p-4 text-left text-sm font-extrabold text-blue-800 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-200"><span className="inline-flex items-center gap-2"><Target className="h-4 w-4" />Answer plan</span><ChevronDown className={`h-4 w-4 transition ${showPlan ? 'rotate-180' : ''}`} /></button>
+              <button disabled={timed} title={timed ? 'Available after submission' : undefined} onClick={() => setShowModel((value) => !value)} className="flex items-center justify-between rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-left text-sm font-extrabold text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-200"><span className="inline-flex items-center gap-2"><BookOpenCheck className="h-4 w-4" />Model answer &amp; rubric</span><ChevronDown className={`h-4 w-4 transition ${showModel ? 'rotate-180' : ''}`} /></button>
             </div>
 
-            {showPlan && <div className="rounded-2xl border border-blue-200 bg-white p-5 dark:border-blue-900 dark:bg-slate-900"><h4 className="font-extrabold text-blue-900 dark:text-blue-200">Plan before writing</h4><ol className="mt-3 space-y-2">{selected.answerPlan.map((step, index) => <li key={step} className="flex gap-3 text-sm leading-6 text-slate-700 dark:text-slate-300"><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-blue-100 text-xs font-black text-blue-700 dark:bg-blue-950 dark:text-blue-300">{index + 1}</span>{step}</li>)}</ol></div>}
-            {showModel && <div className="space-y-4 rounded-2xl border border-emerald-200 bg-white p-5 dark:border-emerald-900 dark:bg-slate-900"><div><h4 className="font-extrabold text-emerald-900 dark:text-emerald-200">Model answer</h4><p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">{selected.modelAnswer}</p></div><div className="border-t border-slate-200 pt-4 dark:border-slate-800"><div className="flex items-center justify-between"><h4 className="font-extrabold text-slate-900 dark:text-white">Self-marking rubric</h4><span className="text-xs font-black text-emerald-700">Total: {rubricTotal}</span></div><div className="mt-3 space-y-2">{selected.rubric.map((item) => <div key={item.criterion} className="flex items-center justify-between gap-4 rounded-xl bg-slate-50 px-3 py-2 text-sm dark:bg-slate-950"><span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500" />{item.criterion}</span><strong>{item.marks}</strong></div>)}</div></div></div>}
+            {showPlan && !timed && <div className="rounded-2xl border border-blue-200 bg-white p-5 dark:border-blue-900 dark:bg-slate-900"><h4 className="font-extrabold text-blue-900 dark:text-blue-200">Plan before writing</h4><ol className="mt-3 space-y-2">{selected.answerPlan.map((step, index) => <li key={step} className="flex gap-3 text-sm leading-6 text-slate-700 dark:text-slate-300"><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-blue-100 text-xs font-black text-blue-700 dark:bg-blue-950 dark:text-blue-300">{index + 1}</span>{step}</li>)}</ol></div>}
+            {showModel && !timed && <div className="space-y-4 rounded-2xl border border-emerald-200 bg-white p-5 dark:border-emerald-900 dark:bg-slate-900"><div><h4 className="font-extrabold text-emerald-900 dark:text-emerald-200">Model answer</h4><p className="mt-3 text-sm leading-7 text-slate-700 dark:text-slate-300">{selected.modelAnswer}</p></div><div className="border-t border-slate-200 pt-4 dark:border-slate-800"><div className="flex items-center justify-between"><h4 className="font-extrabold text-slate-900 dark:text-white">Self-marking rubric</h4><span className="text-xs font-black text-emerald-700">Total: {rubricTotal}</span></div><div className="mt-3 space-y-2">{selected.rubric.map((item) => <div key={item.criterion} className="flex items-center justify-between gap-4 rounded-xl bg-slate-50 px-3 py-2 text-sm dark:bg-slate-950"><span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500" />{item.criterion}</span><strong>{item.marks}</strong></div>)}</div></div></div>}
           </article>
         </div>
       </div>
