@@ -1,4 +1,5 @@
 import express from 'express';
+import subjectiveFeedback from './api/subjective-feedback';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
@@ -144,6 +145,7 @@ async function startServer() {
   const PORT = 3000;
 
   app.use(express.json());
+  app.post('/api/subjective-feedback', subjectiveFeedback);
 
   // Health check endpoint
   app.get('/api/health', (req, res) => {
