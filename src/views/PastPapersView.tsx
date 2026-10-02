@@ -148,7 +148,6 @@ export const PastPapersView: React.FC = () => {
   const { papers: cmsPapers } = useCmsContent();
   const { selectedPastPaperId, setSelectedPastPaperId } = useApp();
   const [active, setActive] = useState<PastPaper | null>(null);
-  const [externalPaper, setExternalPaper] = useState<PastPaper | null>(null);
   const [session, setSession] = useState(0);
 
   // Search & Navigation state
@@ -915,14 +914,6 @@ export const PastPapersView: React.FC = () => {
                       >
                         Start Timed Paper
                       </button>
-                    ) : p.recordType === 'External Past Paper Link' && p.sourceUrl ? (
-                      <button
-                        type="button"
-                        className={`${button} mt-auto w-full`}
-                        onClick={() => setExternalPaper(p)}
-                      >
-                        View Full Paper
-                      </button>
                     ) : p.sourceUrl ? (
                       <a
                         className={`${button} mt-auto text-center flex items-center justify-center gap-1.5`}
@@ -1401,43 +1392,6 @@ export const PastPapersView: React.FC = () => {
         </div>
       )}
 
-      {externalPaper?.sourceUrl && (
-        <div
-          className="fixed inset-0 z-[100] bg-slate-950/80 p-2 sm:p-6"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="external-paper-title"
-        >
-          <section className="mx-auto flex h-[96vh] max-w-7xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-slate-900">
-            <header className="flex items-center justify-between gap-4 border-b border-slate-200 p-4 dark:border-slate-700">
-              <div className="min-w-0">
-                <h2 id="external-paper-title" className="truncate text-lg font-bold text-slate-900 dark:text-white">
-                  {externalPaper.title}
-                </h2>
-                <p className="text-sm text-slate-500">Original TestPoint paper · use its answer controls and pagination</p>
-              </div>
-              <button
-                type="button"
-                className={secondary}
-                aria-label="Close paper reader"
-                onClick={() => setExternalPaper(null)}
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </header>
-            <iframe
-              title={`${externalPaper.title} from TestPoint`}
-              src={externalPaper.sourceUrl.replace(
-                'https://testpointpk.com/paper-mcqs/',
-                'https://testpointpk.com/v2.testpoint.pk/public/paper-mcqs/'
-              )}
-              className="min-h-0 w-full flex-1 border-0 bg-white"
-              loading="eager"
-              referrerPolicy="strict-origin-when-cross-origin"
-            />
-          </section>
-        </div>
-      )}
     </main>
   );
 };

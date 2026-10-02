@@ -161,7 +161,7 @@ export interface PastPaper {
   durationMinutes?: number;
   solvedDate?: string;
   mcqs: MCQ[];
-  recordType?: 'Official Past Paper' | 'Official Sample Paper' | 'Official Answer Key / Date Record' | 'Reconstructed Practice Paper' | 'External Past Paper Link';
+  recordType?: 'Official Past Paper' | 'Official Sample Paper' | 'Official Answer Key / Date Record' | 'Reconstructed Practice Paper';
   testDateLabel?: string;
   sourceUrl?: string;
   sourceNote?: string;
