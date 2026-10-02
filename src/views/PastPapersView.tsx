@@ -921,7 +921,7 @@ export const PastPapersView: React.FC = () => {
                         target="_blank" 
                         rel="noreferrer"
                       >
-                        <span>Open Official Reference</span>
+                        <span>Open Source Paper</span>
                         <ExternalLink className="w-3.5 h-3.5" />
                       </a>
                     ) : (
