@@ -22,7 +22,7 @@ export const TEACHING_LICENSE_PAPER_2_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt2-eng-02',
@@ -178,10 +178,10 @@ export const TEACHING_LICENSE_PAPER_2_MCQS: MCQ[] = [
   },
   {
     id: 'tlt2-math-12',
-    question: 'If a school principal purchases laboratory equipment for Rs. 25,000 and sells old obsolete items for Rs. 20,000, what is the loss percentage?',
+    question: 'An item bought for Rs. 25,000 is sold for Rs. 20,000. What is the loss percentage?',
     options: ['15%', '20%', '25%', '30%'],
     correctIndex: 1,
-    explanation: 'Loss = Cost Price - Selling Price = 25,000 - 20,000 = Rs. 5,000. Loss % = (5,000 / 25,000) * 100 = 20%.',
+    explanation: 'Loss = Cost Price - Selling Price = Rs. 5,000. Loss percentage = (5,000 / 25,000) × 100 = 20%.',
     category: 'Mathematics',
     subtopic: 'Profit and Loss',
     difficulty: 'Easy',
