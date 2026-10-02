@@ -476,7 +476,7 @@ export const PastPapersView: React.FC = () => {
               <div className="flex flex-wrap gap-2.5 mt-5">
                 <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs text-xs font-bold border border-white/10 flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>${ALL_PAST_PAPERS_DIRECTORY.length} Directory Entries</span>
+                  <span>{ALL_PAST_PAPERS_DIRECTORY.length} Directory Entries</span>
                 </div>
                 <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs text-xs font-bold border border-white/10 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
