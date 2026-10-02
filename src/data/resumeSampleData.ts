@@ -406,6 +406,17 @@ export const SAMPLE_FORTUNE_500_RESUME: ResumeData = {
   showHafizStatus: false,
 };
 
+export const SAMPLE_TECH_RESUME: ResumeData = {
+  ...SAMPLE_FORTUNE_500_RESUME,
+  fullName: 'Hamza A. Siddiqui',
+  email: 'hamza.siddiqui.dev@gmail.com',
+  targetHeadline: 'Full Stack Engineer & Cloud Architect | React, TypeScript, Node.js & AWS',
+  professionalSummary: 'Full Stack Engineer with 4+ years of expertise designing responsive, high-performance web applications and resilient REST/GraphQL APIs. Proven track record of reducing page load times by 55%, maintaining 99.9% uptime for cloud microservices, and implementing automated CI/CD deployment pipelines.',
+  template: 'tech-compact',
+  accentColor: 'indigo',
+  fontSize: 'normal',
+};
+
 export const SUMMARY_PRESETS = [
   {
     title: 'Fortune 500 Senior Software Engineer / Distributed Systems',

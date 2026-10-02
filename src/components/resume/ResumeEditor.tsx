@@ -30,7 +30,10 @@ import {
   Globe,
   Link2,
   ShieldCheck,
-  ExternalLink
+  ExternalLink,
+  Wand2,
+  Loader2,
+  Zap
 } from 'lucide-react';
 
 interface ResumeEditorProps {
@@ -41,9 +44,97 @@ interface ResumeEditorProps {
 export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) => {
   const [activeSection, setActiveSection] = useState<string>('personal');
   const [showPresetsModal, setShowPresetsModal] = useState(false);
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [enhancingExpId, setEnhancingExpId] = useState<string | null>(null);
+  const [isSuggestingKeywords, setIsSuggestingKeywords] = useState(false);
+  const [keywordSuggestions, setKeywordSuggestions] = useState<string[]>([]);
 
   const updateField = <K extends keyof ResumeData>(field: K, value: ResumeData[K]) => {
     onChange({ ...data, [field]: value });
+  };
+
+  // AI Summary Generator
+  const handleAIGenerateSummary = async () => {
+    setIsGeneratingSummary(true);
+    try {
+      const res = await fetch('/api/resume-enhance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'generate-summary',
+          role: data.targetHeadline || 'Professional Candidate',
+          skills: data.skills.map((s) => s.name),
+          context: data.education[0]?.degreeTitle || '',
+        }),
+      });
+      const json = await res.json();
+      if (json.summary) {
+        updateField('professionalSummary', json.summary);
+      }
+    } catch (e) {
+      console.error('Failed to generate summary:', e);
+      const fallback = `Results-oriented and disciplined ${data.targetHeadline || 'professional'} with proven foundation in ${data.skills.map(s => s.name).slice(0, 3).join(', ') || 'office administration and analytical tasks'}. Dedicated to maintaining accuracy and delivering high performance in competitive environments.`;
+      updateField('professionalSummary', fallback);
+    } finally {
+      setIsGeneratingSummary(false);
+    }
+  };
+
+  // AI Polish Bullets
+  const handleAIPolishBullets = async (expId: string) => {
+    const targetExp = data.experience.find((e) => e.id === expId);
+    if (!targetExp || !targetExp.responsibilities.length) return;
+
+    setEnhancingExpId(expId);
+    try {
+      const polished: string[] = [];
+      for (const bullet of targetExp.responsibilities) {
+        if (!bullet.trim()) continue;
+        const res = await fetch('/api/resume-enhance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'enhance-bullet',
+            text: bullet,
+            role: targetExp.designation || data.targetHeadline || 'Professional',
+          }),
+        });
+        const json = await res.json();
+        polished.push(json.enhanced || bullet);
+      }
+      updateExperience(expId, 'responsibilities', polished);
+    } catch (e) {
+      console.error('Failed to polish bullets:', e);
+    } finally {
+      setEnhancingExpId(null);
+    }
+  };
+
+  // AI Suggest Keywords
+  const handleAISuggestKeywords = async () => {
+    setIsSuggestingKeywords(true);
+    try {
+      const res = await fetch('/api/resume-enhance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'suggest-keywords',
+          role: data.targetHeadline || 'General Candidate',
+        }),
+      });
+      const json = await res.json();
+      if (json.keywords && Array.isArray(json.keywords)) {
+        setKeywordSuggestions(json.keywords);
+      }
+    } catch (e) {
+      console.error('Failed to suggest keywords:', e);
+      setKeywordSuggestions([
+        'MS Word & Excel', 'Record Keeping', 'Typing Speed (40+ WPM)', 
+        'Data Entry Accuracy', 'Time Management', 'Official Correspondence'
+      ]);
+    } finally {
+      setIsSuggestingKeywords(false);
+    }
   };
 
   // Education helpers
@@ -460,14 +551,27 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setShowPresetsModal(!showPresetsModal)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 transition-colors"
-              >
-                <Sparkles size={14} />
-                <span>Smart Presets</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleAIGenerateSummary}
+                  disabled={isGeneratingSummary}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-linear-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold hover:opacity-90 shadow-sm transition-all disabled:opacity-50"
+                  title="Generate ATS-optimized 2-3 sentence summary based on your profile"
+                >
+                  {isGeneratingSummary ? <Loader2 size={14} className="animate-spin" /> : <Wand2 size={14} />}
+                  <span>{isGeneratingSummary ? 'Writing Summary...' : 'AI Generate Summary'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowPresetsModal(!showPresetsModal)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 transition-colors"
+                >
+                  <Sparkles size={14} />
+                  <span>Smart Presets</span>
+                </button>
+              </div>
             </div>
 
             {/* Smart Presets Inserter */}
@@ -784,9 +888,30 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
                       </div>
 
                       <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-0.5">
-                          Key Responsibilities (One per line)
-                        </label>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+                            Key Responsibilities & Accomplishments (One per line)
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => handleAIPolishBullets(exp.id)}
+                            disabled={enhancingExpId === exp.id || !exp.responsibilities.length}
+                            className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 hover:underline disabled:opacity-40"
+                            title="Rewrite bullets with metrics & power verbs using the Google XYZ formula"
+                          >
+                            {enhancingExpId === exp.id ? (
+                              <>
+                                <Loader2 size={12} className="animate-spin" />
+                                <span>Optimizing Bullets...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Wand2 size={12} />
+                                <span>AI Polish Bullets (Google XYZ)</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
                         <textarea
                           rows={3}
                           value={exp.responsibilities.join('\n')}
@@ -948,12 +1073,58 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
         {/* 5. SKILLS & LANGUAGES */}
         {activeSection === 'skills' && (
           <div className="space-y-4">
-            <div className="border-b border-slate-100 dark:border-slate-800 pb-2">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Skills, Typing & Languages</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Crucial for BPS Clerk & Computer Operator tests (WPM typing, MS Office, languages).
-              </p>
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Skills, Typing & Languages</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Crucial for BPS Clerk & Computer Operator tests (WPM typing, MS Office, languages).
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAISuggestKeywords}
+                disabled={isSuggestingKeywords}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold hover:opacity-90 shadow-sm transition-all disabled:opacity-50"
+              >
+                {isSuggestingKeywords ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
+                <span>{isSuggestingKeywords ? 'Analyzing...' : 'AI Suggest Keywords'}</span>
+              </button>
             </div>
+
+            {/* Keyword Suggestions Chips */}
+            {keywordSuggestions.length > 0 && (
+              <div className="p-3 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 space-y-1.5">
+                <span className="text-[11px] font-bold text-emerald-900 dark:text-emerald-200 block">
+                  Click to add recommended keywords for "{data.targetHeadline || 'your target role'}":
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {keywordSuggestions.map((kw, i) => {
+                    const alreadyHas = data.skills.some(s => s.name.toLowerCase() === kw.toLowerCase());
+                    if (alreadyHas) return null;
+                    return (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => {
+                          const newSk: SkillEntry = {
+                            id: 'sk-' + Date.now() + i,
+                            name: kw,
+                            category: 'technical',
+                            level: 'Proficient',
+                          };
+                          updateField('skills', [...data.skills, newSk]);
+                        }}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-emerald-300 dark:border-emerald-700 text-slate-800 dark:text-slate-200 text-xs font-medium hover:bg-emerald-100 transition-colors"
+                      >
+                        <Plus size={11} className="text-emerald-600" />
+                        <span>{kw}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="flex gap-2">
               <input
@@ -1202,10 +1373,11 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ data, onChange }) =>
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
                 {[
                   { id: 'sts-govt', name: 'STS & Govt Official', desc: 'Screening table format with division breakdown' },
                   { id: 'fortune-500', name: 'Fortune 500 Standard', desc: 'Harvard/Wharton single-column ATS format for global tech & MNCs' },
+                  { id: 'tech-compact', name: '⚡ Tech & Digital', desc: 'High-density developer/analyst layout with project tech stack' },
                   { id: 'modern-ats', name: 'Modern ATS', desc: 'Clean dual-column layout for corporate jobs' },
                   { id: 'executive', name: 'Executive Sidebar', desc: 'Two-tone dark sidebar with contact & skills' },
                   { id: 'minimal', name: 'Classic Minimal', desc: 'Timeless typographic serif layout' },

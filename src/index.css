@@ -199,3 +199,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* Typography scale classes for accessible and comfortable exam reading */
+html.text-scale-large {
+  font-size: 110%;
+}
+html.text-scale-xlarge {
+  font-size: 120%;
+}

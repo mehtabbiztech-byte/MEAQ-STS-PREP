@@ -3,11 +3,14 @@ import { ResumeData } from '../types/resume';
 import { 
   SAMPLE_STS_CANDIDATE_RESUME, 
   SAMPLE_CORPORATE_RESUME,
-  SAMPLE_FORTUNE_500_RESUME 
+  SAMPLE_FORTUNE_500_RESUME,
+  SAMPLE_TECH_RESUME
 } from '../data/resumeSampleData';
 import { ResumeEditor } from '../components/resume/ResumeEditor';
 import { ResumePreview } from '../components/resume/ResumePreview';
 import { Fortune500HubModal } from '../components/resume/Fortune500HubModal';
+import { AtsScoreWidget } from '../components/resume/AtsScoreWidget';
+import { AtsScannerModal } from '../components/resume/AtsScannerModal';
 import { 
   Printer, 
   Download, 
@@ -24,7 +27,11 @@ import {
   UploadCloud,
   HelpCircle,
   Building2,
-  ShieldCheck
+  ShieldCheck,
+  Zap,
+  ZoomIn,
+  ZoomOut,
+  Maximize2
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -50,6 +57,8 @@ export const ResumeView: React.FC = () => {
   const [copiedText, setCopiedText] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving'>('saved');
   const [showF500Modal, setShowF500Modal] = useState(false);
+  const [showScannerModal, setShowScannerModal] = useState(false);
+  const [previewScale, setPreviewScale] = useState<number>(1);
 
   // Auto-save to localStorage on every keystroke
   useEffect(() => {
@@ -70,41 +79,79 @@ export const ResumeView: React.FC = () => {
     window.print();
   };
 
-  // Copy Plain Text for Online Portals (STS IBA, SPSC, Rozee)
-  const handleCopyPlainText = () => {
-    const lines = [
+  // Generate plain text format
+  const generatePlainText = () => {
+    return [
+      `============================================================`,
       `CURRICULUM VITAE: ${resumeData.fullName.toUpperCase()}`,
       resumeData.targetHeadline ? `TARGET: ${resumeData.targetHeadline}` : '',
-      `----------------------------------------`,
-      `Father's Name: ${resumeData.fatherName}`,
-      `CNIC: ${resumeData.cnic}`,
-      `Domicile: ${resumeData.domicileDistrict} (${resumeData.province})`,
-      `Phone: ${resumeData.phone}`,
-      `Email: ${resumeData.email}`,
-      `Address: ${resumeData.address}, ${resumeData.city}`,
-      resumeData.hafizEQuran ? `Hafiz-e-Quran: Yes (Eligible for Quota Marks)` : '',
-      `\n--- PROFESSIONAL SUMMARY ---`,
+      `============================================================`,
+      `CONTACT & BIO DETAILS`,
+      `------------------------------------------------------------`,
+      resumeData.fatherName ? `Father's Name : ${resumeData.fatherName}` : '',
+      resumeData.cnic ? `CNIC No       : ${resumeData.cnic}` : '',
+      resumeData.domicileDistrict ? `Domicile      : ${resumeData.domicileDistrict} (${resumeData.province})` : '',
+      `Phone         : ${resumeData.phone}`,
+      `Email         : ${resumeData.email}`,
+      resumeData.city ? `Location      : ${resumeData.address ? `${resumeData.address}, ` : ''}${resumeData.city}` : '',
+      resumeData.linkedinUrl ? `LinkedIn      : ${resumeData.linkedinUrl}` : '',
+      resumeData.githubUrl ? `GitHub        : ${resumeData.githubUrl}` : '',
+      resumeData.portfolioUrl ? `Portfolio     : ${resumeData.portfolioUrl}` : '',
+      resumeData.hafizEQuran ? `Hafiz-e-Quran : Yes (Eligible for Quota Marks)` : '',
+      ``,
+      `PROFESSIONAL SUMMARY`,
+      `------------------------------------------------------------`,
       resumeData.professionalSummary,
-      `\n--- EDUCATION & QUALIFICATIONS ---`,
-      ...resumeData.education.map(
-        (e) => `• ${e.degreeTitle} (${e.degreeLevel}) | ${e.instituteOrBoard} | Year: ${e.passingYear} | Marks: ${e.obtainedMarks}/${e.totalMarks} (${e.percentageOrCgpa || e.divisionOrGrade})`
-      ),
-      `\n--- WORK EXPERIENCE ---`,
-      ...resumeData.experience.map(
-        (exp) => `• ${exp.designation} at ${exp.organization} (${exp.startDate} - ${exp.isCurrent ? 'Present' : exp.endDate})\n  ${exp.responsibilities.join('; ')}`
-      ),
-      `\n--- SKILLS & PROFICIENCIES ---`,
-      resumeData.skills.map((s) => `${s.name} (${s.level})`).join(', '),
-      `\n--- CERTIFICATIONS & LICENSES ---`,
-      ...resumeData.certifications.map(
-        (c) => `• ${c.title} - ${c.issuingAuthority} (${c.issueYear})`
-      ),
-    ].filter(Boolean);
+      ``,
+      `EDUCATION & QUALIFICATIONS`,
+      `------------------------------------------------------------`,
+      ...resumeData.education.map(e => `• ${e.degreeTitle} (${e.degreeLevel})\n  ${e.instituteOrBoard} | Year: ${e.passingYear} | Result: ${e.percentageOrCgpa || e.divisionOrGrade}${e.majorSubjects ? ` | Majors: ${e.majorSubjects}` : ''}`),
+      ``,
+      `WORK EXPERIENCE`,
+      `------------------------------------------------------------`,
+      ...resumeData.experience.map(exp => `• ${exp.designation} at ${exp.organization} (${exp.startDate} - ${exp.isCurrent ? 'Present' : exp.endDate})\n  Location: ${exp.location} (${exp.employmentType})\n  Responsibilities:\n  ${exp.responsibilities.map(r => `  - ${r}`).join('\n')}`),
+      ``,
+      ...(resumeData.projects && resumeData.projects.length > 0 ? [
+        `KEY PROJECTS`,
+        `------------------------------------------------------------`,
+        ...resumeData.projects.map(p => `• ${p.title}${p.role ? ` (${p.role})` : ''}${p.techStack ? ` [Stack: ${p.techStack}]` : ''}\n  ${p.highlights.map(h => `  - ${h}`).join('\n')}`),
+        ``,
+      ] : []),
+      `SKILLS & PROFICIENCIES`,
+      `------------------------------------------------------------`,
+      resumeData.skills.map(s => `• ${s.name} (${s.level})`).join('\n'),
+      ``,
+      ...(resumeData.certifications && resumeData.certifications.length > 0 ? [
+        `CERTIFICATIONS & LICENSES`,
+        `------------------------------------------------------------`,
+        ...resumeData.certifications.map(c => `• ${c.title} - ${c.issuingAuthority} (${c.issueYear})`),
+        ``,
+      ] : []),
+      `============================================================`,
+    ].filter(Boolean).join('\n');
+  };
 
-    navigator.clipboard.writeText(lines.join('\n')).then(() => {
+  // Copy Plain Text for Online Portals (STS IBA, SPSC, Rozee)
+  const handleCopyPlainText = () => {
+    const text = generatePlainText();
+    navigator.clipboard.writeText(text).then(() => {
       setCopiedText(true);
       setTimeout(() => setCopiedText(false), 2500);
     });
+  };
+
+  // Download Plain Text (.txt)
+  const handleDownloadTxt = () => {
+    const text = generatePlainText();
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.href = url;
+    downloadAnchor.download = `Resume_${resumeData.fullName.replace(/\s+/g, '_') || 'Candidate'}.txt`;
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    URL.revokeObjectURL(url);
   };
 
   // Export JSON
@@ -183,37 +230,34 @@ export const ResumeView: React.FC = () => {
               <span>ATS & Public Sector Scrutiny Ready</span>
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-display tracking-tight text-white">
-              Create Resume / CV Builder
+              ATS Resume & CV Builder
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm max-w-2xl mt-1.5 leading-relaxed">
-              Design a verified, scrutiny-compliant CV for Sukkur IBA STS (BPS 05–15), SPSC, FPSC, STEDA Teaching Licenses, and modern corporate job openings.
+              Build an automated ATS-compliant CV for Sukkur IBA STS (BPS 05–15), SPSC, FPSC, STEDA Teaching Licenses, or global tech and corporate job openings with live keyword match scoring.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <button
+              onClick={() => setShowScannerModal(true)}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black shadow-lg border border-emerald-400/40 transition-transform active:scale-95"
+            >
+              <Zap size={15} />
+              <span>Keyword Matcher</span>
+            </button>
+            <button
               onClick={() => setShowF500Modal(true)}
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-black shadow-lg border border-indigo-400/40 transition-transform active:scale-95"
             >
               <Building2 size={15} />
-              <span>Fortune 500 Portal & Apply</span>
+              <span>F500 Portal</span>
             </button>
             <button
               onClick={handlePrint}
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-slate-950 text-xs font-extrabold hover:bg-slate-100 shadow-lg transition-transform active:scale-95"
             >
               <Printer size={15} />
-              <span>Print / Download PDF</span>
-            </button>
-            <button
-              onClick={() => {
-                setTab('jobs');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-700/60 hover:bg-emerald-700 text-white text-xs font-bold border border-emerald-500/40 transition-colors"
-            >
-              <Briefcase size={15} />
-              <span>View Open Jobs</span>
+              <span>Print / PDF</span>
             </button>
           </div>
         </div>
@@ -234,7 +278,15 @@ export const ResumeView: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
           >
             <Sparkles size={13} />
-            <span>Load STS Candidate Sample</span>
+            <span>STS Candidate</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setResumeData(SAMPLE_TECH_RESUME)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 dark:bg-teal-950/60 border border-teal-300 dark:border-teal-700 text-teal-800 dark:text-teal-300 text-xs font-bold hover:bg-teal-100 dark:hover:bg-teal-900/60 transition-colors"
+          >
+            <Zap size={13} />
+            <span>Tech & Digital</span>
           </button>
           <button
             type="button"
@@ -242,7 +294,7 @@ export const ResumeView: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-750 transition-colors"
           >
             <Briefcase size={13} />
-            <span>Load Corporate ATS Sample</span>
+            <span>Corporate ATS</span>
           </button>
           <button
             type="button"
@@ -250,7 +302,7 @@ export const ResumeView: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-300 dark:border-indigo-700 text-indigo-800 dark:text-indigo-300 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors"
           >
             <Building2 size={13} />
-            <span>Load Fortune 500 ATS Sample</span>
+            <span>Fortune 500</span>
           </button>
           <button
             type="button"
@@ -267,7 +319,7 @@ export const ResumeView: React.FC = () => {
             type="button"
             onClick={handleCopyPlainText}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 transition-colors"
-            title="Copy formatted text for online job portals"
+            title="Copy formatted text for online job portals (STS IBA, SPSC, OTS)"
           >
             {copiedText ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
             <span>{copiedText ? 'Copied Text!' : 'Copy Portal Text'}</span>
@@ -275,12 +327,22 @@ export const ResumeView: React.FC = () => {
 
           <button
             type="button"
+            onClick={handleDownloadTxt}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold"
+            title="Download plain text .txt resume file"
+          >
+            <FileText size={13} />
+            <span className="hidden sm:inline">.TXT</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleExportJson}
             className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold"
-            title="Export resume backup file"
+            title="Export resume JSON backup file"
           >
             <Download size={13} />
-            <span className="hidden sm:inline">Export</span>
+            <span className="hidden sm:inline">JSON</span>
           </button>
 
           <label className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold cursor-pointer">
@@ -299,6 +361,14 @@ export const ResumeView: React.FC = () => {
           </span>
         </div>
       </div>
+
+      {/* Real-time ATS Score & Compliance Audit Engine */}
+      <AtsScoreWidget
+        data={resumeData}
+        onUpdate={setResumeData}
+        onOpenScanner={() => setShowScannerModal(true)}
+        onOpenF500={() => setShowF500Modal(true)}
+      />
 
       {/* Mobile Toggle Bar: Form Editor vs Preview */}
       <div className="flex lg:hidden rounded-2xl bg-slate-200 dark:bg-slate-800 p-1">
@@ -343,21 +413,54 @@ export const ResumeView: React.FC = () => {
               <Eye size={14} className="text-emerald-600" />
               <span>Live A4 Document Preview</span>
             </div>
-            <button
-              onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 hover:underline font-bold"
-            >
-              <Printer size={13} />
-              <span>Print to PDF</span>
-            </button>
+
+            <div className="flex items-center gap-3">
+              {/* Zoom Controls */}
+              <div className="inline-flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5 border border-slate-200 dark:border-slate-700">
+                {[
+                  { label: '75%', val: 0.75 },
+                  { label: '90%', val: 0.9 },
+                  { label: '100%', val: 1.0 },
+                ].map((z) => (
+                  <button
+                    key={z.label}
+                    type="button"
+                    onClick={() => setPreviewScale(z.val)}
+                    className={`px-2 py-0.5 rounded text-[10.5px] font-bold transition-colors ${
+                      previewScale === z.val
+                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                        : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    {z.label}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={handlePrint}
+                className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 hover:underline font-bold"
+              >
+                <Printer size={13} />
+                <span>Print to PDF</span>
+              </button>
+            </div>
           </div>
 
           {/* Scaled Preview Frame */}
-          <div className="bg-slate-200/80 dark:bg-slate-950 p-2 sm:p-5 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-inner overflow-x-auto">
-            <ResumePreview data={resumeData} />
+          <div className="bg-slate-200/80 dark:bg-slate-950 p-2 sm:p-5 rounded-2xl border border-slate-300 dark:border-slate-800 shadow-inner overflow-x-auto min-h-[600px]">
+            <ResumePreview data={resumeData} scale={previewScale} />
           </div>
         </div>
       </div>
+
+      {/* ATS Job Keyword Scanner Modal */}
+      <AtsScannerModal
+        isOpen={showScannerModal}
+        onClose={() => setShowScannerModal(false)}
+        resumeData={resumeData}
+        onUpdateResumeData={setResumeData}
+      />
 
       {/* Fortune 500 Portal & Application Hub Modal */}
       <Fortune500HubModal

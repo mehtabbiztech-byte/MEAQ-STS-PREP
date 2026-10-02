@@ -35,7 +35,7 @@ export const MeaningText: React.FC<MeaningTextProps> = ({ text, className, allWo
           <span
             key={index}
             data-word-meaning-word={part}
-            className="cursor-help rounded px-0.5 underline decoration-dotted decoration-emerald-500/70 underline-offset-2 hover:bg-emerald-100 hover:text-emerald-900 dark:hover:bg-emerald-950 dark:hover:text-emerald-100"
+            className="cursor-help rounded px-0.5 font-medium underline decoration-dotted decoration-emerald-600/80 underline-offset-4 hover:bg-emerald-100/80 hover:text-emerald-900 dark:decoration-emerald-400/80 dark:hover:bg-emerald-950/80 dark:hover:text-emerald-100 transition-colors"
             title={`Click for the meaning of “${part}”`}
             onClick={(event) => {
               event.preventDefault();

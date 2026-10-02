@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { useLayout } from '../context/LayoutContext';
 import { 
   Filter, 
   Search, 
@@ -10,18 +11,29 @@ import {
   EyeOff, 
   Share2, 
   AlertTriangle, 
-  Sparkles,
-  BookOpen,
-  ArrowRight,
-  RotateCcw,
-  Check,
-  MessageSquare
+  Sparkles, 
+  BookOpen, 
+  ArrowRight, 
+  RotateCcw, 
+  Check, 
+  MessageSquare,
+  LayoutGrid,
+  List,
+  Columns,
+  ListOrdered,
+  Layers,
+  ChevronRight,
+  HelpCircle,
+  Clock,
+  Sparkle
 } from 'lucide-react';
 import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { MCQ } from '../types';
 import { useCmsContent } from '../context/CmsContentContext';
 import { MeaningText } from '../components/MeaningText';
+
+export type McqDisplayLayout = 'standard-paper' | 'grid' | 'split-pane' | 'omr-compact';
 
 export const McqsView: React.FC = () => {
   const { mcqs: liveMcqs } = useCmsContent();
@@ -37,6 +49,8 @@ export const McqsView: React.FC = () => {
     setTab
   } = useApp();
 
+  const { getContainerClass, getContentSpacingClass } = useLayout();
+
   const [searchFilter, setSearchFilter] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState<string>('All');
   const [examTagFilter, setExamTagFilter] = useState<string>('All');
@@ -46,6 +60,23 @@ export const McqsView: React.FC = () => {
   const [reportSuccess, setReportSuccess] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+
+  // Content Layout State
+  const [displayLayout, setDisplayLayout] = useState<McqDisplayLayout>(() => {
+    const saved = localStorage.getItem('matb_mcqs_layout');
+    if (saved && ['standard-paper', 'grid', 'split-pane', 'omr-compact'].includes(saved)) {
+      return saved as McqDisplayLayout;
+    }
+    return 'standard-paper';
+  });
+
+  const handleLayoutChange = (layout: McqDisplayLayout) => {
+    setDisplayLayout(layout);
+    localStorage.setItem('matb_mcqs_layout', layout);
+  };
+
+  // Active question for split-pane master-detail view
+  const [activeSplitId, setActiveSplitId] = useState<string | null>(null);
 
   // Active category object
   const activeCategory = useMemo(() => {
@@ -78,11 +109,19 @@ export const McqsView: React.FC = () => {
       return true;
     });
   }, [allMcqs, selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
+
   const pageCount = Math.max(1, Math.ceil(filteredMcqs.length / pageSize));
   const visibleMcqs = filteredMcqs.slice((page - 1) * pageSize, page * pageSize);
 
   useEffect(() => setPage(1), [selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
   useEffect(() => { if (page > pageCount) setPage(pageCount); }, [page, pageCount]);
+
+  // Sync split-pane active question
+  useEffect(() => {
+    if (visibleMcqs.length > 0 && (!activeSplitId || !visibleMcqs.some(m => m.id === activeSplitId))) {
+      setActiveSplitId(visibleMcqs[0].id);
+    }
+  }, [visibleMcqs, activeSplitId]);
 
   const toggleReveal = (id: string) => {
     setRevealedAnswers((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -99,7 +138,7 @@ export const McqsView: React.FC = () => {
   };
 
   const handleShare = (mcq: MCQ) => {
-    const text = `MEQSA Study Platform MCQ:\n${mcq.question}\nOptions:\nA) ${mcq.options[0]}\nB) ${mcq.options[1]}\nC) ${mcq.options[2]}\nD) ${mcq.options[3]}\n\nPractice more on MEQSA Study Platform!`;
+    const text = `MATB STS Prep MCQ:\n${mcq.question}\nOptions:\nA) ${mcq.options[0]}\nB) ${mcq.options[1]}\nC) ${mcq.options[2]}\nD) ${mcq.options[3]}\n\nPractice more on MATB STS Prep!`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
       setCopiedId(mcq.id);
@@ -116,86 +155,80 @@ export const McqsView: React.FC = () => {
     }, 1200);
   };
 
+  // Toggle reveal all in visible page
+  const [revealAll, setRevealAll] = useState(false);
+  const handleToggleRevealAll = () => {
+    const next = !revealAll;
+    setRevealAll(next);
+    const newRevealed: Record<string, boolean> = {};
+    if (next) {
+      visibleMcqs.forEach(m => { newRevealed[m.id] = true; });
+    }
+    setRevealedAnswers(newRevealed);
+  };
+
+  const handleResetChoices = () => {
+    setUserSelections({});
+    setRevealedAnswers({});
+    setRevealAll(false);
+  };
+
+  const activeSplitMcq = useMemo(() => {
+    return visibleMcqs.find(m => m.id === activeSplitId) || visibleMcqs[0] || null;
+  }, [visibleMcqs, activeSplitId]);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className={`space-y-6 sm:space-y-8 ${getContentSpacingClass()}`}>
       
       {/* Category Header Banner */}
-      <div className="bg-white dark:bg-slate-900 border border-purple-100 dark:border-purple-900/40 rounded-2xl p-6 shadow-xs">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-pink-400 mb-1">
-              <span>MCQ Practice Bank</span>
-              {activeCategory && <span>• {activeCategory.name}</span>}
+      <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+        <div className="relative z-10 max-w-3xl">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-bold uppercase tracking-wider">
+              {activeCategory ? activeCategory.name : 'All Subjects'}
+            </span>
+            <span className="text-slate-400 text-xs">• 15,000+ Verified Practice Questions</span>
+          </div>
+
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight font-display mb-3">
+            {activeCategory ? activeCategory.name : 'Master MCQs Question Bank'}
+          </h1>
+          <p className="text-emerald-100/90 text-sm sm:text-base leading-relaxed">
+            {activeCategory 
+              ? activeCategory.description 
+              : 'Authentic syllabus questions aligned with STS IBA, STEDA Teaching License, FPSC One-Paper, and SPSC CCE exam blueprints.'}
+          </p>
+
+          {activeCategory && activeCategory.subtopics.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-4">
+              {activeCategory.subtopics.map((sub, i) => (
+                <span 
+                  key={i} 
+                  className="px-2.5 py-1 rounded-lg bg-white/10 text-white/90 text-xs font-medium hover:bg-white/20 transition cursor-pointer"
+                  onClick={() => setSearchFilter(sub)}
+                >
+                  {sub}
+                </span>
+              ))}
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-              {activeCategory ? `${activeCategory.name} MCQs` : 'All Subject MCQs & Solved Questions'}
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400 text-sm mt-1 max-w-2xl">
-              {activeCategory 
-                ? activeCategory.description 
-                : 'Browse thousands of syllabus-aligned multiple choice questions with authentic rationales, past paper references, and explanations.'}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                setTab('quiz');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-xs sm:text-sm shadow-md transition cursor-pointer flex items-center gap-1.5"
-            >
-              <span>Test Mode Quiz</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+          )}
         </div>
 
-        {/* Official Subject Modules as Bold Buttons — No horizontal scroll, responsive mobile view */}
-        <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
-          <div className="text-[11px] font-extrabold uppercase tracking-wider text-purple-600 dark:text-pink-400 mb-3">
-            Select Subject Module
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap items-center gap-2 sm:gap-2.5">
-            <button
-              onClick={() => setSelectedCategorySlug(null)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer border flex items-center justify-center ${
-                selectedCategorySlug === null
-                  ? 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white border-transparent shadow-md shadow-purple-950/20 font-extrabold'
-                  : 'bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:border-purple-300'
-              }`}
-            >
-              All Subjects
-            </button>
-            {POPULAR_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategorySlug(cat.slug)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer border flex items-center justify-center ${
-                  selectedCategorySlug === cat.slug
-                    ? 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 text-white border-transparent shadow-md shadow-purple-950/20 font-extrabold'
-                    : 'bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:border-purple-300'
-                }`}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Ambient decorative circle */}
+        <div className="absolute -right-12 -bottom-12 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
       </div>
 
-      {/* Filter and Search Toolbar */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
-        
-        {/* Search Input */}
-        <div className="relative w-full sm:w-80">
+      {/* Filter and Search Bar */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        {/* Search */}
+        <div className="relative flex-1 min-w-[220px]">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
           <input
             type="text"
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
-            placeholder="Search within these MCQs..."
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-purple-500"
+            placeholder="Search questions, keywords, or topics..."
+            className="w-full pl-9 pr-12 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
           />
           {searchFilter && (
             <button
@@ -207,7 +240,7 @@ export const McqsView: React.FC = () => {
           )}
         </div>
 
-        {/* Dropdown Filters — No horizontal scroll */}
+        {/* Dropdown Filters */}
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           {/* Exam Tag */}
           <div className="flex items-center gap-1 text-xs">
@@ -218,14 +251,13 @@ export const McqsView: React.FC = () => {
               className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-medium focus:outline-hidden cursor-pointer"
             >
               <option value="All">All Exams</option>
-              <option value="CSS">CSS</option>
-              <option value="FPSC">FPSC</option>
-              <option value="PPSC">PPSC</option>
-              <option value="SPSC">SPSC</option>
               <option value="STS">STS (IBA Sukkur)</option>
+              <option value="Teaching License">STEDA Teaching License</option>
+              <option value="FPSC">FPSC</option>
+              <option value="SPSC">SPSC</option>
+              <option value="CSS">CSS</option>
+              <option value="PPSC">PPSC</option>
               <option value="NTS">NTS</option>
-              <option value="FIA">FIA</option>
-              <option value="Police">Police</option>
             </select>
           </div>
 
@@ -245,161 +277,552 @@ export const McqsView: React.FC = () => {
           </div>
 
           <div className="text-xs text-slate-500 dark:text-slate-400 font-medium pl-2 whitespace-nowrap">
-            Found <strong className="text-purple-600 dark:text-pink-400">{filteredMcqs.length.toLocaleString()}</strong> questions
+            Found <strong className="text-emerald-600 dark:text-emerald-400">{filteredMcqs.length.toLocaleString()}</strong> questions
           </div>
         </div>
       </div>
 
-      {/* MCQs List */}
-      <div className="space-y-6">
-        {filteredMcqs.length === 0 ? (
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center text-slate-500 dark:text-slate-400">
-            <BookOpen className="w-10 h-10 mx-auto text-slate-400 mb-3" />
-            <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">No MCQs Match Your Current Filters</h3>
-            <p className="text-xs mt-1">Try resetting the difficulty or exam commission filter.</p>
+      {/* Advanced Layout & Display Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
+        
+        {/* Layout Switcher Buttons */}
+        <div className="flex items-center gap-1">
+          <span className="text-xs font-bold text-slate-500 dark:text-slate-400 mr-1.5 hidden sm:inline">
+            Layout:
+          </span>
+
+          <div className="inline-flex rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-0.5 shadow-2xs">
+            {/* 1. Standard Paper (Official single-col format) */}
             <button
-              onClick={() => {
-                setSearchFilter('');
-                setDifficultyFilter('All');
-                setExamTagFilter('All');
-                setSelectedCategorySlug(null);
-              }}
-              className="mt-4 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold cursor-pointer"
+              onClick={() => handleLayoutChange('standard-paper')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                displayLayout === 'standard-paper'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+              }`}
+              title="Official Standard Test Paper layout"
             >
-              Reset Filters
+              <ListOrdered className="w-3.5 h-3.5" />
+              <span>Standard Paper</span>
+            </button>
+
+            {/* 2. Grid Cards (Modern multi-col) */}
+            <button
+              onClick={() => handleLayoutChange('grid')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                displayLayout === 'grid'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+              }`}
+              title="Card Grid layout"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>2-Col Grid</span>
+            </button>
+
+            {/* 3. Split Reading Pane */}
+            <button
+              onClick={() => handleLayoutChange('split-pane')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                displayLayout === 'split-pane'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+              }`}
+              title="Split Master-Detail reading pane"
+            >
+              <Columns className="w-3.5 h-3.5" />
+              <span>Split Pane</span>
+            </button>
+
+            {/* 4. OMR Speed Drill */}
+            <button
+              onClick={() => handleLayoutChange('omr-compact')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                displayLayout === 'omr-compact'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+              }`}
+              title="OMR Bubble Speed Drill layout"
+            >
+              <List className="w-3.5 h-3.5" />
+              <span>OMR Sheet</span>
             </button>
           </div>
-        ) : (
-          visibleMcqs.map((mcq, mcqIndex) => {
+        </div>
+
+        {/* Practice Tools */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleToggleRevealAll}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+            title="Reveal or hide all correct answers at once"
+          >
+            {revealAll ? <EyeOff className="w-3.5 h-3.5 text-rose-500" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
+            <span>{revealAll ? 'Hide Answers' : 'Reveal All'}</span>
+          </button>
+
+          {Object.keys(userSelections).length > 0 && (
+            <button
+              onClick={handleResetChoices}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-500 hover:text-rose-600 transition cursor-pointer"
+              title="Clear all selections on this page"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Reset</span>
+            </button>
+          )}
+        </div>
+
+      </div>
+
+      {/* MCQs Render Container based on selected layout */}
+      {filteredMcqs.length === 0 ? (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center text-slate-500 dark:text-slate-400">
+          <BookOpen className="w-10 h-10 mx-auto text-slate-400 mb-3" />
+          <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">No MCQs Match Your Current Filters</h3>
+          <p className="text-xs mt-1">Try resetting the difficulty or exam commission filter.</p>
+          <button
+            onClick={() => {
+              setSearchFilter('');
+              setDifficultyFilter('All');
+              setExamTagFilter('All');
+              setSelectedCategorySlug(null);
+            }}
+            className="mt-4 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold cursor-pointer"
+          >
+            Reset Filters
+          </button>
+        </div>
+      ) : displayLayout === 'split-pane' ? (
+        /* 1. Split-Pane Master-Detail Layout */
+        <div className="flex flex-col lg:flex-row items-start gap-6">
+          
+          {/* Left Master List */}
+          <div className="w-full lg:w-5/12 space-y-2.5 max-h-[82vh] overflow-y-auto pr-1">
+            <div className="text-xs font-bold text-slate-500 mb-1 px-1">
+              Select question to inspect explanation &amp; syllabus notes:
+            </div>
+            {visibleMcqs.map((mcq, idx) => {
+              const qNumber = (page - 1) * pageSize + idx + 1;
+              const isSelected = activeSplitId === mcq.id;
+              const userChoice = userSelections[mcq.id];
+              const isCorrect = userChoice === mcq.correctIndex;
+              const isAnswered = userChoice !== undefined;
+
+              return (
+                <div
+                  key={mcq.id}
+                  onClick={() => setActiveSplitId(mcq.id)}
+                  className={`p-3.5 rounded-2xl border text-left cursor-pointer transition flex items-start justify-between gap-3 ${
+                    isSelected
+                      ? 'border-emerald-500 bg-emerald-50/70 dark:bg-emerald-950/40 ring-2 ring-emerald-500/30'
+                      : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-emerald-300 dark:hover:border-emerald-700'
+                  }`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1 text-[11px]">
+                      <span className="font-extrabold text-emerald-700 dark:text-emerald-400">
+                        Q #{qNumber}
+                      </span>
+                      <span className="text-slate-400">•</span>
+                      <span className="text-slate-500 dark:text-slate-400 truncate">
+                        {mcq.category.replace('-', ' ')}
+                      </span>
+                    </div>
+                    <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 line-clamp-2 leading-relaxed">
+                      {mcq.question}
+                    </p>
+                  </div>
+
+                  <div className="shrink-0 flex flex-col items-end gap-1.5">
+                    {isAnswered ? (
+                      isCorrect ? (
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 text-[10px] font-bold">
+                          Correct
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 text-[10px] font-bold">
+                          Wrong
+                        </span>
+                      )
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 text-[10px] font-medium">
+                        Unattempted
+                      </span>
+                    )}
+
+                    {isBookmarked(mcq.id) && (
+                      <Bookmark className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Right Detail Reading Pane */}
+          {activeSplitMcq && (
+            <div className="w-full lg:w-7/12 sticky top-20 bg-white dark:bg-slate-900 border-2 border-emerald-500/40 rounded-3xl p-6 sm:p-7 shadow-xl">
+              {(() => {
+                const mcq = activeSplitMcq;
+                const isRevealed = revealedAnswers[mcq.id] || false;
+                const userChoice = userSelections[mcq.id];
+                const bookmarked = isBookmarked(mcq.id);
+                const qNumber = (page - 1) * pageSize + visibleMcqs.findIndex(m => m.id === mcq.id) + 1;
+
+                return (
+                  <div className="space-y-5">
+                    {/* Header */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
+                      <div className="flex items-center gap-2">
+                        <span className="px-3 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-extrabold text-xs uppercase">
+                          Question #{qNumber}
+                        </span>
+                        <span className="text-xs font-semibold text-slate-500">
+                          {mcq.category.replace('-', ' ')}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        {mcq.examTags?.map((tag, i) => (
+                          <span key={i} className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-600 dark:text-slate-300">
+                            {tag}
+                          </span>
+                        ))}
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold">
+                          {mcq.difficulty}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Question text */}
+                    <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white leading-relaxed">
+                      <MeaningText text={mcq.question} />
+                    </h2>
+
+                    {/* Options list */}
+                    <div className="space-y-2.5">
+                      {mcq.options.map((option, idx) => {
+                        const isSelected = userChoice === idx;
+                        const isCorrect = idx === mcq.correctIndex;
+                        let optionClass = 'border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200';
+
+                        if (userChoice !== undefined) {
+                          if (isCorrect) {
+                            optionClass = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-100 font-semibold ring-1 ring-emerald-500';
+                          } else if (isSelected && !isCorrect) {
+                            optionClass = 'border-rose-500 bg-rose-50 dark:bg-rose-950/60 text-rose-900 dark:text-rose-100 font-semibold ring-1 ring-rose-500';
+                          }
+                        } else if (isRevealed && isCorrect) {
+                          optionClass = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-100 font-semibold';
+                        }
+
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => handleSelectOption(mcq, idx)}
+                            className={`w-full p-3.5 rounded-xl border text-left text-sm transition flex items-center justify-between cursor-pointer ${optionClass}`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="w-7 h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-black flex items-center justify-center shrink-0">
+                                {String.fromCharCode(65 + idx)}
+                              </span>
+                              <MeaningText text={option} className="leading-snug" />
+                            </div>
+
+                            {userChoice !== undefined && isCorrect && (
+                              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                            )}
+                            {userChoice !== undefined && isSelected && !isCorrect && (
+                              <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Solution Explanation Box */}
+                    {(isRevealed || userChoice !== undefined) && (
+                      <div className="p-4 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700 space-y-2 animate-in fade-in duration-150">
+                        <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-800 dark:text-emerald-300">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          <span>Correct Answer: Option {String.fromCharCode(65 + mcq.correctIndex)} — {mcq.options[mcq.correctIndex]}</span>
+                        </div>
+                        <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                          <MeaningText text={mcq.explanation} />
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Action Bar */}
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => toggleReveal(mcq.id)}
+                          className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer flex items-center gap-1.5"
+                        >
+                          {isRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                          <span>{isRevealed ? 'Hide Explanation' : 'Show Explanation'}</span>
+                        </button>
+
+                        <button
+                          onClick={() => toggleBookmark(mcq.id)}
+                          className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                            bookmarked
+                              ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                              : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                          }`}
+                        >
+                          <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? 'fill-emerald-600 text-emerald-600' : ''}`} />
+                          <span>{bookmarked ? 'Saved' : 'Save'}</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => handleShare(mcq)}
+                          className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-emerald-600 transition"
+                          title="Share question"
+                        >
+                          {copiedId === mcq.id ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+                        </button>
+                        <button
+                          onClick={() => setReportedMcqId(mcq.id)}
+                          className="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-rose-600 transition"
+                          title="Report discrepancy"
+                        >
+                          <AlertTriangle className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+        </div>
+      ) : displayLayout === 'omr-compact' ? (
+        /* 2. OMR Speed Drill Sheet Layout */
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-7 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 text-xs">
+            <span className="font-bold text-slate-700 dark:text-slate-300">
+              STS / SPSC OMR Rapid Practice Sheet
+            </span>
+            <span className="text-slate-500">
+              Click options A, B, C, or D directly to record response
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {visibleMcqs.map((mcq, mcqIndex) => {
+              const qNumber = (page - 1) * pageSize + mcqIndex + 1;
+              const isRevealed = revealedAnswers[mcq.id] || false;
+              const userChoice = userSelections[mcq.id];
+              const isAnswered = userChoice !== undefined;
+              const isCorrect = userChoice === mcq.correctIndex;
+
+              return (
+                <div 
+                  key={mcq.id}
+                  className={`p-3 rounded-2xl border transition ${
+                    isAnswered 
+                      ? isCorrect 
+                        ? 'border-emerald-300 dark:border-emerald-800 bg-emerald-50/30 dark:bg-emerald-950/20' 
+                        : 'border-rose-300 dark:border-rose-800 bg-rose-50/30 dark:bg-rose-950/20'
+                      : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40'
+                  }`}
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-start gap-3 min-w-0 flex-1">
+                      <span className="px-2 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-black text-xs shrink-0">
+                        {qNumber}
+                      </span>
+                      <div className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">
+                        <MeaningText text={mcq.question} />
+                      </div>
+                    </div>
+
+                    {/* OMR Radio Bubbles */}
+                    <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
+                      {mcq.options.map((option, idx) => {
+                        const isSelected = userChoice === idx;
+                        const isOptionCorrect = idx === mcq.correctIndex;
+
+                        let bubbleStyle = 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-emerald-500';
+                        if (userChoice !== undefined) {
+                          if (isOptionCorrect) {
+                            bubbleStyle = 'border-emerald-500 bg-emerald-600 text-white font-black shadow-xs';
+                          } else if (isSelected && !isOptionCorrect) {
+                            bubbleStyle = 'border-rose-500 bg-rose-600 text-white font-black shadow-xs';
+                          }
+                        }
+
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => handleSelectOption(mcq, idx)}
+                            className={`w-8 h-8 rounded-full border-2 text-xs font-bold flex items-center justify-center transition cursor-pointer ${bubbleStyle}`}
+                            title={`Option ${String.fromCharCode(65 + idx)}: ${option}`}
+                          >
+                            {String.fromCharCode(65 + idx)}
+                          </button>
+                        );
+                      })}
+
+                      <button
+                        onClick={() => toggleReveal(mcq.id)}
+                        className="ml-2 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                        title="Toggle Explanation"
+                      >
+                        {isRevealed ? <EyeOff className="w-4 h-4 text-emerald-600" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Inline Explanation if opened */}
+                  {isRevealed && (
+                    <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-700/80 text-xs text-slate-600 dark:text-slate-300">
+                      <strong className="text-emerald-600 dark:text-emerald-400">Correct: ({String.fromCharCode(65 + mcq.correctIndex)}) {mcq.options[mcq.correctIndex]}</strong> — {mcq.explanation}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        /* 3 & 4. Standard Paper (1-Col) or Card Grid (2-Col) */
+        <div className={displayLayout === 'grid' ? 'grid grid-cols-1 lg:grid-cols-2 gap-4' : 'space-y-4'}>
+          {visibleMcqs.map((mcq, mcqIndex) => {
             const isRevealed = revealedAnswers[mcq.id] || false;
             const userChoice = userSelections[mcq.id];
             const bookmarked = isBookmarked(mcq.id);
+            const qNumber = (page - 1) * pageSize + mcqIndex + 1;
 
             return (
               <div 
                 key={mcq.id}
                 id={`mcq-card-${mcq.id}`}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xs hover:border-purple-300 dark:hover:border-purple-800 transition"
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xs hover:border-emerald-300 dark:hover:border-emerald-800 transition flex flex-col justify-between"
               >
-                {/* Meta header */}
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-purple-700 dark:text-pink-400 uppercase tracking-wider text-[11px] bg-purple-50 dark:bg-purple-950/60 px-2.5 py-0.5 rounded-md">
-                      Q {(page - 1) * pageSize + mcqIndex + 1} • {mcq.category.replace('-', ' ')}
-                    </span>
-                    {mcq.subtopic && (
-                      <span className="text-slate-500 dark:text-slate-400 hidden sm:inline">
-                        • {mcq.subtopic}
+                <div>
+                  {/* Meta header */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="font-extrabold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider text-[11px] bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-md">
+                        Q {qNumber} • {mcq.category.replace('-', ' ')}
                       </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    {mcq.examTags?.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-[10px]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                      mcq.difficulty === 'Easy'
-                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-pink-300'
-                        : mcq.difficulty === 'Medium'
-                        ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                        : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
-                    }`}>
-                      {mcq.difficulty}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Question statement */}
-                <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white leading-relaxed mb-4">
-                  <MeaningText text={mcq.question} />
-                </h3>
-
-                {/* Four Options Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-4">
-                  {mcq.options.map((option, idx) => {
-                    const isSelected = userChoice === idx;
-                    const isCorrect = idx === mcq.correctIndex;
-                    
-                    let optionClass = 'border-slate-200 dark:border-slate-700/80 bg-slate-50/60 dark:bg-slate-800/40 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800';
-
-                    if (userChoice !== undefined) {
-                      if (isCorrect) {
-                        optionClass = 'border-purple-500 bg-purple-50 dark:bg-purple-950/60 text-purple-900 dark:text-pink-100 font-semibold ring-1 ring-purple-500';
-                      } else if (isSelected && !isCorrect) {
-                        optionClass = 'border-rose-500 bg-rose-50 dark:bg-rose-950/60 text-rose-900 dark:text-rose-100 font-semibold ring-1 ring-rose-500';
-                      }
-                    } else if (isRevealed && isCorrect) {
-                      optionClass = 'border-purple-500 bg-purple-50 dark:bg-purple-950/60 text-purple-900 dark:text-pink-100 font-semibold';
-                    }
-
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => handleSelectOption(mcq, idx)}
-                        className={`p-3 rounded-xl border text-left text-sm transition flex items-center justify-between cursor-pointer ${optionClass}`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-bold flex items-center justify-center shrink-0">
-                            {String.fromCharCode(65 + idx)}
-                          </span>
-                          <MeaningText text={option} className="leading-snug" />
-                        </div>
-
-                        {userChoice !== undefined && isCorrect && (
-                          <CheckCircle2 className="w-5 h-5 text-purple-600 dark:text-pink-400 shrink-0" />
-                        )}
-                        {userChoice !== undefined && isSelected && !isCorrect && (
-                          <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Explanation Drawer (when revealed) */}
-                {isRevealed && (
-                  <div className="p-4 rounded-xl bg-purple-50/50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/60 mb-4 animate-in fade-in duration-150">
-                    <div className="flex items-center gap-2 font-bold text-sm text-purple-700 dark:text-pink-400 mb-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-purple-600 dark:text-pink-400" />
-                      <span>Correct Answer: Option {String.fromCharCode(65 + mcq.correctIndex)} — <MeaningText text={mcq.options[mcq.correctIndex]} /></span>
+                      {mcq.subtopic && (
+                        <span className="text-slate-500 dark:text-slate-400 hidden sm:inline">
+                          • {mcq.subtopic}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                      <MeaningText text={mcq.explanation} />
-                    </p>
-                    {mcq.verificationStatus && <div className="mt-3 rounded-lg border border-purple-200 dark:border-purple-800 bg-white/70 dark:bg-slate-900/60 p-3 text-[11px] text-slate-600 dark:text-slate-300">
-                      <strong className="uppercase tracking-wide">{mcq.verificationStatus.replace('-', ' ')}</strong>
-                      {mcq.verificationMethod && <span> · {mcq.verificationMethod}</span>}
-                      {mcq.sourceUrl && <a className="block mt-1 text-purple-700 dark:text-pink-300 underline" href={mcq.sourceUrl} target="_blank" rel="noreferrer">Open reference source</a>}
-                    </div>}
-                  </div>
-                )}
 
-                {/* Card Action Controls */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500">
+                    <div className="flex items-center gap-1.5">
+                      {mcq.examTags?.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-[10px]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                        mcq.difficulty === 'Easy'
+                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                          : mcq.difficulty === 'Medium'
+                          ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                          : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+                      }`}>
+                        {mcq.difficulty}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Question statement */}
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white leading-relaxed mb-4">
+                    <MeaningText text={mcq.question} />
+                  </h3>
+
+                  {/* Options List / Grid */}
+                  <div className={`gap-2.5 mb-4 ${displayLayout === 'grid' ? 'grid grid-cols-1 gap-2' : 'grid grid-cols-1 sm:grid-cols-2'}`}>
+                    {mcq.options.map((option, idx) => {
+                      const isSelected = userChoice === idx;
+                      const isCorrect = idx === mcq.correctIndex;
+                      
+                      let optionClass = 'border-slate-200 dark:border-slate-700/80 bg-slate-50/60 dark:bg-slate-800/40 text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800';
+
+                      if (userChoice !== undefined) {
+                        if (isCorrect) {
+                          optionClass = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-100 font-semibold ring-1 ring-emerald-500';
+                        } else if (isSelected && !isCorrect) {
+                          optionClass = 'border-rose-500 bg-rose-50 dark:bg-rose-950/60 text-rose-900 dark:text-rose-100 font-semibold ring-1 ring-rose-500';
+                        }
+                      } else if (isRevealed && isCorrect) {
+                        optionClass = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-100 font-semibold';
+                      }
+
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => handleSelectOption(mcq, idx)}
+                          className={`p-3 rounded-xl border text-left text-sm transition flex items-center justify-between cursor-pointer ${optionClass}`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="w-6 h-6 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-bold flex items-center justify-center shrink-0">
+                              {String.fromCharCode(65 + idx)}
+                            </span>
+                            <MeaningText text={option} className="leading-snug" />
+                          </div>
+
+                          {userChoice !== undefined && isCorrect && (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          )}
+                          {userChoice !== undefined && isSelected && !isCorrect && (
+                            <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Solution Explanation Box */}
+                  {(isRevealed || userChoice !== undefined) && (
+                    <div className="mb-4 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs sm:text-sm text-slate-700 dark:text-slate-300 animate-in fade-in duration-200">
+                      <div className="font-bold text-emerald-800 dark:text-emerald-300 mb-1 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        <span>Correct Answer: Option {String.fromCharCode(65 + mcq.correctIndex)} — {mcq.options[mcq.correctIndex]}</span>
+                      </div>
+                      <p className="leading-relaxed mt-1 text-slate-600 dark:text-slate-300">
+                        <MeaningText text={mcq.explanation} />
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer Actions */}
+                <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => toggleReveal(mcq.id)}
-                      className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-purple-500 text-slate-700 dark:text-slate-300 hover:text-purple-600 dark:hover:text-pink-400 font-semibold transition flex items-center gap-1.5 cursor-pointer"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 transition cursor-pointer"
                     >
-                      {isRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                      <span>{isRevealed ? 'Hide Explanation' : 'View Answer & Explanation'}</span>
+                      {isRevealed ? <EyeOff className="w-3.5 h-3.5 text-rose-500" /> : <Eye className="w-3.5 h-3.5 text-emerald-600" />}
+                      <span>{isRevealed ? 'Hide Answer' : 'Show Answer'}</span>
                     </button>
 
                     <button
                       onClick={() => toggleBookmark(mcq.id)}
-                      className={`px-3 py-1.5 rounded-lg border transition flex items-center gap-1.5 cursor-pointer ${
+                      className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border font-semibold transition cursor-pointer ${
                         bookmarked
-                          ? 'border-purple-500 bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-pink-300 font-bold'
-                          : 'border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-purple-600'
+                          ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                          : 'border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
                       }`}
                     >
-                      <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? 'fill-purple-600 text-purple-600' : ''}`} />
+                      <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? 'fill-emerald-600 text-emerald-600' : ''}`} />
                       <span>{bookmarked ? 'Bookmarked' : 'Bookmark'}</span>
                     </button>
                   </div>
@@ -407,10 +830,10 @@ export const McqsView: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleShare(mcq)}
-                      className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-purple-600 transition cursor-pointer"
+                      className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-emerald-600 transition cursor-pointer"
                       title="Copy Question"
                     >
-                      {copiedId === mcq.id ? <Check className="w-4 h-4 text-purple-600" /> : <Share2 className="w-4 h-4" />}
+                      {copiedId === mcq.id ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
                     </button>
 
                     <button
@@ -423,12 +846,12 @@ export const McqsView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Report Form Modal / Inline */}
+                {/* Report Form Inline */}
                 {reportedMcqId === mcq.id && (
                   <div className="mt-4 p-4 rounded-xl border border-rose-200 dark:border-rose-900 bg-rose-50/50 dark:bg-rose-950/40 animate-in fade-in duration-150">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-bold text-xs text-rose-800 dark:text-rose-300">
-                        Report Issue in Question #{mcqIndex + 1}
+                        Report Issue in Question #{qNumber}
                       </span>
                       <button 
                         onClick={() => setReportedMcqId(null)}
@@ -457,15 +880,32 @@ export const McqsView: React.FC = () => {
 
               </div>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
 
-      {filteredMcqs.length > pageSize && <nav aria-label="MCQ pages" className="flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
-        <button className="px-4 py-2 rounded-xl border disabled:opacity-40" disabled={page === 1} onClick={() => { setPage(p => p - 1); window.scrollTo({top:0,behavior:'smooth'}); }}>Previous</button>
-        <span className="text-sm font-semibold">Page {page.toLocaleString()} of {pageCount.toLocaleString()}</span>
-        <button className="px-4 py-2 rounded-xl border disabled:opacity-40" disabled={page === pageCount} onClick={() => { setPage(p => p + 1); window.scrollTo({top:0,behavior:'smooth'}); }}>Next</button>
-      </nav>}
+      {/* Pagination Bar */}
+      {filteredMcqs.length > pageSize && (
+        <nav aria-label="MCQ pages" className="flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <button 
+            className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer" 
+            disabled={page === 1} 
+            onClick={() => { setPage(p => p - 1); window.scrollTo({top:0,behavior:'smooth'}); }}
+          >
+            Previous
+          </button>
+          <span className="text-xs sm:text-sm font-semibold">
+            Page {page.toLocaleString()} of {pageCount.toLocaleString()}
+          </span>
+          <button 
+            className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 transition cursor-pointer" 
+            disabled={page === pageCount} 
+            onClick={() => { setPage(p => p + 1); window.scrollTo({top:0,behavior:'smooth'}); }}
+          >
+            Next
+          </button>
+        </nav>
+      )}
 
     </div>
   );

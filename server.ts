@@ -1,9 +1,10 @@
 import express from 'express';
 import subjectiveFeedback from './api/subjective-feedback';
 import path from 'path';
+import fs from 'fs';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 
 dotenv.config();
 
@@ -382,6 +383,213 @@ async function startServer() {
     }
   });
 
+  // Word Meaning & Dictionary endpoint for vocabulary lookups
+  app.post('/api/word-meaning', async (req, res) => {
+    try {
+      const { word } = req.body;
+      if (!word || typeof word !== 'string') {
+        return res.status(400).json({ error: 'Word is required.' });
+      }
+
+      const cleanWord = word.trim().replace(/^['’\-]+|['’\-]+$/g, '');
+      if (!cleanWord || cleanWord.length < 2 || cleanWord.length > 50) {
+        return res.status(400).json({ error: 'Invalid word length.' });
+      }
+
+      const client = getAIClient();
+      if (!client) {
+        return res.json({
+          word: cleanWord,
+          partOfSpeech: 'vocabulary word',
+          simpleEnglish: `Key vocabulary term: "${cleanWord}". Practice context and usage in exam questions.`,
+          urdu: `امتحانی الفاظ: "${cleanWord}"۔`,
+          sindhi: `امتحاني لفظ: "${cleanWord}"۔`,
+          example: `Understanding "${cleanWord}" helps solve comprehension and vocabulary questions accurately.`
+        });
+      }
+
+      const prompt = `Provide educational dictionary information for the word: "${cleanWord}".
+Target audience: Competitive exam aspirants in Pakistan (Sukkur IBA STS BPS-05 to 15, SPSC, FPSC).
+Return valid JSON with:
+- word: the input word
+- partOfSpeech: part of speech (noun, verb, adjective, etc.)
+- simpleEnglish: concise 1-2 sentence definition in simple English
+- urdu: accurate Urdu meaning/translation in Urdu script
+- sindhi: accurate Sindhi meaning/translation in Sindhi script
+- example: an exam-style example sentence using the word`;
+
+      const response = await client.models.generateContent({
+        model: 'gemini-3.1-flash-lite',
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              word: { type: Type.STRING },
+              partOfSpeech: { type: Type.STRING },
+              simpleEnglish: { type: Type.STRING },
+              urdu: { type: Type.STRING },
+              sindhi: { type: Type.STRING },
+              example: { type: Type.STRING },
+            },
+            required: ['word', 'partOfSpeech', 'simpleEnglish', 'urdu', 'sindhi'],
+          },
+        },
+      });
+
+      const responseText = response.text;
+      if (!responseText) {
+        throw new Error('Empty response from model');
+      }
+
+      const data = JSON.parse(responseText);
+      return res.json({
+        word: cleanWord,
+        partOfSpeech: data.partOfSpeech || 'word',
+        simpleEnglish: data.simpleEnglish || `Definition of ${cleanWord}`,
+        urdu: data.urdu || cleanWord,
+        sindhi: data.sindhi || cleanWord,
+        example: data.example || `Use "${cleanWord}" in a sentence.`
+      });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.warn(`[Word Meaning API] Model lookup failed: ${msg}. Serving offline vocabulary record.`);
+      const cleanWord = typeof req.body?.word === 'string' ? req.body.word.trim() : 'Word';
+      return res.json({
+        word: cleanWord,
+        partOfSpeech: 'vocabulary word',
+        simpleEnglish: `Key vocabulary term: "${cleanWord}". Practice context and usage in exam questions.`,
+        urdu: `امتحانی الفاظ: "${cleanWord}"۔`,
+        sindhi: `امتحاني لفظ: "${cleanWord}"۔`,
+        example: `Understanding "${cleanWord}" helps solve comprehension and vocabulary questions accurately.`
+      });
+    }
+  });
+
+  // AI Resume Enhancer endpoint
+  app.post('/api/resume-enhance', async (req, res) => {
+    try {
+      const { type, text, role, skills, context } = req.body;
+      const client = getAIClient();
+
+      if (type === 'enhance-bullet') {
+        const originalBullet = (text || '').trim();
+        if (!originalBullet) {
+          return res.status(400).json({ error: 'Text is required for bullet enhancement.' });
+        }
+
+        if (!client) {
+          const verbMatches = ['Spearheaded', 'Engineered', 'Optimized', 'Accelerated', 'Implemented', 'Administered', 'Coordinated'];
+          const randomVerb = verbMatches[Math.floor(Math.random() * verbMatches.length)];
+          const enhanced = originalBullet.replace(/^[a-z]+/i, randomVerb) + ', achieving 25%+ efficiency gains and ensuring 100% adherence to quality standards.';
+          return res.json({ enhanced, original: originalBullet });
+        }
+
+        const prompt = `Rewrite this resume job accomplishment bullet point to be ATS-optimized, high-impact, and metrics-driven using the Google XYZ Formula ("Accomplished [X], as measured by [Y], by doing [Z]"):
+Original bullet: "${originalBullet}"
+Target Role Context: "${role || 'Professional'}"
+Return JSON with { "enhanced": "string with one concise, polished bullet point starting with a strong past-tense action verb" }`;
+
+        const response = await client.models.generateContent({
+          model: 'gemini-3.1-flash-lite',
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                enhanced: { type: Type.STRING },
+              },
+              required: ['enhanced'],
+            },
+          },
+        });
+
+        const parsed = JSON.parse(response.text || '{}');
+        return res.json({ enhanced: parsed.enhanced || originalBullet, original: originalBullet });
+      }
+
+      if (type === 'generate-summary') {
+        const targetRole = (role || text || 'Professional Candidate').trim();
+        const skillsList = Array.isArray(skills) ? skills.join(', ') : (skills || '');
+
+        if (!client) {
+          const fallback = `Results-driven and detail-oriented ${targetRole} with proven expertise in ${skillsList || 'operations, planning, and execution'}. Adept at cross-functional collaboration, streamlining workflows, and delivering high-quality outcomes under competitive deadlines.`;
+          return res.json({ summary: fallback });
+        }
+
+        const prompt = `Write a high-impact, 2-3 sentence ATS-friendly Professional Summary for a candidate.
+Target Role: "${targetRole}"
+Key Skills: "${skillsList}"
+Additional Context: "${context || ''}"
+Tone: Authoritative, polished, accomplishment-focused.
+Return JSON with { "summary": "2-3 sentences string" }`;
+
+        const response = await client.models.generateContent({
+          model: 'gemini-3.1-flash-lite',
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                summary: { type: Type.STRING },
+              },
+              required: ['summary'],
+            },
+          },
+        });
+
+        const parsed = JSON.parse(response.text || '{}');
+        return res.json({ summary: parsed.summary || '' });
+      }
+
+      if (type === 'suggest-keywords') {
+        const targetRole = (role || text || 'General').trim();
+        if (!client) {
+          return res.json({
+            keywords: ['Analytical Thinking', 'Process Optimization', 'Documentation', 'Data Analysis', 'Project Management', 'Quality Assurance', 'Team Leadership', 'Reporting']
+          });
+        }
+
+        const prompt = `List the top 10 high-value ATS keywords and core competencies recruiters and automated applicant tracking systems (Workday, Taleo, STS IBA) search for when hiring a "${targetRole}".
+Return JSON with { "keywords": ["keyword1", "keyword2", ...] }`;
+
+        const response = await client.models.generateContent({
+          model: 'gemini-3.1-flash-lite',
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                keywords: {
+                  type: Type.ARRAY,
+                  items: { type: Type.STRING }
+                }
+              },
+              required: ['keywords'],
+            },
+          },
+        });
+
+        const parsed = JSON.parse(response.text || '{}');
+        return res.json({ keywords: parsed.keywords || [] });
+      }
+
+      return res.status(400).json({ error: 'Unsupported enhancement type.' });
+    } catch (err: unknown) {
+      console.warn('[Resume Enhance API] Error:', err);
+      return res.json({
+        fallback: true,
+        enhanced: req.body?.text || '',
+        summary: `Dedicated professional specializing in ${req.body?.role || 'target career opportunities'} with a strong foundation in core domain skills and organizational success.`,
+        keywords: ['Communication', 'Time Management', 'Problem Solving', 'Attention to Detail', 'MS Office']
+      });
+    }
+  });
+
   // Vite middleware for development / static serving in production
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
@@ -389,16 +597,43 @@ async function startServer() {
       appType: 'spa',
     });
     app.use(vite.middlewares);
+    app.use(async (req, res, next) => {
+      if (req.path.startsWith('/api') || req.path.includes('.')) {
+        return next();
+      }
+      const url = req.originalUrl;
+      try {
+        const indexHtmlPath = path.resolve(process.cwd(), 'index.html');
+        if (fs.existsSync(indexHtmlPath)) {
+          let template = fs.readFileSync(indexHtmlPath, 'utf-8');
+          template = await vite.transformIndexHtml(url, template);
+          res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+        } else {
+          next();
+        }
+      } catch (e) {
+        vite.ssrFixStacktrace(e as Error);
+        next(e);
+      }
+    });
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.use((req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+  });
+
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use`);
+    } else {
+      console.error('Server error:', err);
+    }
   });
 }
 

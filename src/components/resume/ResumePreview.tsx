@@ -69,13 +69,14 @@ const ACCENT_STYLES: Record<ResumeAccentColor, {
   },
 };
 
-export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
+export const ResumePreview: React.FC<ResumePreviewProps> = ({ data, scale = 1 }) => {
   const accent = ACCENT_STYLES[data.accentColor] || ACCENT_STYLES.emerald;
   const isCompact = data.fontSize === 'compact';
   const isSpacious = data.fontSize === 'spacious';
 
   const baseTextSize = isCompact ? 'text-[11px] leading-tight' : isSpacious ? 'text-[13px] leading-relaxed' : 'text-xs leading-normal';
   const headingTextSize = isCompact ? 'text-xs' : isSpacious ? 'text-sm' : 'text-xs';
+  const zoomStyle = scale !== 1 ? { transform: `scale(${scale})`, transformOrigin: 'top center' } : undefined;
 
   // Format STS Govt Standard Format
   if (data.template === 'sts-govt') {
@@ -83,7 +84,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
       <div 
         id="resume-printable-area"
         className={`resume-printable bg-white text-slate-900 w-full max-w-[820px] mx-auto p-7 sm:p-10 shadow-2xl rounded-sm border border-slate-300 font-sans print:p-0 print:border-0 print:shadow-none ${baseTextSize}`}
-        style={{ minHeight: '1050px' }}
+        style={{ minHeight: '1050px', ...zoomStyle }}
       >
         {/* Header Title for Public Sector Scrutiny */}
         <div className="text-center border-b-2 border-slate-800 pb-3 mb-4">
@@ -271,6 +272,38 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
           </div>
         )}
 
+        {/* Projects & Key Initiatives */}
+        {data.projects && data.projects.length > 0 && (
+          <div className="mb-4">
+            <h2 className={`${headingTextSize} font-bold uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-1 mb-2 flex items-center gap-1.5`}>
+              <Award size={14} className="text-slate-700" />
+              <span>Key Projects, Research & Departmental Assignments</span>
+            </h2>
+            <div className="space-y-2">
+              {data.projects.map((proj) => (
+                <div key={proj.id} className="border-l-2 border-slate-400 pl-3">
+                  <div className="flex flex-wrap items-baseline justify-between gap-1">
+                    <span className="font-bold text-slate-950 text-xs">{proj.title}</span>
+                    {proj.role && <span className="text-slate-600 text-[10.5px]">({proj.role})</span>}
+                  </div>
+                  {proj.techStack && (
+                    <div className="text-slate-600 text-[10.5px] font-mono mt-0.5">
+                      Tools / Tech: {proj.techStack}
+                    </div>
+                  )}
+                  {proj.highlights && proj.highlights.length > 0 && (
+                    <ul className="list-disc list-inside mt-0.5 space-y-0.5 text-slate-700 text-[11px]">
+                      {proj.highlights.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Skills & Competencies */}
         {data.skills && data.skills.length > 0 && (
           <div className="mb-4">
@@ -329,7 +362,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
       <div 
         id="resume-printable-area"
         className={`resume-printable bg-white text-slate-900 w-full max-w-[820px] mx-auto p-8 sm:p-12 shadow-2xl rounded-sm font-sans print:p-0 print:shadow-none print:max-w-none ${baseTextSize}`}
-        style={{ minHeight: '1050px' }}
+        style={{ minHeight: '1050px', ...zoomStyle }}
       >
         {/* Fortune 500 EEO Compliance Header */}
         <header className="text-center border-b-2 border-slate-900 pb-3.5 mb-4">
@@ -557,7 +590,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
       <div 
         id="resume-printable-area"
         className={`resume-printable bg-white text-slate-900 w-full max-w-[820px] mx-auto p-8 sm:p-11 shadow-2xl rounded-sm font-sans print:p-0 print:shadow-none ${baseTextSize}`}
-        style={{ minHeight: '1050px' }}
+        style={{ minHeight: '1050px', ...zoomStyle }}
       >
         {/* Modern Header */}
         <header className="border-b-2 pb-4 mb-5 border-slate-900">
@@ -587,6 +620,22 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
               <span className="flex items-center gap-1">
                 <MapPin size={11} className={accent.icon} />
                 {data.city ? `${data.city}, ` : ''}{data.province || 'Pakistan'}
+              </span>
+            )}
+            {data.linkedinUrl && (
+              <span className="flex items-center gap-1">
+                <Globe size={11} className={accent.icon} />
+                {data.linkedinUrl.replace(/^https?:\/\/(www\.)?/, '')}
+              </span>
+            )}
+            {data.githubUrl && (
+              <span className="flex items-center gap-1 font-mono">
+                {data.githubUrl.replace(/^https?:\/\/(www\.)?/, '')}
+              </span>
+            )}
+            {data.portfolioUrl && (
+              <span className="flex items-center gap-1">
+                {data.portfolioUrl.replace(/^https?:\/\/(www\.)?/, '')}
               </span>
             )}
             {data.showCnic && data.cnic && (
@@ -632,6 +681,44 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
                     <ul className="list-disc list-outside ml-4 mt-1 space-y-0.5 text-slate-700 text-[11px]">
                       {exp.responsibilities.map((r, i) => (
                         <li key={i}>{r}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Projects */}
+        {data.projects && data.projects.length > 0 && (
+          <section className="mb-5">
+            <h2 className={`font-bold tracking-wider uppercase text-xs pb-1 mb-2 border-b border-slate-200 ${accent.primary}`}>
+              Key Projects & Technical Initiatives
+            </h2>
+            <div className="space-y-3">
+              {data.projects.map((proj) => (
+                <div key={proj.id}>
+                  <div className="flex justify-between items-baseline">
+                    <span className="font-bold text-slate-900 text-xs">
+                      {proj.title}
+                      {proj.role && <span className="text-slate-500 font-normal ml-1">({proj.role})</span>}
+                    </span>
+                    {proj.link && (
+                      <span className="text-slate-500 text-[10px] font-mono underline">
+                        {proj.link.replace(/^https?:\/\//, '')}
+                      </span>
+                    )}
+                  </div>
+                  {proj.techStack && (
+                    <div className="text-slate-600 text-[10.5px] font-mono mt-0.5">
+                      Stack: {proj.techStack}
+                    </div>
+                  )}
+                  {proj.highlights && proj.highlights.length > 0 && (
+                    <ul className="list-disc list-outside ml-4 mt-1 space-y-0.5 text-slate-700 text-[11px]">
+                      {proj.highlights.map((h, i) => (
+                        <li key={i}>{h}</li>
                       ))}
                     </ul>
                   )}
@@ -724,13 +811,174 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
     );
   }
 
+  // Tech & Digital Compact Format (High-density, developer/analyst/engineering focused)
+  if (data.template === 'tech-compact') {
+    return (
+      <div 
+        id="resume-printable-area"
+        className={`resume-printable bg-white text-slate-900 w-full max-w-[820px] mx-auto p-7 sm:p-9 shadow-2xl rounded-sm font-sans print:p-0 print:shadow-none ${baseTextSize}`}
+        style={{ minHeight: '1050px', ...zoomStyle }}
+      >
+        <header className="border-b-2 border-slate-900 pb-3 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 font-display">
+              {data.fullName || 'Candidate Name'}
+            </h1>
+            {data.targetHeadline && (
+              <span className={`text-xs font-mono font-bold ${accent.subheading}`}>
+                // {data.targetHeadline}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-slate-600 font-mono text-[10.5px]">
+            {data.email && <span>{data.email}</span>}
+            {data.phone && <span>• {data.phone}</span>}
+            {data.city && <span>• {data.city}</span>}
+            {data.linkedinUrl && <span>• {data.linkedinUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>}
+            {data.githubUrl && <span>• {data.githubUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>}
+            {data.portfolioUrl && <span>• {data.portfolioUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>}
+            {data.showCnic && data.cnic && <span>• CNIC: {data.cnic}</span>}
+          </div>
+        </header>
+
+        {/* Technical Skills Header Grid */}
+        {data.skills && data.skills.length > 0 && (
+          <section className="mb-4">
+            <h2 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5 mb-1.5 flex items-center justify-between">
+              <span>Technical Skills & Core Competencies</span>
+              <span className="text-[9px] text-slate-400 font-normal">ATS-Indexed</span>
+            </h2>
+            <div className="p-2.5 rounded-sm bg-slate-50 border border-slate-200 font-mono text-[11px] leading-relaxed text-slate-800">
+              <strong className="text-slate-950">Proficiencies: </strong>
+              {data.skills.map((s) => s.name).join(' • ')}
+            </div>
+          </section>
+        )}
+
+        {/* Summary */}
+        {data.professionalSummary && (
+          <section className="mb-4">
+            <h2 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5 mb-1">
+              Summary
+            </h2>
+            <p className="text-slate-700 leading-relaxed text-justify text-[11.5px]">
+              {data.professionalSummary}
+            </p>
+          </section>
+        )}
+
+        {/* Experience */}
+        {data.experience && data.experience.length > 0 && (
+          <section className="mb-4">
+            <h2 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5 mb-2">
+              Experience
+            </h2>
+            <div className="space-y-3">
+              {data.experience.map((exp) => (
+                <div key={exp.id}>
+                  <div className="flex justify-between items-baseline">
+                    <span className="font-bold text-slate-950 text-xs">
+                      {exp.designation} <span className="font-normal text-slate-600 font-sans">@ {exp.organization}</span>
+                    </span>
+                    <span className="text-slate-500 font-mono text-[10px]">
+                      {exp.startDate} – {exp.isCurrent ? 'Present' : exp.endDate} | {exp.location}
+                    </span>
+                  </div>
+                  {exp.responsibilities && exp.responsibilities.length > 0 && (
+                    <ul className="list-disc list-outside ml-4 mt-1 space-y-0.5 text-slate-700 text-[11px] leading-snug">
+                      {exp.responsibilities.map((r, i) => (
+                        <li key={i}>{r}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Projects */}
+        {data.projects && data.projects.length > 0 && (
+          <section className="mb-4">
+            <h2 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5 mb-2">
+              Projects & Technical Architecture
+            </h2>
+            <div className="space-y-2.5">
+              {data.projects.map((proj) => (
+                <div key={proj.id}>
+                  <div className="flex justify-between items-baseline font-mono text-xs">
+                    <span className="font-bold text-slate-950">
+                      {proj.title}
+                      {proj.role && <span className="text-slate-600 font-normal ml-1">({proj.role})</span>}
+                    </span>
+                    {proj.link && <span className="text-slate-500 text-[10px] underline">{proj.link.replace(/^https?:\/\//, '')}</span>}
+                  </div>
+                  {proj.techStack && (
+                    <div className="text-[10px] text-slate-600 font-mono mt-0.5">
+                      <span className="text-slate-400">Stack:</span> {proj.techStack}
+                    </div>
+                  )}
+                  {proj.highlights && proj.highlights.length > 0 && (
+                    <ul className="list-disc list-outside ml-4 mt-1 space-y-0.5 text-slate-700 text-[11px]">
+                      {proj.highlights.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Education */}
+        {data.education && data.education.length > 0 && (
+          <section className="mb-4">
+            <h2 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5 mb-1.5">
+              Education
+            </h2>
+            <div className="space-y-1.5 font-mono text-[11px]">
+              {data.education.map((edu) => (
+                <div key={edu.id} className="flex justify-between items-baseline">
+                  <div>
+                    <strong className="text-slate-950 font-bold">{edu.degreeTitle}</strong> — {edu.instituteOrBoard}
+                  </div>
+                  <div className="text-slate-600 text-[10px]">
+                    {edu.passingYear} ({edu.percentageOrCgpa || edu.divisionOrGrade})
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Certifications */}
+        {data.certifications && data.certifications.length > 0 && (
+          <section>
+            <h2 className="text-xs font-mono font-black uppercase tracking-wider text-slate-900 border-b border-slate-300 pb-0.5 mb-1.5">
+              Certifications & Credentials
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 font-mono text-[10.5px] text-slate-700">
+              {data.certifications.map((c) => (
+                <div key={c.id}>
+                  • <strong className="text-slate-900">{c.title}</strong> — {c.issuingAuthority} ({c.issueYear})
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    );
+  }
+
   // Executive Template (Distinctive Two-Tone Layout)
   if (data.template === 'executive') {
     return (
       <div 
         id="resume-printable-area"
         className={`resume-printable bg-white text-slate-900 w-full max-w-[820px] mx-auto shadow-2xl rounded-sm font-sans flex flex-col md:flex-row print:p-0 print:shadow-none ${baseTextSize}`}
-        style={{ minHeight: '1050px' }}
+        style={{ minHeight: '1050px', ...zoomStyle }}
       >
         {/* Left Column Sidebar */}
         <aside className="w-full md:w-[280px] bg-slate-900 text-white p-6 sm:p-7 shrink-0 print:bg-slate-900">
@@ -889,7 +1137,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
     <div 
       id="resume-printable-area"
       className={`resume-printable bg-white text-slate-900 w-full max-w-[820px] mx-auto p-8 sm:p-10 shadow-2xl rounded-sm font-serif print:p-0 print:shadow-none ${baseTextSize}`}
-      style={{ minHeight: '1050px' }}
+      style={{ minHeight: '1050px', ...zoomStyle }}
     >
       <div className="text-center pb-4 mb-4 border-b border-slate-400">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 font-serif">
@@ -904,6 +1152,8 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
           {data.phone && <span>{data.phone}</span>}
           {data.email && <span>{data.email}</span>}
           {data.city && <span>{data.city}, {data.province || 'Pakistan'}</span>}
+          {data.linkedinUrl && <span>{data.linkedinUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>}
+          {data.githubUrl && <span>{data.githubUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>}
           {data.showCnic && data.cnic && <span>CNIC: {data.cnic}</span>}
         </div>
       </div>
@@ -956,6 +1206,31 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data }) => {
                   <ul className="list-disc list-inside mt-0.5 space-y-0.5 text-slate-700 text-[11px] font-sans">
                     {exp.responsibilities.map((r, i) => (
                       <li key={i}>{r}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {data.projects && data.projects.length > 0 && (
+        <div className="mb-4">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-0.5 mb-2 font-sans">
+            Projects
+          </h2>
+          <div className="space-y-2">
+            {data.projects.map((proj) => (
+              <div key={proj.id} className="font-sans text-[11px]">
+                <div className="flex justify-between items-baseline">
+                  <span className="font-bold text-slate-950">{proj.title}</span>
+                  {proj.techStack && <span className="text-slate-500 font-mono text-[10px]">{proj.techStack}</span>}
+                </div>
+                {proj.highlights && proj.highlights.length > 0 && (
+                  <ul className="list-disc list-inside mt-0.5 space-y-0.5 text-slate-700">
+                    {proj.highlights.map((h, i) => (
+                      <li key={i}>{h}</li>
                     ))}
                   </ul>
                 )}

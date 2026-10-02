@@ -1,4 +1,4 @@
-export type ResumeTemplateId = 'sts-govt' | 'modern-ats' | 'executive' | 'minimal' | 'fortune-500';
+export type ResumeTemplateId = 'sts-govt' | 'modern-ats' | 'executive' | 'minimal' | 'fortune-500' | 'tech-compact';
 export type ResumeAccentColor = 'emerald' | 'navy' | 'slate' | 'burgundy' | 'indigo';
 export type ResumeFontSize = 'compact' | 'normal' | 'spacious';
 

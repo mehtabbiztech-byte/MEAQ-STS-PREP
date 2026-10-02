@@ -19,6 +19,7 @@ export type NavigationTab =
   | 'mcqs' 
   | 'quiz' 
   | 'past-papers' 
+  | 'past-papers-pdf'
   | 'current-affairs' 
   | 'exams' 
   | 'jobs' 

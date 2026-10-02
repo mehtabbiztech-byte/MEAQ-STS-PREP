@@ -30,6 +30,7 @@ import {
   Bot
 } from 'lucide-react';
 import { ThemeSwitcherWidget, THEME_OPTIONS } from './AttractiveBackground';
+import { LayoutButton } from './LayoutButton';
 
 interface NavItemConfig {
   id: NavigationTab;
@@ -687,6 +688,9 @@ export const Navbar: React.FC = () => {
                 )}
               </button>
 
+              {/* Layout Switcher Trigger (Standard, Executive Sidebar, Split, Zen) */}
+              <LayoutButton variant="navbar" />
+
               {/* Theme Palette Switcher */}
               <ThemeSwitcherWidget />
 
@@ -904,7 +908,7 @@ export const Navbar: React.FC = () => {
               </div>
 
               {/* Mobile Quick Search Input */}
-              <div>
+              <div className="space-y-2">
                 <button
                   onClick={() => {
                     setSearchOpen(true);
@@ -915,6 +919,9 @@ export const Navbar: React.FC = () => {
                   <Search className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span className="truncate">Search practice items, exams and paper records...</span>
                 </button>
+
+                {/* Mobile Layout Switcher Bar */}
+                <LayoutButton variant="sidebar" />
               </div>
 
               {/* Mobile main exam rooms */}

@@ -6,36 +6,6 @@ import { readSavedMeaning, saveMeaning } from '../lib/wordMeaningStore';
 type MeaningSource = 'built-in' | 'saved' | 'online' | 'fallback';
 type MeaningRequest = { word: string; x: number; y: number };
 
-function wordAtPoint(x: number, y: number): string | null {
-  let node: Node | null = null;
-  let offset = 0;
-  const doc = document as Document & {
-    caretPositionFromPoint?: (x: number, y: number) => { offsetNode: Node; offset: number } | null;
-    caretRangeFromPoint?: (x: number, y: number) => Range | null;
-  };
-
-  const position = doc.caretPositionFromPoint?.(x, y);
-  if (position) {
-    node = position.offsetNode;
-    offset = position.offset;
-  } else {
-    const range = doc.caretRangeFromPoint?.(x, y);
-    if (range) {
-      node = range.startContainer;
-      offset = range.startOffset;
-    }
-  }
-
-  if (!node || node.nodeType !== Node.TEXT_NODE) return null;
-  const text = node.textContent ?? '';
-  const matches = [...text.matchAll(/[\p{L}][\p{L}'’\-]*/gu)];
-  const match = matches.find(item => {
-    const start = item.index ?? 0;
-    return offset >= start && offset <= start + item[0].length;
-  });
-  return match?.[0].replace(/^['’\-]+|['’\-]+$/g, '') || null;
-}
-
 function preferredEnglishVoice(voices: SpeechSynthesisVoice[]) {
   const englishVoices = voices.filter(voice => voice.lang.toLowerCase().startsWith('en'));
   const preferredNames = ['natural', 'neural', 'google', 'samantha', 'aria', 'jenny', 'guy', 'serena', 'daniel'];
@@ -75,39 +45,65 @@ export const WordMeaningPopup: React.FC = () => {
   const [speaking, setSpeaking] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 20 });
   const requestId = useRef(0);
+  const popupRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const openMeaning = ({ word, x, y }: MeaningRequest) => {
-      if (!word || word.length < 2 || word.length > 45) return;
+      const clean = word.trim().replace(/^['’\-]+|['’\-]+$/g, '');
+      if (!clean || clean.length < 2 || clean.length > 45) return;
       const popupWidth = Math.min(420, window.innerWidth - 24);
       const popupMaxHeight = Math.min(600, window.innerHeight - 24);
-      setSelectedWord(word);
+      setSelectedWord(clean);
       setPosition({
         x: Math.max(12, Math.min(x + 8, window.innerWidth - popupWidth - 12)),
         y: Math.max(12, Math.min(y + 16, window.innerHeight - popupMaxHeight - 12)),
       });
     };
 
-    const onClick = (event: MouseEvent) => {
+    const onMeaningRequest = (event: Event) => {
+      const customEvent = event as CustomEvent<MeaningRequest>;
+      if (customEvent.detail?.word) {
+        openMeaning(customEvent.detail);
+      }
+    };
+
+    const onDocumentClick = (event: MouseEvent) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      if (!target.closest('main') || target.closest('button, a, input, textarea, select, summary, [role="button"], [data-disable-word-meaning]')) return;
 
-      const word = wordAtPoint(event.clientX, event.clientY);
-      if (!word || word.length < 2 || word.length > 45) return;
+      // If clicked inside the popup card itself, don't dismiss
+      if (popupRef.current && popupRef.current.contains(target)) {
+        return;
+      }
 
-      openMeaning({ word, x: event.clientX, y: event.clientY });
+      // Check if clicking an explicitly underlined vocabulary word
+      const underlinedWordEl = target.closest('[data-word-meaning-word]');
+      if (underlinedWordEl) {
+        const word = underlinedWordEl.getAttribute('data-word-meaning-word');
+        if (word) {
+          openMeaning({ word, x: event.clientX, y: event.clientY });
+          return;
+        }
+      }
+
+      // Clicking blank screen or outside popup closes any active popup
+      setSelectedWord('');
     };
 
-    const onMeaningRequest = (event: Event) => {
-      openMeaning((event as CustomEvent<MeaningRequest>).detail);
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSelectedWord('');
+      }
     };
 
-    document.addEventListener('click', onClick);
     window.addEventListener('meqsa:word-meaning', onMeaningRequest);
+    document.addEventListener('click', onDocumentClick);
+    document.addEventListener('keydown', onKeyDown);
+
     return () => {
-      document.removeEventListener('click', onClick);
       window.removeEventListener('meqsa:word-meaning', onMeaningRequest);
+      document.removeEventListener('click', onDocumentClick);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 
@@ -185,6 +181,7 @@ export const WordMeaningPopup: React.FC = () => {
 
   return (
     <aside
+      ref={popupRef}
       role="dialog"
       aria-modal="false"
       aria-label={`Meaning of ${selectedWord}`}
