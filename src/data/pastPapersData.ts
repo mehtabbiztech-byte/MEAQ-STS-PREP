@@ -228,6 +228,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2024",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/4852/sts-vaccinator-past-paper-06-07-2024",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -242,6 +243,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2024",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/4851/sts-vaccinator-past-paper-07-07-2024",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -256,6 +258,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2024",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/4842/sts-vaccinator-past-paper-29-06-2024",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -270,6 +273,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2024",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/4841/sts-vaccinator-past-paper-30-06-2024",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -284,6 +288,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2924/iba-5-to-15-intermediate-category-past-paper-26-june-2023-(morning-shift)",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -298,6 +303,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2903/iba-5-to-15-intermediate-category-past-paper-25-june-2023-(morning-shift)",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -312,6 +318,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2901/iba-5-to-15-intermediate-category-past-paper-24-june-2023-(evening-shift)",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -326,6 +333,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2896/iba-5-to-15-intermediate-category-past-paper-24-june-2023",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -340,6 +348,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2894/iba-5-to-15-intermediate-category-past-paper-23-june-2023",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -354,6 +363,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2891/iba-5-to-15-intermediate-category-past-paper-22-june-2023-(evening-shit)",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -368,6 +378,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2889/iba-5-to-15-intermediate-category-past-paper-22-june-2023",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -382,6 +393,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2023",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/2832/spsc-cce-gsa-solved-mcqs-paper-held-16-06-2023",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -396,6 +408,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2018",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/1363/sts-sindh-high-court-past-paper-29-08-2018",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -410,6 +423,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2020",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/1368/sts-junior-clerk-past-paper-15-03-2020",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -424,6 +438,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2020",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/1371/sts-junior-clerk-past-paper-15-11-2020",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -438,6 +453,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2020",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/1372/sts-office-assistant-past-paper-01-03-2020",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -452,6 +468,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2021",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/1374/sts-account-officer-past-paper-01-01-2021",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -466,6 +483,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2018",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/1377/sts-naib-qasid-past-paper-held-in-2018",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   },
@@ -480,6 +498,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     "totalQuestions": 0,
     "testDateLabel": "Listed date: 2021",
     "sourceUrl": "https://testpointpk.com/paper-mcqs/92/malir-development-authority-paper-2021",
+    "recordType": "External Past Paper Link",
     "sourceNote": "Linked TestPoint past paper. Questions are hosted on TestPoint and are not included in this app.",
     "mcqs": []
   }
