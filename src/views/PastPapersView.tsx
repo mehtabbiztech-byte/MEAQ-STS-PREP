@@ -842,25 +842,36 @@ export const PastPapersView: React.FC = () => {
                       </div>
 
                       <div className="flex items-center justify-end gap-2 shrink-0">
-                        <button
-                          onClick={() => setSelectedModalEntry(paper)}
-                          className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer"
-                        >
-                          Syllabus
-                        </button>
+                        {!paper.pdfPath && (
+                          <button
+                            onClick={() => setSelectedModalEntry(paper)}
+                            className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer"
+                          >
+                            Syllabus
+                          </button>
+                        )}
                         <button
                           onClick={() => setShowPdfModal(paper)}
                           className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs text-emerald-600 dark:text-emerald-400 cursor-pointer"
-                          title="PDF Guide"
+                          title={paper.pdfPath ? "View uploaded past paper" : "PDF Guide"}
                         >
                           <Download className="w-3.5 h-3.5" />
                         </button>
-                        <button
-                          onClick={() => startPaperFromDirectory(paper)}
-                          className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer"
-                        >
-                          Start
-                        </button>
+                        {paper.pdfPath ? (
+                          <button
+                            onClick={() => setShowPdfModal(paper)}
+                            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer"
+                          >
+                            Read Paper
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => startPaperFromDirectory(paper)}
+                            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer"
+                          >
+                            Start
+                          </button>
+                        )}
                       </div>
                     </article>
                   ))}
@@ -1069,10 +1080,23 @@ export const PastPapersView: React.FC = () => {
           className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
           onClick={() => setShowPdfModal(null)}
         >
-          <div 
-            className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+          <div
+            className={`w-full ${showPdfModal.pdfPath ? 'max-w-6xl h-[90vh]' : 'max-w-2xl'} bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden`}
             onClick={(e) => e.stopPropagation()}
           >
+            {showPdfModal.pdfPath ? (
+              <div className="h-full flex flex-col">
+                <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between gap-4">
+                  <div>
+                    <h2 className="font-bold text-slate-900 dark:text-white">{showPdfModal.title}</h2>
+                    <p className="text-xs text-slate-500">{showPdfModal.sourceNote}</p>
+                  </div>
+                  <button onClick={() => setShowPdfModal(null)} className={secondary}>Close</button>
+                </div>
+                <iframe title={showPdfModal.title} src={showPdfModal.pdfPath} className="w-full flex-1" />
+              </div>
+            ) : (
+            <>
             {/* Printable Document Preview */}
             <div className="p-6 sm:p-8 space-y-6">
               <div className="border-b-2 border-emerald-800 pb-4 flex items-center justify-between gap-4">
@@ -1166,6 +1190,8 @@ export const PastPapersView: React.FC = () => {
                 </button>
               </div>
             </div>
+            </>
+            )}
           </div>
         </div>
       )}

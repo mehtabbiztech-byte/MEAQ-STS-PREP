@@ -17,7 +17,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-02',
@@ -35,7 +35,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-03',
@@ -48,7 +48,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-04',
@@ -61,7 +61,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-05',
@@ -79,7 +79,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-06',
@@ -92,7 +92,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-07',
@@ -110,7 +110,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-08',
@@ -128,7 +128,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-09',
@@ -146,7 +146,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-eng-10',
@@ -159,7 +159,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 2. MATHEMATICS (Class 1 to 8 DCAR Curriculum) (Q11 - Q20) ---
@@ -174,7 +174,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-12',
@@ -187,7 +187,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-13',
@@ -200,7 +200,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-14',
@@ -213,7 +213,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-15',
@@ -226,7 +226,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-16',
@@ -239,7 +239,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-17',
@@ -252,7 +252,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-18',
@@ -265,7 +265,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-19',
@@ -278,7 +278,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-math-20',
@@ -291,7 +291,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 3. GENERAL SCIENCE (Class 1 to 8 DCAR Curriculum) (Q21 - Q30) ---
@@ -306,7 +306,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-22',
@@ -319,11 +319,11 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-23',
-    question: 'Which gas is predominantly responsible for the greenhouse effect keeping Earth\'s lower atmosphere habitable?',
+    question: 'Which pair contains two greenhouse gases that contribute to Earth\'s natural greenhouse effect?',
     options: ['Nitrogen', 'Oxygen', 'Carbon Dioxide and Water Vapor', 'Hydrogen'],
     correctIndex: 2,
     explanation: 'While nitrogen and oxygen constitute 99% of dry air, greenhouse warming is driven by greenhouse gases including carbon dioxide (CO2), water vapor (H2O), and methane (CH4).',
@@ -332,7 +332,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-24',
@@ -345,7 +345,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-25',
@@ -358,7 +358,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-26',
@@ -371,7 +371,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-27',
@@ -384,7 +384,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-28',
@@ -397,7 +397,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-29',
@@ -410,7 +410,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-sci-30',
@@ -423,7 +423,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 4. SOCIAL STUDIES & PAKISTAN STUDIES (Class 1 to 8 DCAR Curriculum) (Q31 - Q40) ---
@@ -438,11 +438,11 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-32',
-    question: 'The historic Pakistan Resolution was moved by A.K. Fazlul Huq on 23rd March 1940 at:',
+    question: 'At which park was the Pakistan Resolution moved on 23 March 1940?',
     options: ['Simla', 'Minto Park (Iqbal Park), Lahore', 'Karachi', 'Dacca'],
     correctIndex: 1,
     explanation: 'The Lahore Resolution demanding sovereign constituent units for Muslims in northwestern and eastern zones was passed on March 23, 1940, at Minto Park (now Minar-e-Pakistan, Lahore).',
@@ -451,7 +451,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-33',
@@ -464,7 +464,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-34',
@@ -477,7 +477,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-35',
@@ -490,7 +490,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-36',
@@ -503,7 +503,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-37',
@@ -521,7 +521,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-38',
@@ -534,7 +534,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-39',
@@ -547,7 +547,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-soc-40',
@@ -560,7 +560,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 5. URDU & SINDHI LANGUAGE (Class 1 to 8 DCAR Curriculum) (Q41 - Q50) ---
@@ -575,7 +575,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-42',
@@ -588,7 +588,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-43',
@@ -601,7 +601,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-44',
@@ -614,7 +614,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-45',
@@ -627,7 +627,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-46',
@@ -640,7 +640,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-47',
@@ -653,7 +653,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-48',
@@ -666,7 +666,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-49',
@@ -679,7 +679,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-lang-50',
@@ -692,7 +692,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // =========================================================================
@@ -711,7 +711,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-52',
@@ -724,7 +724,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-53',
@@ -742,7 +742,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-54',
@@ -755,7 +755,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-55',
@@ -773,7 +773,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-56',
@@ -786,7 +786,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-57',
@@ -804,7 +804,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-58',
@@ -817,7 +817,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-59',
@@ -830,7 +830,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-60',
@@ -843,7 +843,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 2. CHILD DEVELOPMENT & EDUCATIONAL PSYCHOLOGY (Q61 - Q70) ---
@@ -858,7 +858,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-62',
@@ -871,7 +871,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-63',
@@ -884,7 +884,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-64',
@@ -897,7 +897,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-65',
@@ -910,7 +910,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-66',
@@ -928,7 +928,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-67',
@@ -946,7 +946,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-68',
@@ -964,7 +964,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-69',
@@ -982,7 +982,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-70',
@@ -995,7 +995,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 3. CLASSROOM MANAGEMENT & DIFFERENTIATED LEARNING (Q71 - Q80) ---
@@ -1010,7 +1010,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-72',
@@ -1028,7 +1028,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-73',
@@ -1046,7 +1046,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-74',
@@ -1059,7 +1059,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-75',
@@ -1077,7 +1077,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-76',
@@ -1090,7 +1090,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-77',
@@ -1108,7 +1108,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-78',
@@ -1121,7 +1121,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-79',
@@ -1139,7 +1139,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-80',
@@ -1157,7 +1157,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 4. CLASSROOM ASSESSMENT, TEST DEVELOPMENT & EVALUATION (Q81 - Q90) ---
@@ -1172,7 +1172,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-82',
@@ -1185,7 +1185,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-83',
@@ -1198,7 +1198,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-84',
@@ -1211,7 +1211,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-85',
@@ -1224,7 +1224,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-86',
@@ -1237,7 +1237,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-87',
@@ -1255,7 +1255,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-88',
@@ -1273,7 +1273,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-89',
@@ -1286,7 +1286,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-90',
@@ -1304,7 +1304,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 
   // --- 5. SCHOOL COMMUNITY & TEACHER (Q91 - Q100) ---
@@ -1324,7 +1324,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-92',
@@ -1337,7 +1337,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-93',
@@ -1350,7 +1350,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-94',
@@ -1368,7 +1368,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-95',
@@ -1386,7 +1386,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-96',
@@ -1399,7 +1399,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-97',
@@ -1412,7 +1412,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-98',
@@ -1430,7 +1430,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-99',
@@ -1448,7 +1448,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt1-ped-100',
@@ -1466,6 +1466,6 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
     difficulty: 'Easy',
     examTags: ['STS', 'Teaching License', 'Pedagogy'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
 ];
