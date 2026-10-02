@@ -112,7 +112,7 @@ export const HomeView: React.FC = () => {
     : POPULAR_CATEGORIES.slice(0, 8);
 
   return (
-    <div className="space-y-16 pb-16">
+    <div className="space-y-8 pb-8">
       
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden text-white pt-16 pb-20 px-4 sm:px-6 lg:px-8 border-y border-white/15 shadow-2xl" style={{ backgroundImage: "linear-gradient(125deg, rgba(8,18,52,.94) 0%, rgba(42,35,110,.88) 48%, rgba(5,100,138,.82) 100%), url('/themes/pastel-network-uhd.webp')", backgroundPosition: 'center', backgroundSize: 'cover' }}>
