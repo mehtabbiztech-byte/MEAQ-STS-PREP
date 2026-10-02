@@ -216,7 +216,7 @@ export const PAST_PAPERS_DATA: PastPaper[] = [
     totalQuestions: 100,
     solvedDate: 'July 2024',
     mcqs: MCQS_DATA.filter((m) => m.examTags?.includes('Police')),
-  },,
+  },
   {
     "id": "testpoint-sts-vaccinator-2024-07-06",
     "title": "STS Vaccinator Past Paper 06-07-2024",
