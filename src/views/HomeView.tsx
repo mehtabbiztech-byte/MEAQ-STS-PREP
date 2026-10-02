@@ -33,11 +33,15 @@ import {
   Sprout,
   Bookmark,
   Share2,
-  ChevronRight
+  ChevronRight,
+  Briefcase,
+  Target,
+  FileCheck2
 } from 'lucide-react';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { EXAMS_DATA } from '../data/examsData';
 import { PersonalizedDashboard } from '../components/PersonalizedDashboard';
+import { TopSubjectsAndTestingServicesHub } from '../components/TopSubjectsAndTestingServicesHub';
 
 // Map string icon names to Lucide components
 const iconMap: Record<string, React.ReactNode> = {
@@ -61,6 +65,9 @@ const iconMap: Record<string, React.ReactNode> = {
   Building2: <Building2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
   Network: <Network className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
   Sprout: <Sprout className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
+  Briefcase: <Briefcase className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
+  Target: <Target className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
+  FileCheck2: <FileCheck2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
 };
 
 export const HomeView: React.FC = () => {
@@ -737,7 +744,74 @@ export const HomeView: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. POPULAR CATEGORIES SECTION */}
+      {/* 3.5. FEATURED STBB CLASS 5 SCIENCE CURRICULUM MODULE */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="rounded-3xl bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 border border-emerald-800/60 p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+            <div className="max-w-3xl space-y-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-black uppercase tracking-wider">
+                <Atom className="w-3.5 h-3.5" />
+                <span>STBB (Sindh Textbook Board) · Class 5 General Science</span>
+                <span className="px-1.5 py-0.2 rounded-md bg-amber-400 text-slate-950 text-[10px] font-black">
+                  Chapter 1 Complete
+                </span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-black font-display text-white tracking-tight">
+                Classification of Living Things — Interactive Learning Experience
+              </h2>
+
+              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+                Full 8-topic breakdown with 5 Kingdoms, Vertebrates vs Invertebrates, Monocots vs Dicots, interactive Dichotomous Key simulation, and 40 verified topic-covering MCQs. Essential for Sukkur IBA STS PST &amp; JEST test candidates.
+              </p>
+
+              <div className="flex flex-wrap gap-2 pt-1 text-[11px] text-emerald-200">
+                <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 8 Topic Deep-Dives</span>
+                <span className="text-emerald-500">•</span>
+                <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-amber-400" /> 40 Solved MCQs</span>
+                <span className="text-emerald-500">•</span>
+                <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" /> Dichotomous Key Tool</span>
+                <span className="text-emerald-500">•</span>
+                <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-rose-400" /> Mnemonics &amp; Riddles</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+              <button
+                onClick={() => {
+                  sessionStorage.setItem('matb_open_stbb_science', 'true');
+                  setTab('study-notes');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs sm:text-sm transition cursor-pointer flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+              >
+                <span>Launch Interactive Module</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => {
+                  setTab('mcqs');
+                  sessionStorage.setItem('matb_quick_exam_filter', 'STBB');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs transition cursor-pointer text-center"
+              >
+                Practice 40 Chapter MCQs
+              </button>
+            </div>
+          </div>
+
+          <div className="absolute right-0 top-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+        </div>
+      </section>
+
+      {/* 4. TOP SUBJECTS & TEST PREPARATION ONLINE HUB */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TopSubjectsAndTestingServicesHub />
+      </section>
+
+      {/* 5. ALL POPULAR SUBJECT CATEGORIES SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
@@ -745,7 +819,7 @@ export const HomeView: React.FC = () => {
               Subject-Wise MCQ Banks
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-display">
-              Popular Categories
+              All Subjects &amp; Disciplines ({POPULAR_CATEGORIES.length})
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">
               Select any core competitive discipline to study chapter-wise and topic-wise MCQs.
@@ -756,7 +830,7 @@ export const HomeView: React.FC = () => {
             onClick={() => setShowAllCategories((prev) => !prev)}
             className="text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 flex items-center gap-1 cursor-pointer"
           >
-            <span>{showAllCategories ? 'Show Fewer Categories' : 'View All 20 Categories'}</span>
+            <span>{showAllCategories ? 'Show Fewer Categories' : `View All ${POPULAR_CATEGORIES.length} Categories`}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -809,7 +883,7 @@ export const HomeView: React.FC = () => {
               onClick={() => setShowAllCategories(true)}
               className="px-6 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:border-emerald-500 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-semibold text-sm transition hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
             >
-              View All 20 Categories (Urdu, Economics, Pedagogy, Geography, Agriculture & more)
+              View All {POPULAR_CATEGORIES.length} Categories (Management Sciences, CS, Law, Geography, Agriculture &amp; more)
             </button>
           </div>
         )}

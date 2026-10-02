@@ -415,12 +415,26 @@ export const QuizView: React.FC = () => {
               <span>{formatTimer(secondsRemaining)}</span>
             </div>
 
-            <button
-              onClick={handleSubmitQuiz}
-              className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm transition cursor-pointer shadow-xs"
-            >
-              Submit Test
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setQuizState('config');
+                  setActiveQuestions([]);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 dark:hover:bg-rose-950 dark:hover:text-rose-300 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+              >
+                <span>Exit Attempt</span>
+              </button>
+
+              <button
+                onClick={handleSubmitQuiz}
+                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm transition cursor-pointer shadow-xs"
+              >
+                Submit Test
+              </button>
+            </div>
           </div>
 
           {/* Current Question Box */}

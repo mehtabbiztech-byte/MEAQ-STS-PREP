@@ -14,6 +14,7 @@ import { MCQS_DATA } from '../data/mcqsData';
 import { POPULAR_CATEGORIES } from '../data/categoriesData';
 import { EXAMS_DATA } from '../data/examsData';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
+import { ALL_PAST_PAPERS_DIRECTORY } from '../data/allPastPapersDirectory';
 
 export const SearchModal: React.FC = () => {
   const { 
@@ -70,11 +71,29 @@ export const SearchModal: React.FC = () => {
       c.subtopics.some((st) => st.toLowerCase().includes(q))
     );
 
-    const matchedPapers = PAST_PAPERS_DATA.filter((p) =>
-      p.title.toLowerCase().includes(q) ||
-      p.exam.toLowerCase().includes(q) ||
-      p.postName.toLowerCase().includes(q)
-    );
+    const matchedPapers = [
+      ...PAST_PAPERS_DATA.filter((p) =>
+        p.title.toLowerCase().includes(q) ||
+        p.exam.toLowerCase().includes(q) ||
+        p.postName.toLowerCase().includes(q)
+      ),
+      ...ALL_PAST_PAPERS_DIRECTORY.filter((p) =>
+        p.title.toLowerCase().includes(q) ||
+        p.exam.toLowerCase().includes(q) ||
+        p.syllabus.toLowerCase().includes(q) ||
+        p.conductedBy.toLowerCase().includes(q)
+      ).map(p => ({
+        id: p.id,
+        title: `#${p.number} · ${p.title}`,
+        exam: p.exam,
+        conductedBy: p.conductedBy,
+        year: 2025,
+        postName: p.title,
+        bps: p.bps,
+        totalQuestions: 100,
+        mcqs: [],
+      }))
+    ].slice(0, 10);
 
     return {
       mcqs: matchedMcqs,

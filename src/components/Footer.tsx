@@ -8,7 +8,7 @@ import {
   ArrowUpRight,
   Sparkles
 } from 'lucide-react';
-import { POPULAR_CATEGORIES } from '../data/categoriesData';
+import { POPULAR_CATEGORIES, TOP_SUBJECTS_DIRECTORY, TEST_PREPARATION_ONLINE_SERVICES } from '../data/categoriesData';
 import { EXAMS_DATA } from '../data/examsData';
 
 export const Footer: React.FC = () => {
@@ -112,19 +112,19 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Popular Subjects */}
+          {/* Top Subjects */}
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-3 font-display">
-              Popular Subjects
+              Top Subjects
             </h4>
             <ul className="space-y-2 text-sm text-slate-400">
-              {POPULAR_CATEGORIES.slice(0, 6).map((cat) => (
-                <li key={cat.id}>
+              {TOP_SUBJECTS_DIRECTORY.slice(0, 8).map((subj) => (
+                <li key={subj.id}>
                   <button
-                    onClick={() => handleCategoryClick(cat.slug)}
+                    onClick={() => handleCategoryClick(subj.categorySlug)}
                     className="hover:text-emerald-400 transition cursor-pointer text-left"
                   >
-                    {cat.name} MCQs
+                    {subj.name}
                   </button>
                 </li>
               ))}
@@ -136,26 +136,26 @@ export const Footer: React.FC = () => {
                   }}
                   className="text-emerald-400 hover:underline font-medium text-xs pt-1 flex items-center gap-1"
                 >
-                  <span>View All 20+ Subjects</span>
+                  <span>View All {POPULAR_CATEGORIES.length} Subjects (Management, Law &amp; more)</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Exam Commissions */}
+          {/* Test Preparation Online */}
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider text-white mb-3 font-display">
-              Exam Portals
+              Test Prep Online
             </h4>
             <ul className="space-y-2 text-sm text-slate-400">
-              {EXAMS_DATA.slice(0, 7).map((exam) => (
-                <li key={exam.id}>
+              {TEST_PREPARATION_ONLINE_SERVICES.slice(0, 8).map((agency) => (
+                <li key={agency.id}>
                   <button
-                    onClick={() => handleExamClick(exam.id)}
+                    onClick={() => handleExamClick(agency.examId)}
                     className="hover:text-emerald-400 transition cursor-pointer text-left"
                   >
-                    {exam.shortName} Preparation
+                    {agency.code} — {agency.name}
                   </button>
                 </li>
               ))}
@@ -167,7 +167,7 @@ export const Footer: React.FC = () => {
                   }}
                   className="text-emerald-400 hover:underline font-medium text-xs pt-1 flex items-center gap-1"
                 >
-                  <span>View All 16 Testing Bodies</span>
+                  <span>View All {TEST_PREPARATION_ONLINE_SERVICES.length} Testing Bodies</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </button>
               </li>

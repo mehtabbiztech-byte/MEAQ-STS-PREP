@@ -4,6 +4,22 @@ import { STS_IBA_MCQS } from './stsIba5000';
 import { TEACHING_LICENSE_PAPER_1_MCQS } from './teachingLicensePaper1';
 import { TEACHING_LICENSE_PAPER_2_MCQS } from './teachingLicensePaper2';
 import { TEACHING_LICENSE_PAPER_3_MCQS } from './teachingLicensePaper3';
+import { STBB_MCQS_DATA } from './stbbClassFiveScienceData';
+
+const STBB_CONVERTED_MCQS: MCQ[] = STBB_MCQS_DATA.map(m => ({
+  id: m.id,
+  question: m.question,
+  options: m.options,
+  correctIndex: m.correctIndex,
+  explanation: m.explanation,
+  category: 'biology',
+  subtopic: m.sectionTitle,
+  examTags: ['STBB', 'Class 5 Science', 'PST', 'JEST', 'STS', 'SPSC'],
+  year: 2025,
+  difficulty: m.number > 25 ? 'Medium' : 'Easy',
+  viewsCount: 3500 + m.number * 40,
+  submittedBy: 'Sindh Textbook Board (STBB) Jamshoro'
+}));
 
 export const MCQS_DATA: MCQ[] = [
   ...STS_IBA_MCQS,
@@ -11,6 +27,7 @@ export const MCQS_DATA: MCQ[] = [
   ...TEACHING_LICENSE_PAPER_2_MCQS,
   ...TEACHING_LICENSE_PAPER_3_MCQS,
   ...CURRENT_AFFAIRS_2000,
+  ...STBB_CONVERTED_MCQS,
   // Pakistan Studies
   {
     id: 'ps-01',
@@ -553,5 +570,355 @@ export const MCQS_DATA: MCQ[] = [
     difficulty: 'Medium',
     viewsCount: 18200,
     submittedBy: 'Economic Research Bureau',
+  },
+
+  // ==========================================
+  // Pakistan Affairs
+  // ==========================================
+  {
+    id: 'pa-001',
+    question: 'Under Article 160 of the 1973 Constitution of Pakistan, which body is constituted to distribute financial resources between the Federal government and the Provinces?',
+    options: ['Council of Common Interests (CCI)', 'National Finance Commission (NFC)', 'National Economic Council (NEC)', 'Federal Board of Revenue (FBR)'],
+    correctIndex: 1,
+    explanation: 'Article 160 of the 1973 Constitution mandates the President of Pakistan to constitute the National Finance Commission (NFC) every five years to formulate the award distributing divisible pool taxes between the Federation and the Provinces.',
+    category: 'pakistan-affairs',
+    subtopic: '1973 Constitution & Constitutional Amendments',
+    examTags: ['CSS', 'FPSC', 'PMS', 'SPSC', 'PPSC', 'KPPSC', 'BPSC'],
+    year: 2025,
+    difficulty: 'Medium',
+    viewsCount: 22400,
+    submittedBy: 'Constitutional Law Cell',
+  },
+  {
+    id: 'pa-002',
+    question: 'The 18th Constitutional Amendment was passed by the Parliament of Pakistan and signed into law in which year?',
+    options: ['2008', '2010', '2012', '2013'],
+    correctIndex: 1,
+    explanation: 'The historic 18th Amendment was passed unanimously and received Presidential assent on April 19, 2010. It devolved the Concurrent List to the provinces and strengthened provincial autonomy.',
+    category: 'pakistan-affairs',
+    subtopic: '1973 Constitution & Constitutional Amendments',
+    examTags: ['CSS', 'FPSC', 'SPSC', 'PPSC', 'LAT', 'NTS'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 28900,
+    submittedBy: 'Civil Service Forum',
+  },
+  {
+    id: 'pa-003',
+    question: 'Which deep-sea port forms the crucial southern terminus of the China-Pakistan Economic Corridor (CPEC)?',
+    options: ['Port Qasim', 'Karachi Port', 'Gwadar Port', 'Pasni Port'],
+    correctIndex: 2,
+    explanation: 'Gwadar Port, located in Balochistan on the Arabian Sea at the mouth of the Persian Gulf, is the centerpiece and maritime gateway of the China-Pakistan Economic Corridor (CPEC).',
+    category: 'pakistan-affairs',
+    subtopic: 'CPEC & Regional Connectivity',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'BPSC', 'BTS', 'OTS', 'PTS', 'STS'],
+    year: 2025,
+    difficulty: 'Easy',
+    viewsCount: 34100,
+    submittedBy: 'Pakistan Geopolitics Desk',
+  },
+
+  // ==========================================
+  // Management Sciences
+  // ==========================================
+  {
+    id: 'mgmt-001',
+    question: 'According to Henri Fayol, which of the following represents the five primary functions of management?',
+    options: [
+      'Planning, Organizing, Commanding, Coordinating, Controlling',
+      'Staffing, Directing, Financing, Accounting, Marketing',
+      'Forecasting, Budgeting, Purchasing, Selling, Auditing',
+      'Leading, Inspiring, Motivating, Communicating, Rewarding'
+    ],
+    correctIndex: 0,
+    explanation: 'Henri Fayol, known as the father of modern administrative management, defined the five functions of management as: Planning, Organizing, Commanding, Coordinating, and Controlling (POCCC).',
+    category: 'management-sciences',
+    subtopic: 'Principles of Management (POLCA)',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'PTS', 'CTS', 'UTS'],
+    year: 2025,
+    difficulty: 'Easy',
+    viewsCount: 19800,
+    submittedBy: 'Business School Faculty',
+  },
+  {
+    id: 'mgmt-002',
+    question: 'In Maslow’s Hierarchy of Needs, which level of need sits at the highest pinnacle of the pyramid?',
+    options: ['Safety and Security Needs', 'Social Belongingness', 'Esteem Needs', 'Self-Actualization'],
+    correctIndex: 3,
+    explanation: 'Self-Actualization is the apex of Abraham Maslow’s five-tier hierarchy of needs, representing the realization of one’s full potential and personal growth.',
+    category: 'management-sciences',
+    subtopic: 'Organizational Behavior & Motivation',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'KPPSC', 'BPSC'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 24500,
+    submittedBy: 'Organizational Psychology Board',
+  },
+
+  // ==========================================
+  // Accounting
+  // ==========================================
+  {
+    id: 'acc-001',
+    question: 'What is the fundamental accounting equation upon which the double-entry bookkeeping system rests?',
+    options: [
+      'Assets = Liabilities + Owner\'s Equity',
+      'Assets + Liabilities = Capital',
+      'Assets = Capital - Liabilities',
+      'Liabilities = Assets + Revenue'
+    ],
+    correctIndex: 0,
+    explanation: 'The fundamental balance sheet equation is: Assets = Liabilities + Owner\'s Equity (Capital). Every financial transaction maintains this equilibrium under double-entry accounting.',
+    category: 'accounting',
+    subtopic: 'Double Entry Bookkeeping & Journal',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'Banking', 'PTS', 'OTS', 'CTS', 'UTS'],
+    year: 2025,
+    difficulty: 'Easy',
+    viewsCount: 31200,
+    submittedBy: 'Institute of Chartered Accountants Cell',
+  },
+  {
+    id: 'acc-002',
+    question: 'Which financial statement reports a company\'s financial performance and net profit or loss over a specified accounting period?',
+    options: ['Balance Sheet', 'Income Statement (Profit & Loss Account)', 'Cash Flow Statement', 'Statement of Changes in Equity'],
+    correctIndex: 1,
+    explanation: 'The Income Statement (also called Profit and Loss Account) summarizes the revenues, costs, and expenses incurred during a specific accounting period to arrive at net income or loss.',
+    category: 'accounting',
+    subtopic: 'Trial Balance & Financial Statements',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'UTS', 'Banking'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 26700,
+    submittedBy: 'Commerce Department',
+  },
+
+  // ==========================================
+  // Auditing
+  // ==========================================
+  {
+    id: 'audit-001',
+    question: 'When an independent auditor concludes that financial statements present a true and fair view in all material respects, what type of audit opinion is issued?',
+    options: ['Qualified Opinion', 'Adverse Opinion', 'Unqualified (Clean) Opinion', 'Disclaimer of Opinion'],
+    correctIndex: 2,
+    explanation: 'An Unqualified Opinion (commonly known as a clean report) is issued when the independent auditor is satisfied that the financial statements are free of material misstatements and comply with financial reporting frameworks.',
+    category: 'auditing',
+    subtopic: 'Audit Reports, Qualified & Clean Opinions',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'Banking', 'NTS', 'PTS'],
+    year: 2025,
+    difficulty: 'Medium',
+    viewsCount: 19400,
+    submittedBy: 'Auditor General of Pakistan Academy',
+  },
+  {
+    id: 'audit-002',
+    question: 'The process of inspecting documentary evidence (such as invoices, bills, and payment receipts) in support of entries recorded in books of accounts is called:',
+    options: ['Verification', 'Vouching', 'Valuation', 'Depreciation'],
+    correctIndex: 1,
+    explanation: 'Vouching is regarded as the backbone of auditing; it involves examining underlying authentic documentary evidence (vouchers, bills, contracts) to establish the authenticity and accuracy of entries recorded in the books of prime entry.',
+    category: 'auditing',
+    subtopic: 'Vouching & Verification of Assets',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'OTS', 'PTS', 'CTS'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 23100,
+    submittedBy: 'Senior Audit Officer Practice',
+  },
+
+  // ==========================================
+  // Finance
+  // ==========================================
+  {
+    id: 'fin-001',
+    question: 'In capital budgeting, a project is deemed financially acceptable when its Net Present Value (NPV) is:',
+    options: ['Greater than Zero (Positive NPV)', 'Equal to Zero only', 'Less than Zero (Negative NPV)', 'Equal to the initial investment'],
+    correctIndex: 0,
+    explanation: 'Under the Net Present Value rule, a project is accepted if NPV > 0 because the present value of future expected cash inflows exceeds the initial capital outlay, creating net wealth for shareholders.',
+    category: 'finance',
+    subtopic: 'Capital Budgeting (NPV, IRR)',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'Banking', 'SBP', 'NTS'],
+    year: 2025,
+    difficulty: 'Medium',
+    viewsCount: 28400,
+    submittedBy: 'Financial Analysts Society',
+  },
+  {
+    id: 'fin-002',
+    question: 'Which institution serves as the central bank and sole regulatory authority of Pakistan\'s monetary and banking system?',
+    options: ['National Bank of Pakistan (NBP)', 'State Bank of Pakistan (SBP)', 'Security and Exchange Commission of Pakistan (SECP)', 'Ministry of Finance'],
+    correctIndex: 1,
+    explanation: 'The State Bank of Pakistan (SBP), established on July 1, 1948 by Quaid-e-Azam Muhammad Ali Jinnah, is the central bank of Pakistan responsible for currency issuance, monetary policy, and bank regulation.',
+    category: 'finance',
+    subtopic: 'Banking Regulations & SBP Directives',
+    examTags: ['Banking', 'SBP', 'FPSC', 'PPSC', 'SPSC', 'NTS', 'STS'],
+    year: 2025,
+    difficulty: 'Easy',
+    viewsCount: 37600,
+    submittedBy: 'Central Banking Institute',
+  },
+
+  // ==========================================
+  // HRM (Human Resource Management)
+  // ==========================================
+  {
+    id: 'hrm-001',
+    question: 'The systematic process of collecting, evaluating, and recording information about the duties, responsibilities, and skill requirements of a specific position is known as:',
+    options: ['Job Evaluation', 'Job Analysis', 'Job Enrichment', 'Job Specification'],
+    correctIndex: 1,
+    explanation: 'Job Analysis is the foundational HR process that yields two primary outcomes: Job Description (tasks and duties) and Job Specification (qualifications, skills, and experience needed).',
+    category: 'hrm',
+    subtopic: 'Job Analysis & Workforce Planning',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'PTS', 'OTS'],
+    year: 2025,
+    difficulty: 'Easy',
+    viewsCount: 21900,
+    submittedBy: 'HR Institute of Pakistan',
+  },
+  {
+    id: 'hrm-002',
+    question: 'A 360-degree performance appraisal gathers feedback from which of the following sources?',
+    options: [
+      'Direct supervisor only',
+      'Self, supervisor, peers, subordinates, and customers',
+      'Human Resource Department only',
+      'External labor union representatives only'
+    ],
+    correctIndex: 1,
+    explanation: '360-degree feedback is a multi-rater appraisal system where an employee’s performance is reviewed by all surrounding stakeholders: superiors, colleagues/peers, direct reports, self-evaluation, and sometimes clients.',
+    category: 'hrm',
+    subtopic: 'Performance Management Systems',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'MTSP', 'UTS'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 25400,
+    submittedBy: 'HR Management Council',
+  },
+
+  // ==========================================
+  // Marketing
+  // ==========================================
+  {
+    id: 'mkt-001',
+    question: 'Who originally coined and popularized the classic "4Ps" marketing mix framework (Product, Price, Place, Promotion)?',
+    options: ['Philip Kotler', 'E. Jerome McCarthy', 'Peter Drucker', 'Michael Porter'],
+    correctIndex: 1,
+    explanation: 'E. Jerome McCarthy first proposed the 4Ps of marketing (Product, Price, Place, Promotion) in 1960, which was later widely popularized globally by Philip Kotler.',
+    category: 'marketing',
+    subtopic: '4Ps & 7Ps Marketing Framework',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'PTS', 'CTS'],
+    year: 2025,
+    difficulty: 'Medium',
+    viewsCount: 27100,
+    submittedBy: 'Marketing Association of Pakistan',
+  },
+  {
+    id: 'mkt-002',
+    question: 'In the STP marketing model, what does the acronym "STP" stand for?',
+    options: [
+      'Sales, Trade, Profit',
+      'Segmentation, Targeting, Positioning',
+      'Strategy, Tactics, Planning',
+      'Supply, Transport, Pricing'
+    ],
+    correctIndex: 1,
+    explanation: 'STP stands for Segmentation (dividing the market into distinct groups), Targeting (selecting the most attractive segments), and Positioning (establishing a clear value proposition in the customer’s mind).',
+    category: 'marketing',
+    subtopic: 'Market Segmentation, Targeting & Positioning (STP)',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'UTS', 'Banking'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 31000,
+    submittedBy: 'Brand Strategy Bureau',
+  },
+
+  // ==========================================
+  // Computer Science
+  // ==========================================
+  {
+    id: 'cs-001',
+    question: 'In the OSI (Open Systems Interconnection) reference model, which layer is responsible for logical IP addressing and path routing?',
+    options: ['Data Link Layer', 'Network Layer', 'Transport Layer', 'Session Layer'],
+    correctIndex: 1,
+    explanation: 'The Network Layer (Layer 3 of OSI) handles logical addressing (IPv4/IPv6), subnetting, and packet routing across networks using routers.',
+    category: 'computer-science',
+    subtopic: 'Computer Networking & Cybersecurity',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'CSS', 'NTS', 'STS', 'PTS'],
+    year: 2025,
+    difficulty: 'Easy',
+    viewsCount: 41200,
+    submittedBy: 'Computer Science Faculty',
+  },
+  {
+    id: 'cs-002',
+    question: 'Which data structure operates strictly on the "Last-In, First-Out" (LIFO) access principle?',
+    options: ['Queue', 'Stack', 'Array', 'Linked List'],
+    correctIndex: 1,
+    explanation: 'A Stack is a linear data structure that follows the LIFO (Last In First Out) principle, commonly used in function call stacks, undo mechanisms, and expression parsing.',
+    category: 'computer-science',
+    subtopic: 'Data Structures & Algorithms',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'NTS', 'STS', 'UTS'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 38700,
+    submittedBy: 'Software Engineering Cell',
+  },
+
+  // ==========================================
+  // Biology
+  // ==========================================
+  {
+    id: 'bio-001',
+    question: 'Which cellular organelle is known as the "powerhouse of the cell" due to its generation of adenosine triphosphate (ATP) via aerobic cellular respiration?',
+    options: ['Ribosome', 'Mitochondria', 'Endoplasmic Reticulum', 'Golgi Apparatus'],
+    correctIndex: 1,
+    explanation: 'Mitochondria generate most of the chemical energy needed to power the cell\'s biochemical reactions. Chemical energy produced by the mitochondria is stored in adenosine triphosphate (ATP).',
+    category: 'biology',
+    subtopic: 'Cell Biology & Energy Metabolism',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'STS', 'NTS', 'MDCAT'],
+    year: 2024,
+    difficulty: 'Easy',
+    viewsCount: 34500,
+    submittedBy: 'Biological Sciences Directorate',
+  },
+  {
+    id: 'bio-002',
+    question: 'In molecular genetics, which enzyme unwinds the double helix structure of DNA during the initiation of DNA replication?',
+    options: ['DNA Polymerase', 'DNA Helicase', 'DNA Ligase', 'RNA Primase'],
+    correctIndex: 1,
+    explanation: 'DNA Helicase breaks the hydrogen bonds between nitrogenous base pairs to unwind and separate the two strands of the DNA double helix, forming a replication fork.',
+    category: 'biology',
+    subtopic: 'Genetics & Molecular Biology',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'MDCAT', 'NUMS'],
+    year: 2025,
+    difficulty: 'Medium',
+    viewsCount: 29800,
+    submittedBy: 'Genetics Research Wing',
+  },
+  {
+    id: 'bio-003',
+    question: 'During photosynthesis in green plants, oxygen is released as a byproduct resulting from the photolysis (light-driven splitting) of:',
+    options: ['Carbon dioxide (CO2)', 'Water (H2O)', 'Glucose (C6H12O6)', 'Ribulose bisphosphate (RuBP)'],
+    correctIndex: 1,
+    explanation: 'In the light-dependent reactions of photosynthesis within photosystem II (PSII), light energy splits water molecules (H2O) into protons, electrons, and oxygen gas (O2).',
+    category: 'biology',
+    subtopic: 'Plant Physiology & Photosynthesis',
+    examTags: ['PPSC', 'FPSC', 'SPSC', 'STS', 'NTS'],
+    year: 2024,
+    difficulty: 'Medium',
+    viewsCount: 27600,
+    submittedBy: 'Botanical Sciences Council',
+  },
+  {
+    id: 'bio-004',
+    question: 'In the human circulatory system, which blood vessels carry oxygenated blood from the lungs directly into the left atrium of the heart?',
+    options: ['Pulmonary arteries', 'Pulmonary veins', 'Superior vena cava', 'Coronary arteries'],
+    correctIndex: 1,
+    explanation: 'Pulmonary veins are the only veins in the adult human body that carry oxygen-rich blood, transporting it from the alveoli of the lungs directly to the heart\'s left atrium.',
+    category: 'biology',
+    subtopic: 'Human Physiology & Organ Systems',
+    examTags: ['FPSC', 'PPSC', 'SPSC', 'MDCAT', 'STS'],
+    year: 2025,
+    difficulty: 'Easy',
+    viewsCount: 31200,
+    submittedBy: 'Medical Sciences Cell',
   },
 ];

@@ -28,7 +28,7 @@ import {
   Sparkle
 } from 'lucide-react';
 import { MCQS_DATA } from '../data/mcqsData';
-import { POPULAR_CATEGORIES } from '../data/categoriesData';
+import { POPULAR_CATEGORIES, TOP_SUBJECTS_DIRECTORY } from '../data/categoriesData';
 import { MCQ } from '../types';
 import { useCmsContent } from '../context/CmsContentContext';
 import { MeaningText } from '../components/MeaningText';
@@ -53,13 +53,26 @@ export const McqsView: React.FC = () => {
 
   const [searchFilter, setSearchFilter] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState<string>('All');
-  const [examTagFilter, setExamTagFilter] = useState<string>('All');
+  const [examTagFilter, setExamTagFilter] = useState<string>(() => {
+    const saved = sessionStorage.getItem('matb_quick_exam_filter');
+    if (saved) {
+      sessionStorage.removeItem('matb_quick_exam_filter');
+      return saved;
+    }
+    return 'All';
+  });
   const [revealedAnswers, setRevealedAnswers] = useState<Record<string, boolean>>({});
   const [userSelections, setUserSelections] = useState<Record<string, number>>({});
   const [reportedMcqId, setReportedMcqId] = useState<string | null>(null);
   const [reportSuccess, setReportSuccess] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [selectedSubtopic, setSelectedSubtopic] = useState<string | null>(null);
+
+  // Reset subtopic when category changes
+  useEffect(() => {
+    setSelectedSubtopic(null);
+  }, [selectedCategorySlug]);
 
   // Content Layout State
   const [displayLayout, setDisplayLayout] = useState<McqDisplayLayout>(() => {
@@ -86,17 +99,45 @@ export const McqsView: React.FC = () => {
   // Filtered MCQs list
   const filteredMcqs = useMemo(() => {
     return allMcqs.filter((mcq) => {
-      // Category filter
-      if (selectedCategorySlug && mcq.category !== selectedCategorySlug) {
-        return false;
+      // Category filter with intelligent aliases
+      if (selectedCategorySlug) {
+        if (selectedCategorySlug === 'management-sciences') {
+          const mgmtSlugs = ['management-sciences', 'accounting', 'auditing', 'finance', 'hrm', 'marketing'];
+          if (!mgmtSlugs.includes(mcq.category)) return false;
+        } else if (selectedCategorySlug === 'pakistan-affairs') {
+          if (mcq.category !== 'pakistan-affairs' && mcq.category !== 'pakistan-studies') return false;
+        } else if (selectedCategorySlug === 'pakistan-studies') {
+          if (mcq.category !== 'pakistan-studies' && mcq.category !== 'pakistan-affairs') return false;
+        } else if (selectedCategorySlug === 'computer-science') {
+          if (mcq.category !== 'computer-science' && mcq.category !== 'computer') return false;
+        } else if (selectedCategorySlug === 'computer') {
+          if (mcq.category !== 'computer' && mcq.category !== 'computer-science') return false;
+        } else if (mcq.category !== selectedCategorySlug) {
+          return false;
+        }
+      }
+      // Subtopic filter
+      if (selectedSubtopic) {
+        const qSub = selectedSubtopic.toLowerCase();
+        const matchesSub = 
+          mcq.subtopic?.toLowerCase().includes(qSub) ||
+          mcq.question.toLowerCase().includes(qSub) ||
+          mcq.explanation.toLowerCase().includes(qSub) ||
+          qSub.split(/[ &,/]+/).some(word => word.length > 3 && (mcq.question.toLowerCase().includes(word) || mcq.subtopic?.toLowerCase().includes(word)));
+        if (!matchesSub) return false;
       }
       // Difficulty
       if (difficultyFilter !== 'All' && mcq.difficulty !== difficultyFilter) {
         return false;
       }
       // Exam Tag
-      if (examTagFilter !== 'All' && !mcq.examTags?.includes(examTagFilter)) {
-        return false;
+      if (examTagFilter !== 'All') {
+        const matchesTag = mcq.examTags?.some((t) => 
+          t.toLowerCase() === examTagFilter.toLowerCase() || 
+          t.toLowerCase().includes(examTagFilter.toLowerCase()) ||
+          examTagFilter.toLowerCase().includes(t.toLowerCase())
+        );
+        if (!matchesTag) return false;
       }
       // Search
       if (searchFilter.trim()) {
@@ -108,12 +149,12 @@ export const McqsView: React.FC = () => {
       }
       return true;
     });
-  }, [allMcqs, selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
+  }, [allMcqs, selectedCategorySlug, selectedSubtopic, difficultyFilter, examTagFilter, searchFilter]);
 
   const pageCount = Math.max(1, Math.ceil(filteredMcqs.length / pageSize));
   const visibleMcqs = filteredMcqs.slice((page - 1) * pageSize, page * pageSize);
 
-  useEffect(() => setPage(1), [selectedCategorySlug, difficultyFilter, examTagFilter, searchFilter]);
+  useEffect(() => setPage(1), [selectedCategorySlug, selectedSubtopic, difficultyFilter, examTagFilter, searchFilter]);
   useEffect(() => { if (page > pageCount) setPage(pageCount); }, [page, pageCount]);
 
   // Sync split-pane active question
@@ -242,22 +283,82 @@ export const McqsView: React.FC = () => {
 
         {/* Dropdown Filters */}
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          {/* Subject Filter Dropdown */}
+          <div className="flex items-center gap-1 text-xs">
+            <span className="text-slate-500 font-medium whitespace-nowrap">Subject:</span>
+            <select
+              value={selectedCategorySlug || 'all'}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedCategorySlug(val === 'all' ? null : val);
+                setSelectedSubtopic(null);
+              }}
+              className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-medium focus:outline-hidden cursor-pointer"
+            >
+              <option value="all">All Subjects (General Bank)</option>
+              <optgroup label="Top Core Subjects">
+                <option value="general-knowledge">General Knowledge MCQs</option>
+                <option value="pakistan-affairs">Pakistan Affairs MCQs</option>
+                <option value="current-affairs">Current Affairs MCQs</option>
+                <option value="english">English Language MCQs</option>
+                <option value="islamic-studies">Islamic Studies / Islamiat MCQs</option>
+                <option value="computer-science">Computer Science MCQs</option>
+                <option value="pakistan-studies">Pakistan Studies MCQs</option>
+                <option value="everyday-science">Everyday Science MCQs</option>
+                <option value="mathematics">Mathematics MCQs</option>
+                <option value="biology">Biology MCQs</option>
+              </optgroup>
+              <optgroup label="Management Sciences Suite">
+                <option value="management-sciences">Management Sciences (All)</option>
+                <option value="accounting">Accounting MCQs</option>
+                <option value="auditing">Auditing MCQs</option>
+                <option value="finance">Finance MCQs</option>
+                <option value="hrm">HRM MCQs</option>
+                <option value="marketing">Marketing MCQs</option>
+              </optgroup>
+              <optgroup label="Other Specialized Disciplines">
+                <option value="history">History</option>
+                <option value="economics">Economics</option>
+                <option value="political-science">Political Science</option>
+                <option value="international-relations">International Relations</option>
+                <option value="sociology">Sociology</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="pedagogy">Pedagogy &amp; Education</option>
+                <option value="urdu">Urdu</option>
+              </optgroup>
+            </select>
+          </div>
+
           {/* Exam Tag */}
           <div className="flex items-center gap-1 text-xs">
-            <span className="text-slate-500 font-medium whitespace-nowrap">Exam:</span>
+            <span className="text-slate-500 font-medium whitespace-nowrap">Testing Body:</span>
             <select
               value={examTagFilter}
               onChange={(e) => setExamTagFilter(e.target.value)}
               className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-medium focus:outline-hidden cursor-pointer"
             >
-              <option value="All">All Exams</option>
-              <option value="STS">STS (IBA Sukkur)</option>
-              <option value="Teaching License">STEDA Teaching License</option>
-              <option value="FPSC">FPSC</option>
-              <option value="SPSC">SPSC</option>
-              <option value="CSS">CSS</option>
-              <option value="PPSC">PPSC</option>
-              <option value="NTS">NTS</option>
+              <option value="All">All Exams &amp; Services</option>
+              <optgroup label="Civil &amp; Provincial Commissions">
+                <option value="FPSC">FPSC (Federal Public Service Commission)</option>
+                <option value="PPSC">PPSC (Punjab Public Service Commission)</option>
+                <option value="SPSC">SPSC (Sindh Public Service Commission)</option>
+                <option value="CSS">CSS (Central Superior Services)</option>
+                <option value="KPPSC">KPPSC (Khyber Pakhtunkhwa PSC)</option>
+                <option value="BPSC">BPSC (Balochistan Public Service Commission)</option>
+              </optgroup>
+              <optgroup label="Standardized Testing Services">
+                <option value="STS">SIBA Testing Service (STS Sukkur IBA)</option>
+                <option value="NTS">NTS (National Testing Service)</option>
+                <option value="PTS">PTS (Pakistan Testing Service)</option>
+                <option value="BTS">BTS (Balochistan Testing Service)</option>
+                <option value="CTS">CTS (Candidates Testing Services)</option>
+                <option value="JTS">JTS (Job Testing Service)</option>
+                <option value="LAT">LAT (Law Admission Test - HEC)</option>
+                <option value="MTSP">MTSP (Modern Testing Service Pakistan)</option>
+                <option value="OTS">OTS (Open Testing Service)</option>
+                <option value="UTS">UTS (Universal Testing Service)</option>
+                <option value="Teaching License">STEDA Teaching License</option>
+              </optgroup>
             </select>
           </div>
 
@@ -279,6 +380,219 @@ export const McqsView: React.FC = () => {
           <div className="text-xs text-slate-500 dark:text-slate-400 font-medium pl-2 whitespace-nowrap">
             Found <strong className="text-emerald-600 dark:text-emerald-400">{filteredMcqs.length.toLocaleString()}</strong> questions
           </div>
+        </div>
+      </div>
+
+      {/* Top Subjects Quick Filter Strip */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 shadow-2xs space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">
+              Top Subjects:
+            </span>
+            <span className="text-[11px] text-slate-400 hidden sm:inline">
+              Instant topic filtering
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Quick dropdown in strip header */}
+            <div className="flex items-center gap-1 text-xs">
+              <span className="text-slate-400 text-[11px] font-semibold hidden md:inline">Select:</span>
+              <select
+                value={selectedCategorySlug || 'all'}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSelectedCategorySlug(val === 'all' ? null : val);
+                  setSelectedSubtopic(null);
+                }}
+                className="px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-semibold focus:outline-hidden cursor-pointer"
+              >
+                <option value="all">Select Subject...</option>
+                {TOP_SUBJECTS_DIRECTORY.map((subj) => (
+                  <option key={subj.id} value={subj.categorySlug}>
+                    {subj.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {selectedCategorySlug && (
+              <button
+                onClick={() => {
+                  setSelectedCategorySlug(null);
+                  setSelectedSubtopic(null);
+                }}
+                className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer whitespace-nowrap"
+              >
+                Reset to All Subjects
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Primary Top Subjects Pills Row */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+          <button
+            onClick={() => {
+              setSelectedCategorySlug(null);
+              setSelectedSubtopic(null);
+            }}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${
+              !selectedCategorySlug
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-750'
+            }`}
+          >
+            All Subjects
+          </button>
+
+          {TOP_SUBJECTS_DIRECTORY.map((subj) => {
+            const isSelected = selectedCategorySlug === subj.categorySlug;
+            return (
+              <button
+                key={subj.id}
+                onClick={() => {
+                  setSelectedCategorySlug(subj.categorySlug);
+                  setSelectedSubtopic(null);
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer shrink-0 flex items-center gap-1.5 ${
+                  isSelected
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-750'
+                }`}
+              >
+                <span>{subj.shortLabel}</span>
+                {subj.badge && !isSelected && (
+                  <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                    {subj.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Subcategories & Topics Tray Opened Directly Under Top Subjects */}
+        <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+          {selectedCategorySlug ? (
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">
+                    {activeCategory?.name || 'Subject'} Subcategories &amp; Topics:
+                  </span>
+                  <span className="text-[11px] text-slate-400">
+                    ({filteredMcqs.length} MCQs found)
+                  </span>
+                </div>
+
+                {selectedSubtopic && (
+                  <button
+                    onClick={() => setSelectedSubtopic(null)}
+                    className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+                  >
+                    Show All {activeCategory?.name} Topics
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+                <button
+                  onClick={() => setSelectedSubtopic(null)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer shrink-0 ${
+                    !selectedSubtopic
+                      ? 'bg-emerald-600 text-white shadow-xs'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-750'
+                  }`}
+                >
+                  All {activeCategory?.name || 'Topics'}
+                </button>
+
+                {/* If Management Sciences is selected, show child discipline buttons */}
+                {selectedCategorySlug === 'management-sciences' && (
+                  <>
+                    {[
+                      { label: 'Accounting MCQs', slug: 'accounting' },
+                      { label: 'Auditing MCQs', slug: 'auditing' },
+                      { label: 'Finance MCQs', slug: 'finance' },
+                      { label: 'HRM MCQs', slug: 'hrm' },
+                      { label: 'Marketing MCQs', slug: 'marketing' },
+                    ].map((child) => (
+                      <button
+                        key={child.slug}
+                        onClick={() => {
+                          setSelectedCategorySlug(child.slug);
+                          setSelectedSubtopic(null);
+                        }}
+                        className="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer shrink-0 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 flex items-center gap-1"
+                      >
+                        <span>{child.label}</span>
+                        <ChevronRight className="w-3 h-3" />
+                      </button>
+                    ))}
+                  </>
+                )}
+
+                {/* Subtopics from activeCategory */}
+                {activeCategory?.subtopics?.map((topic, i) => {
+                  const isSelected = selectedSubtopic === topic;
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedSubtopic(isSelected ? null : topic)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition cursor-pointer shrink-0 ${
+                        isSelected
+                          ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-750'
+                      }`}
+                    >
+                      {topic}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* When All Subjects is active: show all subject categories opened under it */
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>All Subject Categories:</span>
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  Click any subject to open its specific topics
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
+                <button
+                  onClick={() => {
+                    setSelectedCategorySlug(null);
+                    setSelectedSubtopic(null);
+                  }}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer shrink-0 bg-emerald-600 text-white shadow-xs"
+                >
+                  All Combined (Full Bank)
+                </button>
+
+                {POPULAR_CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      setSelectedCategorySlug(cat.slug);
+                      setSelectedSubtopic(null);
+                    }}
+                    className="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer shrink-0 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/60 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-200 border border-transparent"
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
