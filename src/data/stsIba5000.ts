@@ -60,7 +60,7 @@ function englishQuestions(): MCQ[] {
   for (let i=0;i<500;i++) {
     const [noun,article]=nouns[i%nouns.length]; const contexts=['I saw','She needs','They found','We discussed','He selected'][Math.floor(i/10)%5];
     const c=choice(article,['a','an','the','no article'],i+1);
-    result.push({id:`sts-en-article-${i+1}`,question:`Select the correct article (variant ${i+1}): “${contexts} ___ ${noun}.”`,...c,explanation:`“${noun}” takes “${article}” here because article choice follows the opening sound, not simply the first letter.`,category:'english',subtopic:'Articles',difficulty:i%4===0?'Medium':'Easy',...meta('british-council-grammar','Rule-based generation; article answer checked against pronunciation class.')});
+    result.push({id:`sts-en-article-${i+1}`,question:`Select the correct indefinite article (variant ${i+1}): “___ ${noun}.”`,...c,explanation:`“${noun}” takes “${article}” here because article choice follows the opening sound, not simply the first letter.`,category:'english',subtopic:'Articles',difficulty:i%4===0?'Medium':'Easy',...meta('british-council-grammar','Rule-based generation; article answer checked against pronunciation class.')});
   }
   for (let i=0;i<500;i++) {
     const [base,past]=verbs[i%verbs.length]; const subject=['Ali','Sara','The team','Our class','The applicant'][Math.floor(i/10)%5];
@@ -70,7 +70,7 @@ function englishQuestions(): MCQ[] {
   const preps=[['interested','in'],['responsible','for'],['afraid','of'],['good','at'],['depend','on'],['belong','to'],['agree','with'],['apply','for'],['listen','to'],['consist','of']];
   for (let i=0;i<500;i++) {
     const [word,prep]=preps[i%preps.length]; const c=choice(prep,['in','on','at','for','of','to','with'].filter(p=>p!==prep),i+3);
-    result.push({id:`sts-en-prep-${i+1}`,question:`Choose the standard preposition: “The candidate will ${word} ___ the opportunity described in practice set ${i+1}.”`,...c,explanation:`The standard combination is “${word} ${prep}”.`,category:'english',subtopic:'Prepositions',difficulty:i%3===0?'Medium':'Easy',...meta('british-council-grammar','Answer checked against a curated standard-English collocation list.')});
+    result.push({id:`sts-en-prep-${i+1}`,question:`Choose the standard preposition in the collocation “${word} ___” (variant ${i+1}).`,...c,explanation:`The standard combination is “${word} ${prep}”.`,category:'english',subtopic:'Prepositions',difficulty:i%3===0?'Medium':'Easy',...meta('british-council-grammar','Answer checked against a curated standard-English collocation list.')});
   }
   return result;
 }
