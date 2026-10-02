@@ -14,9 +14,12 @@ export interface AllPastPaperEntry {
   yearLabel: string;
   sampleQuestionsCount: number;
   examTag: string;
+  pdfPath?: string;
+  sourceNote?: string;
 }
 
 export const ALL_PAST_PAPERS_DIRECTORY: AllPastPaperEntry[] = [
+  ...CSS_UPLOADED_PAST_PAPERS,
   {
     "id": "official-paper-1",
     "number": 1,
