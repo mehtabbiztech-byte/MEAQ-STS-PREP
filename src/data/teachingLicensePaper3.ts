@@ -17,7 +17,7 @@ export const TEACHING_LICENSE_PAPER_3_MCQS: MCQ[] = [
     difficulty: 'Medium',
     examTags: ['STS', 'Teaching License', 'Content Knowledge'],
     year: 2024,
-    verificationStatus: 'official-paper',
+    verificationStatus: 'source-aligned',
   },
   {
     id: 'tlt3-eng-02',
@@ -393,7 +393,7 @@ export const TEACHING_LICENSE_PAPER_3_MCQS: MCQ[] = [
   },
   {
     id: 'tlt3-sci-28',
-    question: 'What is the main gas responsible for the greenhouse effect and ocean acidification on Earth?',
+    question: 'Which gas is a major driver of human-caused global warming and also contributes to ocean acidification?',
     options: ['Nitrogen gas (N2)', 'Oxygen gas (O2)', 'Carbon dioxide (CO2)', 'Argon (Ar)'],
     correctIndex: 2,
     explanation: 'Carbon dioxide traps infrared radiation in the troposphere and dissolves in oceans to form carbonic acid, causing ocean acidification.',
@@ -1325,10 +1325,10 @@ export const TEACHING_LICENSE_PAPER_3_MCQS: MCQ[] = [
   // --- 10. SCHOOL, COMMUNITY, ETHICS & STEDA POLICIES (Q91 - Q100) ---
   {
     id: 'tlt3-ped-91',
-    question: 'What is the minimum passing score required in the STS IBA Teaching License Examination to earn the Sindh Teaching License certification?',
-    options: ['40%', '50%', '60%', '75%'],
-    correctIndex: 2,
-    explanation: 'Under STEDA policy guidelines, the mandatory threshold for qualifying for the Sindh Teaching License is 60% (60 marks out of 100), ensuring rigorous competency standards.',
+    question: 'According to STEDA’s 2023 Teaching License Policy, how long is a teaching license valid?',
+    options: ['3 years', '5 years', '7 years', '10 years'],
+    correctIndex: 1,
+    explanation: 'STEDA’s 2023 Teaching License Policy states that a teaching license is valid for 5 years.',
     category: 'Pedagogy',
     subtopic: 'STEDA Teaching License Policy',
     difficulty: 'Easy',
