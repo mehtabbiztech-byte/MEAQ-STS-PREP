@@ -323,7 +323,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
   },
   {
     id: 'tlt1-sci-23',
-    question: 'Which gas is predominantly responsible for the greenhouse effect keeping Earth\'s lower atmosphere habitable?',
+    question: 'Which pair contains two greenhouse gases that contribute to Earth\'s natural greenhouse effect?',
     options: ['Nitrogen', 'Oxygen', 'Carbon Dioxide and Water Vapor', 'Hydrogen'],
     correctIndex: 2,
     explanation: 'While nitrogen and oxygen constitute 99% of dry air, greenhouse warming is driven by greenhouse gases including carbon dioxide (CO2), water vapor (H2O), and methane (CH4).',
@@ -442,7 +442,7 @@ export const TEACHING_LICENSE_PAPER_1_MCQS: MCQ[] = [
   },
   {
     id: 'tlt1-soc-32',
-    question: 'The historic Pakistan Resolution was moved by A.K. Fazlul Huq on 23rd March 1940 at:',
+    question: 'At which park was the Pakistan Resolution moved on 23 March 1940?',
     options: ['Simla', 'Minto Park (Iqbal Park), Lahore', 'Karachi', 'Dacca'],
     correctIndex: 1,
     explanation: 'The Lahore Resolution demanding sovereign constituent units for Muslims in northwestern and eastern zones was passed on March 23, 1940, at Minto Park (now Minar-e-Pakistan, Lahore).',
