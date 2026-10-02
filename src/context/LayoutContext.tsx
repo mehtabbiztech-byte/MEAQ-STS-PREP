@@ -34,7 +34,7 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (saved && ['standard', 'sidebar', 'split', 'zen'].includes(saved)) {
       return saved as ShellLayout;
     }
-    return 'standard';
+    return 'sidebar';
   });
 
   // Container Width (standard 1280px, wide 1536px, fluid 100%)
@@ -43,7 +43,7 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (saved && ['standard', 'wide', 'fluid'].includes(saved)) {
       return saved as ContainerWidth;
     }
-    return 'standard';
+    return 'fluid';
   });
 
   // Content Density (comfortable, standard, compact)
@@ -52,7 +52,7 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (saved && ['comfortable', 'standard', 'compact'].includes(saved)) {
       return saved as ContentDensity;
     }
-    return 'standard';
+    return 'compact';
   });
 
   // Font Size (normal, large, xlarge)
