@@ -34,7 +34,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { PAST_PAPERS_DATA } from '../data/pastPapersData';
-import { ALL_PAST_PAPERS_DIRECTORY, AllPastPaperEntry } from '../data/allPastPapersDirectory';
+import { ALL_PAST_PAPERS_DIRECTORY, AllPastPaperEntry, PAST_PAPERS_DIRECTORY_CAPACITY } from '../data/allPastPapersDirectory';
 import { MCQS_DATA } from '../data/mcqsData';
 import { PastPaper } from '../types';
 import { practiceMinutes, scorePaper } from '../lib/paperResults';
@@ -155,7 +155,7 @@ export const PastPapersView: React.FC = () => {
   const [selectedExam, setSelectedExam] = useState<string>('All');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [layoutMode, setLayoutMode] = useState<'table' | 'grid' | 'list'>('table');
-  const [activeTab, setActiveTab] = useState<'all-papers-200' | 'simulated-sessions'>('all-papers-200');
+  const [activeTab, setActiveTab] = useState<'directory' | 'simulated-sessions'>('directory');
 
   // Modal State for Syllabus & PDF preview
   const [selectedModalEntry, setSelectedModalEntry] = useState<AllPastPaperEntry | null>(null);
@@ -264,7 +264,7 @@ export const PastPapersView: React.FC = () => {
         return;
       }
 
-      // Check if it matches an entry in the 200 directory
+      // Check if it matches an entry in the directory
       const matchDirectory = ALL_PAST_PAPERS_DIRECTORY.find(p => p.id === selectedPastPaperId);
       if (matchDirectory) {
         handleOpenSubjectSelection({ entry: matchDirectory });
@@ -372,9 +372,9 @@ export const PastPapersView: React.FC = () => {
     return pool.length;
   }, [subjectSelectionModalData, selectedSubjectSlugs]);
 
-  // Filter 200 Directory Papers
+  // Filter and cap directory entries
   const filteredDirectoryPapers = useMemo(() => {
-    return ALL_PAST_PAPERS_DIRECTORY.filter((paper) => {
+    return [...ALL_PAST_PAPERS_DIRECTORY].sort((a, b) => a.number - b.number).filter((paper) => {
       // Exam filter
       if (selectedExam !== 'All') {
         const matchesExam = 
@@ -401,7 +401,7 @@ export const PastPapersView: React.FC = () => {
       }
 
       return true;
-    });
+    }).slice(0, PAST_PAPERS_DIRECTORY_CAPACITY);
   }, [search, selectedExam, selectedCategory]);
 
   // Filter practice papers
@@ -463,28 +463,28 @@ export const PastPapersView: React.FC = () => {
             <div className="relative z-10 max-w-3xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3 border border-emerald-500/30">
                 <FileText className="w-4 h-4 text-emerald-300" />
-                <span>ALL PAST PAPERS ARCHIVE (1–200)</span>
+                <span>ALL PAST PAPERS ARCHIVE · UP TO 1,000</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white font-display">
                 ALL PAST PAPERS &amp; SYLLABUS DIRECTORY
               </h1>
               <p className="mt-3 text-sm sm:text-base text-emerald-100/90 leading-relaxed">
-                Complete, officially indexed archive of 200 past papers covering PPSC, FPSC, SPSC, STS IBA, NTS, CSS, Police, FIA, ASF, Lecturers, and Banking. Practice timed mock tests or view official syllabus breakdowns.
+                Search past-paper and syllabus entries across PPSC, FPSC, SPSC, STS IBA, NTS, CSS, Police, FIA, ASF, lecturer recruitment, and banking. The directory supports up to 1,000 entries; PDFs and practice questions are available where provided.
               </p>
 
               {/* Quick stats pills */}
               <div className="flex flex-wrap gap-2.5 mt-5">
                 <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs text-xs font-bold border border-white/10 flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>200 Solved Papers Indexed</span>
+                  <span>{ALL_PAST_PAPERS_DIRECTORY.length} Directory Entries</span>
                 </div>
                 <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs text-xs font-bold border border-white/10 flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>100% Verified Syllabi</span>
+                  <span>1,000 Entry Capacity</span>
                 </div>
                 <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs text-xs font-bold border border-white/10 flex items-center gap-1.5">
                   <GraduationCap className="w-3.5 h-3.5 text-sky-400" />
-                  <span>Free PDF Downloads &amp; Tests</span>
+                  <span>Source PDFs When Available</span>
                 </div>
               </div>
             </div>
@@ -492,19 +492,19 @@ export const PastPapersView: React.FC = () => {
             <div className="absolute right-0 top-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
           </header>
 
-          {/* Primary View Switcher: 200 Directory vs Practice Sessions */}
+          {/* Directory vs practice sessions */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2 shadow-xs">
             <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
               <button
-                onClick={() => setActiveTab('all-papers-200')}
+                onClick={() => setActiveTab('directory')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer ${
-                  activeTab === 'all-papers-200'
+                  activeTab === 'directory'
                     ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 <Layers className="w-4 h-4" />
-                <span>All 200 Past Papers ({filteredDirectoryPapers.length})</span>
+                <span>Past Papers &amp; Syllabi ({filteredDirectoryPapers.length}/{PAST_PAPERS_DIRECTORY_CAPACITY})</span>
               </button>
               <button
                 onClick={() => setActiveTab('simulated-sessions')}
@@ -520,7 +520,7 @@ export const PastPapersView: React.FC = () => {
             </div>
 
             {/* Layout switch buttons */}
-            {activeTab === 'all-papers-200' && (
+            {activeTab === 'directory' && (
               <div className="flex items-center gap-1 self-end sm:self-center">
                 <span className="text-xs text-slate-400 mr-1 hidden md:inline">Layout:</span>
                 <button
@@ -530,10 +530,10 @@ export const PastPapersView: React.FC = () => {
                       ? 'bg-emerald-600 text-white shadow-xs' 
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
                   }`}
-                  title="Numbered Table View (1–200)"
+                  title={`Numbered directory table, up to ${PAST_PAPERS_DIRECTORY_CAPACITY} entries`}
                 >
                   <TableIcon className="w-3.5 h-3.5" />
-                  <span>Table #1–200</span>
+                  <span>Table #1–1,000</span>
                 </button>
                 <button
                   onClick={() => setLayoutMode('grid')}
@@ -647,12 +647,12 @@ export const PastPapersView: React.FC = () => {
             </div>
           </div>
 
-          {/* TAB 1: ALL 200 PAST PAPERS DIRECTORY */}
-          {activeTab === 'all-papers-200' && (
+          {/* TAB 1: PAST PAPERS DIRECTORY */}
+          {activeTab === 'directory' && (
             <div className="space-y-4">
               <div className="flex items-center justify-between gap-2 px-1">
                 <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                  Showing <strong className="text-emerald-600 dark:text-emerald-400">{filteredDirectoryPapers.length}</strong> of 200 Past Papers
+                  Showing <strong className="text-emerald-600 dark:text-emerald-400">{filteredDirectoryPapers.length}</strong> of {ALL_PAST_PAPERS_DIRECTORY.length} available entries · capacity {PAST_PAPERS_DIRECTORY_CAPACITY}
                 </p>
                 {(selectedExam !== 'All' || selectedCategory !== 'All' || search) && (
                   <button
@@ -668,7 +668,7 @@ export const PastPapersView: React.FC = () => {
                 )}
               </div>
 
-              {/* TABLE VIEW (Canonical 1 to 200) */}
+              {/* Numbered directory table (up to 1,000 records) */}
               {layoutMode === 'table' && (
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
                   <div className="overflow-x-auto">

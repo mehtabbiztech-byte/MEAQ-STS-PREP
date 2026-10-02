@@ -1,5 +1,5 @@
-// Auto-generated 200 All Past Papers Canonical Directory
-// Aligned strictly with Pakistan competitive examinations syllabus and papers
+// Searchable past papers and syllabus directory. Capacity is 1,000 records.
+// Entries appear only when their metadata or source material is available.
 
 export interface AllPastPaperEntry {
   id: string;
@@ -17,6 +17,8 @@ export interface AllPastPaperEntry {
   pdfPath?: string;
   sourceNote?: string;
 }
+
+export const PAST_PAPERS_DIRECTORY_CAPACITY = 1000;
 
 export const CSS_UPLOADED_PAST_PAPERS: AllPastPaperEntry[] = [
   {
