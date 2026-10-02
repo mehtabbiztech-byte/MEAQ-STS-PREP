@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { 
   BookOpen, 
   GraduationCap, 
@@ -27,6 +27,8 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { useCmsContent } from '../context/CmsContentContext';
+import { MCQS_DATA } from '../data/mcqsData';
 import { 
   TOP_SUBJECTS_DIRECTORY, 
   TEST_PREPARATION_ONLINE_SERVICES, 
@@ -41,6 +43,24 @@ export const TopSubjectsAndTestingServicesHub: React.FC<{
   onSelectExam?: (examId: string, examTag: string) => void;
 }> = ({ variant = 'full', onSelectSubject, onSelectExam }) => {
   const { setTab, setSelectedCategorySlug, setSelectedExamId } = useApp();
+  const { mcqs: liveMcqs } = useCmsContent();
+  const subjectMcqCounts = useMemo(() => {
+    return [...liveMcqs, ...MCQS_DATA].reduce<Record<string, number>>((counts, mcq) => {
+      counts[mcq.category] = (counts[mcq.category] || 0) + 1;
+      return counts;
+    }, {});
+  }, [liveMcqs]);
+  const getSubjectMcqCount = (slug: string) => {
+    const categoriesBySubject: Record<string, string[]> = {
+      'management-sciences': ['management-sciences', 'accounting', 'auditing', 'finance', 'hrm', 'marketing'],
+      'pakistan-affairs': ['pakistan-affairs', 'pakistan-studies'],
+      'pakistan-studies': ['pakistan-studies', 'pakistan-affairs'],
+      'computer-science': ['computer-science', 'computer'],
+      computer: ['computer', 'computer-science'],
+    };
+    const categories = categoriesBySubject[slug] || [slug];
+    return categories.reduce((total, category) => total + (subjectMcqCounts[category] || 0), 0);
+  };
   const [activeTab, setActiveTab] = useState<'subjects' | 'testing-agencies'>('subjects');
   const [agencyFilter, setAgencyFilter] = useState<'All' | 'Federal' | 'Provincial' | 'Testing Agency' | 'Admission'>('All');
   const [subjectGroupFilter, setSubjectGroupFilter] = useState<'all' | 'general' | 'management-sciences'>('all');
@@ -500,7 +520,7 @@ export const TopSubjectsAndTestingServicesHub: React.FC<{
 
                 <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
                   <span className="font-mono font-bold text-slate-600 dark:text-slate-400">
-                    {subject.count}
+                    {getSubjectMcqCount(subject.categorySlug).toLocaleString()} MCQs
                   </span>
                   <span className="inline-flex items-center gap-1 font-bold text-emerald-600 dark:text-emerald-400 group-hover:underline">
                     <span>{isOpened ? 'Category Opened' : 'Open Category'}</span>
